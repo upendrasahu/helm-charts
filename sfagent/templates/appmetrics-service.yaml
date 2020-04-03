@@ -1,0 +1,20 @@
+{{- if .Values.application_monitoring.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "sf-apm-agents.fullname" . }}
+  labels:
+    app: {{ template "sf-apm-agents.name" . }}
+    release: {{ .Release.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  type: {{ .Values.application_monitoring.apm_agent_server.service.type }}
+  ports:
+    - port: {{ .Values.application_monitoring.apm_agent_server.service.port }}
+      targetPort: pluginserver
+      protocol: TCP
+      name: pluginserver
+  selector:
+    app: {{ template "sf-apm-agents.name" . }}
+    release: {{ .Release.Name }}
+{{- end }}

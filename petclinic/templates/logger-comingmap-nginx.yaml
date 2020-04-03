@@ -1,0 +1,17 @@
+{{- if .Values.nginx.logger.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "spring.fullname" . }}-nginx-logger-conf
+  labels:
+    app: {{ template "spring.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/component: nginx
+data:
+{{ (.Files.Glob "logger_config_nginx/*").AsConfig | indent 2 }}
+{{- end }}
+

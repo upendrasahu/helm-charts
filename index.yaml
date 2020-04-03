@@ -1,0 +1,107 @@
+apiVersion: v1
+entries:
+  elasticsearch:
+  - apiVersion: v1
+    created: 2020-04-03T11:46:30.971567094+05:30
+    description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
+      and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
+      Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
+      logs
+    digest: 710ab47a0accbe3f56eaa49a178682fa90ddbc9d678ba8ad31bf7627161e1e7c
+    engine: gotpl
+    home: https://www.elastic.co/products/elasticsearch
+    icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
+    maintainers:
+    - email: matthew.titmus@gmail.com
+      name: Matt Titmus
+    name: elasticsearch
+    sources:
+    - https://www.elastic.co/products/elasticsearch
+    - https://github.com/pires/kubernetes-elasticsearch-cluster
+    urls:
+    - elasticsearch-0.2.7.tgz
+    version: 0.2.7
+  fluentd-elasticsearch:
+  - appVersion: 2.3.2
+    created: 2020-04-03T11:46:30.974173674+05:30
+    description: A Fluentd Helm chart for Kubernetes with Elasticsearch output
+    digest: 75d4ab3f0bb462c70c2ce5c83542f48a2ae93cccd6097a0818c0be78c76ff607
+    engine: gotpl
+    home: https://www.fluentd.org/
+    icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
+    keywords:
+    - fluentd
+    - elasticsearch
+    - multiline
+    - detect-exceptions
+    - logging
+    name: fluentd-elasticsearch
+    sources:
+    - https://github.com/kubernetes/charts/stable/fluentd-elasticsearch
+    - https://github.com/fluent/fluentd-kubernetes-daemonset
+    - https://github.com/GoogleCloudPlatform/fluent-plugin-detect-exceptions
+    - https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch/fluentd-es-image
+    urls:
+    - fluentd-elasticsearch-2.0.8.tgz
+    version: 2.0.8
+  kafka:
+  - apiVersion: v1
+    appVersion: 5.3.1
+    created: 2020-04-03T11:46:30.977039243+05:30
+    description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
+      monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
+      Topic Metrics, and logs
+    digest: eda80dce0e1ae7eb15623dce3e52ff54eef4edb072fa65048d4db42bffd0a565
+    home: https://kafka.apache.org/
+    icon: https://kafka.apache.org/images/logo.png
+    keywords:
+    - kafka
+    - zookeeper
+    - kafka statefulset
+    name: kafka
+    sources:
+    - https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
+    - https://github.com/Yolean/kubernetes-kafka
+    - https://github.com/confluentinc/cp-docker-images
+    - https://github.com/apache/kafka
+    urls:
+    - kafka-2.3.1.tgz
+    version: 2.3.1
+  petclinic:
+  - apiVersion: v1
+    appVersion: 2.1.0.BUILD-SNAPSHOT
+    created: 2020-04-03T11:46:30.97921208+05:30
+    description: Helm chart for deploying basic Spring applications
+    digest: 119721447478681110f37c361a14471ddb17189e2ee932000470234914b28812
+    home: https://spring.io
+    icon: https://spring.io/img/homepage/icon-spring-boot.svg
+    keywords:
+    - spring
+    - petclinic
+    name: petclinic
+    sources:
+    - https://github.com/spring-projects/spring-petclinic
+    urls:
+    - petclinic-0.2.5.tgz
+    version: 0.2.5
+  sfagent:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2020-04-03T11:46:30.979924016+05:30
+    description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
+      APM.
+    digest: 35374781c4a0c9214280d33f322d215b891bd7778cc4c99e377a7febe0e6320f
+    engine: gotpl
+    home: http://www.snappyflow.io
+    keywords:
+    - monitoring
+    - alerting
+    - metric
+    maintainers:
+    - email: upendra.sahu@maplelabs.com
+      name: Upendra
+    name: sfagent
+    urls:
+    - sfagent-2.0.0.tgz
+    version: 2.0.0
+generated: 2020-04-03T11:46:30.969259543+05:30

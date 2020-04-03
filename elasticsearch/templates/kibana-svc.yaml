@@ -1,0 +1,22 @@
+{{- if .Values.kibana.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-kibana
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    component: {{ template "fullname" . }}-kibana
+    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+spec:
+  type: {{ .Values.common.serviceType }}
+  ports:
+  - port: {{ .Values.kibana.httpPort }}
+    targetPort: 5601
+    protocol: TCP
+  selector:
+    component: {{ template "fullname" . }}-kibana
+{{- end }}

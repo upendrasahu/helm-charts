@@ -1,0 +1,23 @@
+{{- if .Values.podDisruptionBudget.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "spring.controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ template "spring.name" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/component: petclinic
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "spring.name" . }}
+      heritage: "{{ .Release.Service }}"
+      release: "{{ .Release.Name }}"
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+{{- end }}
