@@ -20,6 +20,7 @@
   - **Search all available charts in snappyflow repo**
 
 	$ helm search snappyflow/
+	
 	NAME                            	CHART VERSION	APP VERSION         	DESCRIPTION                                                 
 
 	snappyflow/elasticsearch        	0.2.8        	                    	This Elasticsearch cluster supports 3 master nodes, 2 dat...
@@ -58,6 +59,7 @@
   - **Check if app is installed**
 
 	$ helm list -a
+	
 	NAME     	REVISION	UPDATED                 	STATUS  	CHART              	APP VERSION         	NAMESPACE 
 
 	my-app	    1       	Fri Apr  3 17:50:53 2020	DEPLOYED	sample-petclinic-1.0.0	1          	default  
