@@ -8,10 +8,9 @@
   - **Check repo added**
 
 	$ helm repo list
-	NAME      		URL                                                            
-	stable    		https://kubernetes-charts.storage.googleapis.com               
-	local     		http://127.0.0.1:8879/charts                                                                                      
-	snappyflow		https://raw.githubusercontent.com/snappyflow/helm-charts/master
+	- NAME      		URL                                                            
+	- stable    		https://kubernetes-charts.storage.googleapis.com               
+	- local     		http://127.0.0.1:8879/charts                                                                                     - snappyflow		https://raw.githubusercontent.com/snappyflow/helm-charts/master
 
   - **Update Helm repo**
 
