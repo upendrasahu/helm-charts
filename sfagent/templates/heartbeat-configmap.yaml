@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sf-apm-agents.heartbeat.fullname" . }}
+  labels:
+    app: {{ template "sf-apm-agents.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+data:
+  config.yaml: |
+{{ toYaml .Values.heartbeat.configmap | indent 4 }}
+{{- if .Values.config }}
+{{ toYaml .Values.config | indent 4 }}
+{{- end }}
+    cloud_monitoring: {{ .Values.cluster_monitoring.enabled  }}

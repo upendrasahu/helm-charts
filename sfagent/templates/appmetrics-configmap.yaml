@@ -1,0 +1,17 @@
+{{- if .Values.application_monitoring.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "sf-apm-agents.application.fullname" . }}
+  labels:
+    app: {{ template "sf-apm-agents.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+data:
+  config.yaml: |
+{{ toYaml .Values.application_monitoring.configmap | indent 4 }}
+{{- if .Values.config }}
+{{ toYaml .Values.config | indent 4 }}
+{{- end }}
+{{- end }}

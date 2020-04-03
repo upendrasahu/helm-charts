@@ -1,0 +1,186 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "expressCart.fullname" . }}-jmeter
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ include "expressCart.name" . }}
+    chart: {{ include "expressCart.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/component: jmeter
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "expressCart.name" . }}
+      release: {{ .Release.Name }}
+      snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+      snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+      snappyflow/component: jmeter
+  template:
+    metadata:
+      labels:
+        app: {{ include "expressCart.name" . }}
+        release: {{ .Release.Name }}
+        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/component: jmeter
+      annotations:
+        {{ toYaml .Values.podAnnotations | indent 8 }}
+    spec:
+      serviceAccountName: {{ template "expressCart.serviceAccountName" . }}
+      securityContext:
+        {{ toYaml .Values.securityContext | indent 8 }}
+      initContainers:
+        - name: get-jar-files
+          image: alpine
+          command:
+            - sh
+            - -c
+            - -x
+            - apk add --no-cache curl && curl ${JOLOKIA_JAR_URL} -o /data/jolokia.jar
+          env:
+            - name: JOLOKIA_JAR_URL
+              value: https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jvm-1.6.2-agent.jar
+
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      containers:
+        - name: {{ .Chart.Name }}-jmeter
+          image: "{{ .Values.jmeter.image.repository }}:{{ .Values.jmeter.image.tag }}"
+          imagePullPolicy: {{ .Values.jmeter.image.pullPolicy }}
+          command:
+            - sh 
+            - -c 
+            - -x 
+            - cp /data/jolokia.jar /opt/apache-jmeter-5.1.1/lib/. && touch /var/log/test_plan.jtl; cd $JMETER_HOME/bin && /usr/bin/java -server $JAVA_ARGS $JVM_ARGS $JAVA_AGENT -jar $JMETER_HOME/bin/ApacheJMeter.jar -n -t /scripts/test_plan.jmx -l /var/log/test_plan.jtl -LINFO -j /var/log/jmeter.log -JEXPRESSCART_HOST=${EXPRESSCART_HOST} -JEXPRESSCART_PORT=${EXPRESSCART_PORT};
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: EXPRESSCART_HOST
+              value: {{ template "expressCart.fullname" . }}
+            - name: EXPRESSCART_PORT
+              value: "80"
+            - name: JMETER_HOME
+              value: "/opt/apache-jmeter-5.1.1"
+            - name: JVM_ARGS
+              value: "-Dcom.sun.management.jmxremote -Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=5555 -Dcom.sun.management.jmxremote.rmi.port=5555 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+            - name: JAVA_ARGS
+              value: "-XX:+HeapDumpOnOutOfMemoryError -Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -Djava.security.egd=file:/dev/urandom -Duser.language=en -Duser.region=EN"
+            - name: JAVA_AGENT
+              value: "-javaagent:/opt/apache-jmeter-5.1.1/lib/jolokia.jar=port=8778,host=0.0.0.0"
+            {{- range $key, $value := .Values.jmeter.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: scripts
+              mountPath: /scripts
+            - name: jmeterlog
+              mountPath: /var/log
+          resources:
+{{ toYaml .Values.jmeter.resources | indent 12 }}
+{{- if .Values.jmeter.logger.enabled }}
+        - name: jmeter-logger
+          image:  "{{ .Values.jmeter.logger.image }}:{{ .Values.jmeter.logger.imageTag }}"
+          imagePullPolicy: {{ .Values.jmeter.logger.imagePullPolicy | quote }}
+          env:
+          - name: FLUENTD_ARGS
+            value: --no-supervisor -q
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: DEEPINSIGHT_APPLICATION_NAME
+            value: {{ default .Release.Name .Values.sfappname }}
+          - name: DEEPINSIGHT_PROJECT_NAME
+            value: {{ default .Release.Name .Values.sfprojectname }}
+          - name: FLUENTD_FORWARD_HOST
+            value: "{{ .Values.jmeter.logger.fluentd_server_host }}"
+          - name: FLUENTD_FORWARD_PORT
+            value: "{{ .Values.jmeter.logger.fluentd_server_port }}"
+          resources:
+{{ toYaml .Values.jmeter.logger.resources | indent 12 }}
+          volumeMounts:
+          - name: jmeterlog
+            mountPath: /var/log
+          - name: jmeter-logger-conf
+            mountPath: /etc/fluent/config.d
+{{- end }}
+{{- if .Values.logrotate.enabled }}
+        - name: logrotate
+          image:  "{{ .Values.logrotate.image.repository }}:{{ .Values.logrotate.image.tag }}"
+          imagePullPolicy: {{ .Values.logrotate.image.pullPolicy | quote }}
+          env:
+          {{- range $key, $value := .Values.logrotate.env }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{- end }}
+          - name: LOGS_DIRECTORIES
+            value: "/var/log"
+          resources:
+{{ toYaml .Values.logrotate.resources | indent 12 }}
+          volumeMounts:
+          - name: jmeterlog
+            mountPath: /var/log
+{{- end }}
+{{- if .Values.jmx_exporter.enabled }}
+        - name: jmx-exporter
+          image: "{{ .Values.jmx_exporter.image.repository }}:{{ .Values.jmx_exporter.image.tag }}"
+          imagePullPolicy: {{ .Values.jmx_exporter.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - -x
+            - java -jar /opt/bitnami/jmx-exporter/jmx_prometheus_httpserver.jar {{ .Values.jmx_exporter.port }} /config/jmx-config.yml
+          ports:
+          - name: jmx-exporter
+            containerPort: {{ .Values.jmx_exporter.port }}
+          volumeMounts:
+            - name: jmx-exporter
+              mountPath: /config/jmx-config.yml
+              subPath: jmx-config.yml
+          livenessProbe:
+            httpGet:
+              path: /metric
+              port: jmx-exporter
+            initialDelaySeconds: 90
+            timeoutSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /metric
+              port: jmx-exporter
+            initialDelaySeconds: 60
+            timeoutSeconds: 20
+{{- end }}
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: scripts
+          configMap:
+            name: {{ include "expressCart.fullname" . }}-scripts
+        - name: jmeterlog
+          emptyDir: {}
+        {{- if .Values.jmeter.logger.enabled }}
+        - name: jmeter-logger-conf
+          configMap:
+            name: {{ template "expressCart.fullname" . }}-jmeter-logger-conf
+        {{- end }}
+{{- if .Values.jmx_exporter.enabled }}
+        - name: jmx-exporter
+          configMap:
+            name: {{ include "expressCart.fullname" . }}-jmx-exporter
+{{- end }}
+

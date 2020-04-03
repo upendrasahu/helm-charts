@@ -1,0 +1,16 @@
+{{- if .Values.configmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: {{ template "mongodb.name" . }}
+    chart: {{ template "mongodb.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+  name: {{ template "mongodb.fullname" . }}
+data:
+  mongodb.conf: |-
+{{ toYaml .Values.configmap | indent 4 }}
+{{- end }}

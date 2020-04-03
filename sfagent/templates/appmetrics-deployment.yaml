@@ -1,0 +1,83 @@
+{{- if .Values.application_monitoring.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "sf-apm-agents.application.fullname" . }}
+  labels:
+    app: {{ template "sf-apm-agents.name" . }}
+    release: {{ .Release.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "sf-apm-agents.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "sf-apm-agents.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ template "sf-apm-agents.name" . }}-prometheus
+        image: "{{ .Values.application_monitoring.prometheus_poller.image.repository }}:{{ .Values.application_monitoring.prometheus_poller.image.tag }}"
+        imagePullPolicy: {{ .Values.application_monitoring.prometheus_poller.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.application_monitoring.prometheus_poller.resources | indent 12 }}
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+          - name: hbconfig
+            mountPath: /opt/heartbeat_config
+            readOnly: true
+      - name: {{ template "sf-apm-agents.name" . }}-event
+        image: "{{ .Values.application_monitoring.event_metrics.image.repository }}:{{ .Values.application_monitoring.event_metrics.image.tag }}"
+        imagePullPolicy: {{ .Values.application_monitoring.event_metrics.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.application_monitoring.event_metrics.resources | indent 12 }}
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+        {{- if .Values.cluster_monitoring.enabled }}
+          - name: clusterconfig
+            mountPath: /opt/clusterconfig
+            readOnly: true
+          {{- end }}
+      - name: {{ template "sf-apm-agents.name" . }}-agentserver
+        image: "{{ .Values.application_monitoring.apm_agent_server.image.repository }}:{{ .Values.application_monitoring.apm_agent_server.image.tag }}"
+        imagePullPolicy: {{ .Values.application_monitoring.apm_agent_server.image.pullPolicy }}
+        command: ["python",
+                    "plugin_server/plugin_server.py"]
+        ports:
+          - name: pluginserver
+            containerPort: 9001
+        resources:
+{{ toYaml .Values.application_monitoring.apm_agent_server.resources | indent 12 }}
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+          - name: hbconfig
+            mountPath: /opt/hbconfig
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "sf-apm-agents.application.fullname" . }}
+        {{- if .Values.cluster_monitoring.enabled }}
+        - name: clusterconfig
+          configMap:
+            name: {{ template "sf-apm-agents.cluster.fullname" . }}
+        {{- end }}
+        - name: hbconfig
+          configMap:
+            name: {{ template "sf-apm-agents.heartbeat.fullname" . }}
+      serviceAccountName: {{ if .Values.rbac.create }}{{ template "sf-apm-agents.name" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
+{{- if .Values.application_monitoring.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.application_monitoring.nodeSelector | indent 8 }}
+{{- end }}
+{{- end }}
