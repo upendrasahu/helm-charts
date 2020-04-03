@@ -1,10 +1,12 @@
 ### Kubernetes Helm charts ###
 
   - **Add snappyflow helm chart repo**
-
+	
+	```
 	$ helm repo add snappyflow https://raw.githubusercontent.com/snappyflow/helm-charts/master
 	"snappyflow" has been added to your repositories
-
+	```
+	
   - **Check repo added**
 	```
 	$ helm repo list
@@ -13,12 +15,13 @@
 	local     		http://127.0.0.1:8879/charts                                                                                     
 	snappyflow		https://raw.githubusercontent.com/snappyflow/helm-charts/master
 	```
-  - **Update Helm repo**
-
+  - **Update Helm repo**	
+	```
 	$ helm repo update
-
+	```
+	
   - **Search all available charts in snappyflow repo**
-
+	```
 	$ helm search snappyflow/
 	
 	NAME                            	CHART VERSION	APP VERSION         	DESCRIPTION                                                 
@@ -37,38 +40,44 @@
 
 	snappyflow/sfagent              	2.0.0        	1.0                 	Cluster and Application Monitoring system for Maplelabs' ...
 
-
-  - **Get values.yaml content**
-
+	```
+	
+  - **Get values.yaml content**	
+	```
 	$ helm inspect snappyflow/petclinic
-
+	```
+	
   - **Note: Below commands are applicable for Helm version 2. Commands has changed for Helm version 3**
 
-  - **Install with Default values**
-
+  - **Install with Default values**	
+	```
 	$ helm install snappyflow/sample-petclinic --name my-app --namespace my-namespace
-
-  - **Install with command line argument to set parameters**
-
+	```
+	
+  - **Install with command line argument to set parameters**	
+	```
 	$ helm install snappyflow/sample-petclinic --set global.sfappname=my-app --set global.sfprojectname=my-project --name my-app --namespace my-namespace
-
-  - **Install with file as input to set parameters**
-
+	```
+	
+  - **Install with file as input to set parameters**	
+	```
 	$ helm install snappyflow/sample-petclinic -f inputfile.yaml --name my-app --namespace my-namespace
-
+	```
+	
   - **Check if app is installed**
-
+	```
 	$ helm list -a
 	
 	NAME     	REVISION	UPDATED                 	STATUS  	CHART              	APP VERSION         	NAMESPACE 
 
 	my-app	    1       	Fri Apr  3 17:50:53 2020	DEPLOYED	sample-petclinic-1.0.0	1          	default  
-
-
+	
+	```
+	
   - **Delete an app**
-
+	```
 	$ helm delete my-app --purge
-
+	```
 
 
 
