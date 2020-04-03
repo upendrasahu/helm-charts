@@ -8,8 +8,8 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   serviceName: {{ include "kafka.fullname" . }}-headless
   podManagementPolicy: {{ .Values.podManagementPolicy }}
@@ -27,8 +27,8 @@ spec:
         app: {{ include "kafka.name" . }}
         release: {{ .Release.Name }}
         service: kafka
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
 {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"

@@ -9,6 +9,15 @@ image:
   tag: 2.1.0.BUILD-SNAPSHOT
   pullPolicy: IfNotPresent
 
+# Global application tags   
+# sfappname key will be replaced with snappyflow/appaname and
+# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname: petclinic --> snappyflow/appname: petclinic
+# sfprojectname: spring --> snappyflow/projectname: spring
+global:
+  sfappname: petclinic
+  sfprojectname: spring
+
 nameOverride: ""
 fullnameOverride: ""
 
@@ -132,8 +141,6 @@ mysql:
   mysqlDatabase: petclinic
   persistence:
     enabled: true
-  sfappname: petclinic
-  sfprojectname: spring
   logrotate:
     enabled: true
     env:
@@ -175,9 +182,6 @@ jmeter:
       limits:
         cpu: 500m
         memory: 512Mi
-
-sfappname: petclinic
-sfprojectname: demo-kube
 
 nginx:
   resolver: "coredns.kube-system.svc.cluster.local"

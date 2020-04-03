@@ -8,8 +8,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     role: exporter
 spec:
   replicas: 1
@@ -28,8 +28,8 @@ spec:
         app: {{ template "kafka.name" . }}-exporter
         release: {{ .Release.Name }}
         role: exporter
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
       containers:
       - image: "{{ .Values.prometheus.kafka.image }}:{{ .Values.prometheus.kafka.imageTag }}"

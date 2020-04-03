@@ -7,8 +7,8 @@ metadata:
     chart: {{ template "mongodb.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     {{- with .Values.labels }}
 {{ toYaml . | indent 4 }}
     {{- end }}
@@ -27,8 +27,8 @@ spec:
         app: {{ template "mongodb.name" . }}
         release: "{{ .Release.Name }}"
         chart: {{ template "mongodb.chart" . }}
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
       {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
       {{- end }}
@@ -254,7 +254,7 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: DEEPINSIGHT_APPLICATION_NAME
-          value: {{ default .Release.Name .Values.sfappname }}
+          value: {{ default .Release.Name .Values.global.sfappname }}
         - name: FLUENTD_FORWARD_HOST
           value: "{{ .Values.logger.fluentd_server_host }}"
         - name: FLUENTD_FORWARD_PORT

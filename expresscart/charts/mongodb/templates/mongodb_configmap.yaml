@@ -7,8 +7,8 @@ metadata:
     chart: {{ template "mongodb.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
   name: {{ template "mongodb.fullname" . }}
 data:
   mongodb.conf: |-

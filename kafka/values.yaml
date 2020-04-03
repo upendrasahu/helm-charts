@@ -11,6 +11,15 @@ image: "confluentinc/cp-kafka"
 ## The kafka image tag
 imageTag: "5.3.1"
 
+# Global application tags   
+# sfappname key will be replaced with snappyflow/appaname and
+# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname: petclinic --> snappyflow/appname: kafka
+# sfprojectname: spring --> snappyflow/projectname: kafka-project
+global:
+  sfappname: kafka
+  sfprojectname: kafka-project
+
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 imagePullPolicy: "IfNotPresent"
@@ -319,8 +328,6 @@ zookeeper:
 #         labelSelector:
 #           matchLabels:
 #             release: zookeeper
-  sfappname: kafka
-  sfprojectname: kafka-project
 
 nodeport:
   enabled: false
@@ -343,5 +350,3 @@ perf_test:
   num_messages: 5000
   topic: "perftest"
   group_name: "kafka_group"
-sfappname: kafka
-sfprojectname: kafka-project

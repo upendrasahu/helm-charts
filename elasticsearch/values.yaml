@@ -8,6 +8,15 @@ image:
     tag: latest
     pullPolicy: IfNotPresent
 
+# Global application tags   
+# sfappname key will be replaced with snappyflow/appaname and
+# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname: petclinic --> snappyflow/appname: elasticsearch
+# sfprojectname: spring --> snappyflow/projectname: demo-kube
+global:
+  sfappname: elasticsearch
+  sfprojectname: demo-kube
+
 common:
   # Defines the service type for all outward-facing (non-discovery) services.
   # For minikube use NodePort otherwise use LoadBalancer

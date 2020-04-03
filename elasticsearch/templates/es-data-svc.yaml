@@ -9,8 +9,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     role: data
 spec:
   ports:

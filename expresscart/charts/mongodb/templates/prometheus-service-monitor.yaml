@@ -14,8 +14,8 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
 {{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
     {{- end }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   endpoints:
   - interval: 30s

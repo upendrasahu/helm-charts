@@ -7,8 +7,8 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.servers }}
@@ -20,8 +20,8 @@ spec:
         app: {{ include "zookeeper.name" . | quote }}
         release: {{ .Release.Name | quote }}
         service: zookeeper
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
 {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"

@@ -2,12 +2,12 @@ apiVersion: v1
 entries:
   elasticsearch:
   - apiVersion: v1
-    created: 2020-04-03T11:46:30.971567094+05:30
+    created: 2020-04-03T13:25:39.341530602+05:30
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
       logs
-    digest: 710ab47a0accbe3f56eaa49a178682fa90ddbc9d678ba8ad31bf7627161e1e7c
+    digest: a7e2ef69d6e3665b0a717acee09dbec011455a8d4b531913627b200fc657775e
     engine: gotpl
     home: https://www.elastic.co/products/elasticsearch
     icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
@@ -19,13 +19,26 @@ entries:
     - https://www.elastic.co/products/elasticsearch
     - https://github.com/pires/kubernetes-elasticsearch-cluster
     urls:
-    - elasticsearch-0.2.7.tgz
-    version: 0.2.7
+    - elasticsearch-0.2.8.tgz
+    version: 0.2.8
+  expresscart:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2020-04-03T13:25:39.346220866+05:30
+    description: A Helm chart to deploy expressCart nodejs application
+    digest: f63b7c29d70c65d0eb06df3c271f3743cb197356e04c72fa1e8278473b1cea46
+    icon: https://raw.githubusercontent.com/mrvautin/expressCart/master/public/images/logo.png
+    name: expresscart
+    sources:
+    - https://github.com/mrvautin/expressCart
+    urls:
+    - expresscart-0.1.7.tgz
+    version: 0.1.7
   fluentd-elasticsearch:
   - appVersion: 2.3.2
-    created: 2020-04-03T11:46:30.974173674+05:30
+    created: 2020-04-03T13:25:39.347565691+05:30
     description: A Fluentd Helm chart for Kubernetes with Elasticsearch output
-    digest: 75d4ab3f0bb462c70c2ce5c83542f48a2ae93cccd6097a0818c0be78c76ff607
+    digest: 3a091e75d9e755856676639285ec95e9ebbbaae4d3e25ffb5e2e19ca5343f1f7
     engine: gotpl
     home: https://www.fluentd.org/
     icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
@@ -44,35 +57,12 @@ entries:
     urls:
     - fluentd-elasticsearch-2.0.8.tgz
     version: 2.0.8
-  kafka:
-  - apiVersion: v1
-    appVersion: 5.3.1
-    created: 2020-04-03T11:46:30.977039243+05:30
-    description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
-      monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
-      Topic Metrics, and logs
-    digest: eda80dce0e1ae7eb15623dce3e52ff54eef4edb072fa65048d4db42bffd0a565
-    home: https://kafka.apache.org/
-    icon: https://kafka.apache.org/images/logo.png
-    keywords:
-    - kafka
-    - zookeeper
-    - kafka statefulset
-    name: kafka
-    sources:
-    - https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
-    - https://github.com/Yolean/kubernetes-kafka
-    - https://github.com/confluentinc/cp-docker-images
-    - https://github.com/apache/kafka
-    urls:
-    - kafka-2.3.1.tgz
-    version: 2.3.1
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-03T11:46:30.97921208+05:30
+    created: 2020-04-03T13:25:39.35108709+05:30
     description: Helm chart for deploying basic Spring applications
-    digest: 119721447478681110f37c361a14471ddb17189e2ee932000470234914b28812
+    digest: c75482154c4caecd359cdf328919610ac940e783d398f4810a10f5c162e1baf5
     home: https://spring.io
     icon: https://spring.io/img/homepage/icon-spring-boot.svg
     keywords:
@@ -82,15 +72,33 @@ entries:
     sources:
     - https://github.com/spring-projects/spring-petclinic
     urls:
-    - petclinic-0.2.5.tgz
-    version: 0.2.5
+    - petclinic-0.2.6.tgz
+    version: 0.2.6
+  petclinic-v3:
+  - apiVersion: v1
+    appVersion: 2.1.0.BUILD-SNAPSHOT
+    created: 2020-04-03T13:25:39.353865531+05:30
+    description: Helm chart for deploying basic Spring applications
+    digest: 4c6ef5ce460110fd79c54af0940b289181b38c9ba599ef38b852c9b3e9d2a82c
+    home: https://spring.io
+    icon: https://spring.io/img/homepage/icon-spring-boot.svg
+    keywords:
+    - spring
+    - petclinic
+    - v3
+    name: petclinic-v3
+    sources:
+    - https://github.com/spring-projects/spring-petclinic
+    urls:
+    - petclinic-v3-0.4.0.tgz
+    version: 0.4.0
   sfagent:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-04-03T11:46:30.979924016+05:30
+    created: 2020-04-03T13:25:39.354792988+05:30
     description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
       APM.
-    digest: 35374781c4a0c9214280d33f322d215b891bd7778cc4c99e377a7febe0e6320f
+    digest: 83918703383bd62e739f075f5e47c0a4b7570ac0481ee5815cb1045cadb1a5cb
     engine: gotpl
     home: http://www.snappyflow.io
     keywords:
@@ -104,4 +112,4 @@ entries:
     urls:
     - sfagent-2.0.0.tgz
     version: 2.0.0
-generated: 2020-04-03T11:46:30.969259543+05:30
+generated: 2020-04-03T13:25:39.340106882+05:30

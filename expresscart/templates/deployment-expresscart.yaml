@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   name: {{ include "expressCart.fullname" . }}
   labels:
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
 {{ include "expressCart.labels" . | indent 4 }}
   {{- with .Values.annotations }}
   annotations:
@@ -16,15 +16,15 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "expressCart.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-      snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+      snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+      snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
   template:
     metadata:
       labels:
         app.kubernetes.io/name: {{ include "expressCart.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
       {{- with .Values.annotations }}
       annotations:
 {{ toYaml . | indent 8 }}

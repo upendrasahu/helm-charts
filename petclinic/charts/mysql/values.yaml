@@ -126,5 +126,3 @@ logrotate:
     LOGROTATE_PARAMETERS: "vf"
     LOG_FILE: "/dev/stdout"
 
-sfappname: petclinic
-sfprojectname: spring

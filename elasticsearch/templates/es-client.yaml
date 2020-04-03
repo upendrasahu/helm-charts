@@ -8,8 +8,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     role: client
 spec:
   replicas: {{ .Values.client.replicas }}
@@ -19,8 +19,8 @@ spec:
       component: {{ template "fullname" . }}
       role: client
       service: ES
-      snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-      snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+      snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+      snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
   template:
     metadata:
       labels:
@@ -28,8 +28,8 @@ spec:
         component: {{ template "fullname" . }}
         role: client
         service: ES
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
@@ -141,9 +141,9 @@ spec:
         - name: FLUENTD_FORWARD_PORT
           value: "{{ .Values.logger.fluentd_server_port }}"
         - name: DEEPINSIGHT_APPLICATION_NAME
-          value: {{ default .Release.Name .Values.sfappname }}
+          value: {{ default .Release.Name .Values.global.sfappname }}
         - name: DEEPINSIGHT_PROJECT_NAME
-          value: {{ default .Release.Name .Values.sfprojectname }}
+          value: {{ default .Release.Name .Values.global.sfprojectname }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:

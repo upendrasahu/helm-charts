@@ -8,8 +8,8 @@ metadata:
     chart: {{ include "spring.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     snappyflow/component: jmeter
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -17,16 +17,16 @@ spec:
     matchLabels:
       app: {{ include "spring.name" . }}
       release: {{ .Release.Name }}
-      snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-      snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+      snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+      snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
       snappyflow/component: jmeter
   template:
     metadata:
       labels:
         app: {{ include "spring.name" . }}
         release: {{ .Release.Name }}
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
         snappyflow/component: jmeter
       annotations:
         {{ toYaml .Values.podAnnotations | indent 8 }}
@@ -113,9 +113,9 @@ spec:
               fieldRef:
                 fieldPath: metadata.name
           - name: DEEPINSIGHT_APPLICATION_NAME
-            value: {{ default .Release.Name .Values.sfappname }}
+            value: {{ default .Release.Name .Values.global.sfappname }}
           - name: DEEPINSIGHT_PROJECT_NAME
-            value: {{ default .Release.Name .Values.sfprojectname }}
+            value: {{ default .Release.Name .Values.global.sfprojectname }}
           - name: FLUENTD_FORWARD_HOST
             value: "{{ .Values.jmeter.logger.fluentd_server_host }}"
           - name: FLUENTD_FORWARD_PORT

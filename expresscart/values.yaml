@@ -9,6 +9,15 @@ image:
   tag: v1
   pullPolicy: IfNotPresent
 
+# Global application tags   
+# sfappname key will be replaced with snappyflow/appaname and
+# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname: petclinic --> snappyflow/appname: expresscart
+# sfprojectname: spring --> snappyflow/projectname: nodejs
+global:
+  sfappname: expresscart
+  sfprojectname: nodejs
+
 initContainerImage: "alpine:3.6"
 replicaCount: 1
 
@@ -170,5 +179,3 @@ jmx_exporter:
   port: 5556
 
 
-sfappname: expresscart
-sfprojectname: nodejs

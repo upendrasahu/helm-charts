@@ -7,8 +7,8 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
     snappyflow/component: mysql
 spec:
   selector:
@@ -16,8 +16,8 @@ spec:
       app: {{ template "mysql.fullname" . }}
       release: {{ .Release.Name  }}
       service: mysql
-      snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-      snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+      snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+      snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
       snappyflow/component: mysql
   template:
     metadata:
@@ -25,8 +25,8 @@ spec:
         app: {{ template "mysql.fullname" . }}
         release: {{ .Release.Name  }}
         service: mysql
-        snappyflow/appname: {{ default .Release.Name .Values.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.sfprojectname }}
+        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
         snappyflow/component: mysql
     spec:
       initContainers:
@@ -169,9 +169,9 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: DEEPINSIGHT_APPLICATION_NAME
-          value: {{ default .Release.Name .Values.sfappname }}
+          value: {{ default .Release.Name .Values.global.sfappname }}
         - name: DEEPINSIGHT_PROJECT_NAME
-          value: {{ default .Release.Name .Values.sfprojectname }}
+          value: {{ default .Release.Name .Values.global.sfprojectname }}
         - name: FLUENTD_FORWARD_HOST
           value: "{{ .Values.logger.fluentd_server_host }}"
         - name: FLUENTD_FORWARD_PORT
