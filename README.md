@@ -47,7 +47,7 @@
 	$ helm inspect snappyflow/petclinic
 	```
 	
-  - **Note: Below commands are applicable for Helm version 2. Commands has changed for Helm version 3**
+  - **Note: Below commands are applicable for Helm version 2. May not work for Helm version 3**
 
   - **Install with Default values**	
 	```
