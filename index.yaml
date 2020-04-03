@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   elasticsearch:
   - apiVersion: v1
-    created: 2020-04-03T13:25:39.341530602+05:30
+    created: 2020-04-03T17:38:41.027931863+05:30
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
@@ -24,7 +24,7 @@ entries:
   expresscart:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-04-03T13:25:39.346220866+05:30
+    created: 2020-04-03T17:38:41.030639684+05:30
     description: A Helm chart to deploy expressCart nodejs application
     digest: f63b7c29d70c65d0eb06df3c271f3743cb197356e04c72fa1e8278473b1cea46
     icon: https://raw.githubusercontent.com/mrvautin/expressCart/master/public/images/logo.png
@@ -36,7 +36,7 @@ entries:
     version: 0.1.7
   fluentd-elasticsearch:
   - appVersion: 2.3.2
-    created: 2020-04-03T13:25:39.347565691+05:30
+    created: 2020-04-03T17:38:41.03419271+05:30
     description: A Fluentd Helm chart for Kubernetes with Elasticsearch output
     digest: 3a091e75d9e755856676639285ec95e9ebbbaae4d3e25ffb5e2e19ca5343f1f7
     engine: gotpl
@@ -60,7 +60,7 @@ entries:
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-03T13:25:39.35108709+05:30
+    created: 2020-04-03T17:38:41.036840483+05:30
     description: Helm chart for deploying basic Spring applications
     digest: c75482154c4caecd359cdf328919610ac940e783d398f4810a10f5c162e1baf5
     home: https://spring.io
@@ -77,7 +77,7 @@ entries:
   petclinic-v3:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-03T13:25:39.353865531+05:30
+    created: 2020-04-03T17:38:41.039855801+05:30
     description: Helm chart for deploying basic Spring applications
     digest: 4c6ef5ce460110fd79c54af0940b289181b38c9ba599ef38b852c9b3e9d2a82c
     home: https://spring.io
@@ -92,10 +92,20 @@ entries:
     urls:
     - petclinic-v3-0.4.0.tgz
     version: 0.4.0
+  sample-petclinic:
+  - apiVersion: v1
+    appVersion: "1"
+    created: 2020-04-03T17:38:41.041895543+05:30
+    description: Helm chart for deploying basic Spring applications
+    digest: dfc179c457dcf222b609220998ac2a41b565333cf4386446eeecd0d65ed22a29
+    name: sample-petclinic
+    urls:
+    - sample-petclinic-1.0.0.tgz
+    version: 1.0.0
   sfagent:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-04-03T13:25:39.354792988+05:30
+    created: 2020-04-03T17:38:41.043009608+05:30
     description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
       APM.
     digest: 83918703383bd62e739f075f5e47c0a4b7570ac0481ee5815cb1045cadb1a5cb
@@ -112,4 +122,4 @@ entries:
     urls:
     - sfagent-2.0.0.tgz
     version: 2.0.0
-generated: 2020-04-03T13:25:39.340106882+05:30
+generated: 2020-04-03T17:38:41.026796253+05:30

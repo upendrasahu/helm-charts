@@ -1,0 +1,14 @@
+{{- if .Values.configurationFiles }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mysql.fullname" . }}
+  snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+  snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+  snappyflow/component: mysql
+data:
+{{- range $key, $val := .Values.configurationFiles }}
+  {{ $key }}: |-
+{{ $val | indent 4}}
+{{- end }}
+{{- end -}}
