@@ -70,7 +70,7 @@
 	
 	NAME     	REVISION	UPDATED                 	STATUS  	CHART              	APP VERSION         	NAMESPACE 
 
-	my-app	    	1       	Fri Apr  3 17:50:53 2020	DEPLOYED	sample-petclinic-1.0.0	1          	default  
+	my-app	    	1       	Fri Apr  3 17:50:53 2020	DEPLOYED	sample-petclinic-1.0.0	1          		default  
 	
 	```
 	
