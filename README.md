@@ -79,8 +79,9 @@
 	$ helm delete my-app --purge
 	```
 
- **Install SnappyFlow Monitoring Agent Pods**	
-	```
+ **Install SnappyFlow Monitoring Agent Pods**
+ 
+ 	```
 	$ helm install snappyflow/sfagent --set config.cluster_name=<unique cluster name> --set config.key=<encoded_key> --name sfagent --namespace sfagent
 	```
 
