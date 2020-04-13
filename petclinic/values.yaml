@@ -141,6 +141,9 @@ mysql:
   mysqlDatabase: petclinic
   persistence:
     enabled: true
+    storageClass: "slow"
+    accessMode: ReadWriteOnce
+    size: 8Gi
   logrotate:
     enabled: true
     env:

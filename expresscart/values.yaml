@@ -111,6 +111,9 @@ mongodb:
 
   persistence:
     enabled: true
+    storageClass: "slow"
+    size: 8Gi
+    
   metrics:
     enabled: true
   logger:
