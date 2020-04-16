@@ -67,17 +67,17 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           ports:
-            - containerPort: {{ .Values.service.httpPort }}
+            - containerPort: {{ .Values.exporter.service.httpPort }}
               name: exporter
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: exporter
             initialDelaySeconds: 30
             timeoutSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: exporter
             initialDelaySeconds: 10
             timeoutSeconds: 10
