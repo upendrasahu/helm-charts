@@ -184,7 +184,7 @@ jmeter:
       cpu: 250m
       memory: 512Mi
   logger:
-    enabled: false
+    enabled: true
     image: snappyflowml/sfagent-logger
     imageTag: latest
     imagePullPolicy: Always
@@ -214,7 +214,7 @@ nginx:
     type: ClusterIP
 
   logger:
-    enabled: false
+    enabled: true
     image: snappyflowml/sfagent-logger
     imageTag: latest
     imagePullPolicy: IfNotPresent

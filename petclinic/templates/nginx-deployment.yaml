@@ -95,7 +95,6 @@ spec:
           volumeMounts:
           - name: varlog
             mountPath: /var/log/nginx
-          - name: nginx-logger-conf
 {{- end }}
 
 {{- if .Values.logrotate.enabled }}
@@ -148,6 +147,3 @@ spec:
         - name: nginx-config-file
           configMap:
             name: {{ include "spring.fullname" . }}-nginx-config
-        - name: geoip
-          configMap:
-            name: {{ include "spring.fullname" . }}-geoip
