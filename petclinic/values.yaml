@@ -9,6 +9,7 @@ image:
   tag: 2.1.0.BUILD-SNAPSHOT
   pullPolicy: IfNotPresent
 
+# key --> apm key for logger
 # Global application tags   
 # sfappname key will be replaced with snappyflow/appaname and
 # sfprojectname key replaced with snappyflow/projectname during helm chart deployment
@@ -17,6 +18,7 @@ image:
 global:
   sfappname: petclinic
   sfprojectname: spring
+  key: ""
 
 nameOverride: ""
 fullnameOverride: ""
@@ -131,8 +133,6 @@ podDisruptionBudget:
   minAvailable: 1
 
 mysql:
-  logger:
-    enabled: false
   mysql_exporter:
     enabled: true
   mysqlRootPassword: spring
@@ -144,6 +144,18 @@ mysql:
     storageClass: "slow"
     accessMode: ReadWriteOnce
     size: 8Gi
+  logger:
+    enabled: true
+    image: snappyflowml/sfagent-logger
+    imageTag: latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
   logrotate:
     enabled: true
     env:
@@ -172,12 +184,10 @@ jmeter:
       cpu: 250m
       memory: 512Mi
   logger:
-    enabled: false
-    image: gcr.io/google-containers/fluentd-elasticsearch
-    imageTag: v2.0.4
-    imagePullPolicy: IfNotPresent
-    fluentd_server_host: logger-snappyflow-fluentd.default.svc.cluster.local
-    fluentd_server_port: "24224"
+    enabled: true
+    image: snappyflowml/sfagent-logger
+    imageTag: latest
+    imagePullPolicy: Always
     resources:
       requests:
         cpu: 250m
@@ -204,12 +214,10 @@ nginx:
     type: ClusterIP
 
   logger:
-    enabled: false
-    image: gcr.io/google-containers/fluentd-elasticsearch
-    imageTag: v2.0.4
+    enabled: true
+    image: snappyflowml/sfagent-logger
+    imageTag: latest
     imagePullPolicy: IfNotPresent
-    fluentd_server_host: logger-snappyflow-fluentd.default.svc.cluster.local
-    fluentd_server_port: "24224"
     resources:
       requests:
         cpu: 250m

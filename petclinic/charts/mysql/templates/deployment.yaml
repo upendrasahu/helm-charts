@@ -157,37 +157,20 @@ spec:
       - name: {{ template "mysql.fullname" . }}-logger
         image:  "{{ .Values.logger.image }}:{{ .Values.logger.imageTag }}"
         imagePullPolicy: {{ .Values.logger.imagePullPolicy | quote }}
+        command:
+        - /app/sfagent
+        - -config
+        - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"mysql-general","enabled":true,"config":{"log_path":"/var/log/mysql/mysql.log, /var/log/mysql.log, /var/log/mysqld.log"}},{"name":"mysql-error","enabled":true,"config":{"log_level":["error","warn","note"],"log_path":"/var/log/mysql/error.log, /var/log/mysql/mysql-error.log, /var/log/mysqld.err"}}]}}'
         env:
-        - name: FLUENTD_ARGS
-          value: --no-supervisor -q
-        - name: NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: DEEPINSIGHT_APPLICATION_NAME
-          value: {{ default .Release.Name .Values.global.sfappname }}
-        - name: DEEPINSIGHT_PROJECT_NAME
-          value: {{ default .Release.Name .Values.global.sfprojectname }}
-        - name: FLUENTD_FORWARD_HOST
-          value: "{{ .Values.logger.fluentd_server_host }}"
-        - name: FLUENTD_FORWARD_PORT
-          value: "{{ .Values.logger.fluentd_server_port }}"
+        - name: APP_NAME
+          value: {{ .Values.global.sfappname }}
+        - name: PROJECT_NAME
+          value: {{ .Values.global.sfprojectname }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
-        - name: libsystemddir
-          mountPath: /host/lib
-          readOnly: true
         - name: varlog
           mountPath: /var/log
-        - name: mysql-config-file
-          mountPath: /etc/mysql/conf.d
-        - name: {{ template "mysql.fullname" . }}-logger-conf
-          mountPath: /etc/fluent/config.d
 {{- end }}
 {{- if .Values.logrotate.enabled }}
       - name: logrotate
@@ -215,11 +198,6 @@ spec:
       - name: libsystemddir
         hostPath:
           path: /usr/lib64
-      {{- if .Values.logger.enabled }}
-      - name: {{ template "mysql.fullname" . }}-logger-conf
-        configMap:
-          name: {{ template "mysql.fullname" . }}-logger-conf
-      {{- end }}
       {{- if .Values.configurationFiles }}
       - name: configurations
         configMap:
