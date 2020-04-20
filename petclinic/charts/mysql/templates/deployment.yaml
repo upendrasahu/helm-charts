@@ -157,10 +157,10 @@ spec:
       - name: {{ template "mysql.fullname" . }}-logger
         image:  "{{ .Values.logger.image }}:{{ .Values.logger.imageTag }}"
         imagePullPolicy: {{ .Values.logger.imagePullPolicy | quote }}
-          command:
-          - /app/sfagent
-          - -config
-          - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"mysql-general","enabled":true,"config":{"log_path":"/var/log/mysql/mysql.log, /var/log/mysql.log, /var/log/mysqld.log"}},{"name":"mysql-error","enabled":true,"config":{"log_level":["error","warn","note"],"log_path":"/var/log/mysql/error.log, /var/log/mysql/mysql-error.log, /var/log/mysqld.err"}}]}}'
+        command:
+        - /app/sfagent
+        - -config
+        - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"mysql-general","enabled":true,"config":{"log_path":"/var/log/mysql/mysql.log, /var/log/mysql.log, /var/log/mysqld.log"}},{"name":"mysql-error","enabled":true,"config":{"log_level":["error","warn","note"],"log_path":"/var/log/mysql/error.log, /var/log/mysql/mysql-error.log, /var/log/mysqld.err"}}]}}'
         env:
         - name: APP_NAME
           value: {{ .Values.global.sfappname }}
