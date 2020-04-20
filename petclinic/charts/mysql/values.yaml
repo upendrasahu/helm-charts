@@ -95,12 +95,10 @@ mysql_exporter:
     prometheus.io/port: "9104"
 
 logger:
-  enabled: false
-  image: gcr.io/google-containers/fluentd-elasticsearch
-  imageTag: v2.0.4
-  imagePullPolicy: IfNotPresent
-  fluentd_server_host: logger-snappyflow-fluentd.default.svc.cluster.local
-  fluentd_server_port: "24224"
+  enabled: true
+  image: snappyflowml/sfagent-logger
+  imageTag: latest
+  imagePullPolicy: Always
 
 logrotate:
   enabled: true
