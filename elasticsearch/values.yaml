@@ -16,6 +16,7 @@ image:
 global:
   sfappname: elasticsearch
   sfprojectname: demo-kube
+  key: ""
 
 common:
   # Defines the service type for all outward-facing (non-discovery) services.
@@ -233,12 +234,8 @@ kibana:
     # XPACK_SECURITY_ENABLED: "false"
 
 logger:
-  enabled: false
-  image: gcr.io/google-containers/fluentd-elasticsearch
-  imageTag: v2.0.4
-  imagePullPolicy: IfNotPresent
-  fluentd_server_host: logger-snappyflow-fluentd.default.svc.cluster.local
-  fluentd_server_port: "24224"
+  enabled: true
+  image: snappyflowml/sfagent-logger
+  imageTag: latest
+  imagePullPolicy: Always
 
-sfappname: elasticsearch
-sfprojectname: demo-kube
