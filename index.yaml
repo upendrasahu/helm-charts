@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   elasticsearch:
   - apiVersion: v1
-    created: "2020-04-23T15:55:10.396323827+05:30"
+    created: "2020-04-23T16:47:45.796395649+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
@@ -22,7 +22,7 @@ entries:
     - elasticsearch-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v1
-    created: "2020-04-23T15:55:10.39494831+05:30"
+    created: "2020-04-23T16:47:45.796000842+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
@@ -44,7 +44,7 @@ entries:
   expresscart:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-04-23T15:55:10.399076182+05:30"
+    created: "2020-04-23T16:47:45.797841993+05:30"
     description: A Helm chart to deploy expressCart nodejs application
     digest: a53d15fbdaf5069a45f080e4d0585f0ba3a35b167ca9b01acd351abf5066dec5
     icon: https://raw.githubusercontent.com/mrvautin/expressCart/master/public/images/logo.png
@@ -56,7 +56,7 @@ entries:
     version: 0.1.8
   fluentd-elasticsearch:
   - appVersion: 2.3.2
-    created: "2020-04-23T15:55:10.405476074+05:30"
+    created: "2020-04-23T16:47:45.798605319+05:30"
     description: A Fluentd Helm chart for Kubernetes with Elasticsearch output
     digest: 3a091e75d9e755856676639285ec95e9ebbbaae4d3e25ffb5e2e19ca5343f1f7
     engine: gotpl
@@ -80,7 +80,7 @@ entries:
   kafka:
   - apiVersion: v1
     appVersion: 5.3.1
-    created: "2020-04-23T15:55:10.406781396+05:30"
+    created: "2020-04-23T16:47:45.799591771+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -103,7 +103,23 @@ entries:
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: "2020-04-23T15:55:10.408434364+05:30"
+    created: "2020-04-23T16:47:45.801220484+05:30"
+    description: Helm chart for deploying basic Spring applications
+    digest: 80faa95618f7c2fde79cbff271f6193ba6bcc5b3fb4a426e3e2d15ca942472d2
+    home: https://spring.io
+    icon: https://spring.io/img/homepage/icon-spring-boot.svg
+    keywords:
+    - spring
+    - petclinic
+    name: petclinic
+    sources:
+    - https://github.com/spring-projects/spring-petclinic
+    urls:
+    - petclinic-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v1
+    appVersion: 2.1.0.BUILD-SNAPSHOT
+    created: "2020-04-23T16:47:45.800382559+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: 9b83b6b8d3064d06b73127c44f2a10b33f62b9cfad880501657d789a87bbd88e
     home: https://spring.io
@@ -120,7 +136,7 @@ entries:
   petclinic-v3:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: "2020-04-23T15:55:10.411565534+05:30"
+    created: "2020-04-23T16:47:45.802065893+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: 4c6ef5ce460110fd79c54af0940b289181b38c9ba599ef38b852c9b3e9d2a82c
     home: https://spring.io
@@ -138,7 +154,7 @@ entries:
   sample-petclinic:
   - apiVersion: v1
     appVersion: "1"
-    created: "2020-04-23T15:55:10.413076614+05:30"
+    created: "2020-04-23T16:47:45.802773818+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: ecf77e3da358c27504cda5eedb4564a09620f11a296e307982883ec90f8ead13
     name: sample-petclinic
@@ -148,7 +164,7 @@ entries:
   sfagent:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-04-23T15:55:10.415458741+05:30"
+    created: "2020-04-23T16:47:45.803038722+05:30"
     description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
       APM.
     digest: 83918703383bd62e739f075f5e47c0a4b7570ac0481ee5815cb1045cadb1a5cb
@@ -165,4 +181,4 @@ entries:
     urls:
     - sfagent-2.0.0.tgz
     version: 2.0.0
-generated: "2020-04-23T15:55:10.392966705+05:30"
+generated: "2020-04-23T16:47:45.795397112+05:30"
