@@ -126,7 +126,7 @@ spec:
         command:
         - /app/sfagent
         - -config
-        - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"elasticsearch-general","enabled":true,"config":{"log_level:["info","debug","error"]","log_path":"/var/log/elasticsearch/*"}}]}}'
+        - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"elasticsearch-general","enabled":true,"config":{"log_level":["info","debug","error"],"log_path":"/var/log/elasticsearch/*"}}]}}'
         env:
         - name: APP_NAME
           value: {{ .Values.global.sfappname }}
@@ -147,11 +147,6 @@ spec:
         - name: libsystemddir
           hostPath:
             path: /usr/lib64
-        {{- if .Values.logger.enabled }}
-        - name: {{ template "fullname" . }}-logger-conf
-          configMap:
-            name: {{ template "fullname" . }}-logger-conf
-        {{- end }}
         {{- if not .Values.common.stateful.enabled }}
         - emptyDir:
             medium: ""
