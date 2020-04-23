@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "zookeeper.fullname" . }}
@@ -10,6 +10,13 @@ metadata:
     snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
     snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
+  selector:
+    matchLabels:
+      app: {{ include "zookeeper.name" . | quote }}
+      release: {{ .Release.Name | quote }}
+      service: zookeeper
+      snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
+      snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }} 
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.servers }}
   updateStrategy:
