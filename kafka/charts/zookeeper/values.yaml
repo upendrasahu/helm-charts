@@ -139,3 +139,14 @@ jmx:
   whitelistObjectNames:  #[]
   - java.lang:*
   - org.apache.ZooKeeperService:*
+
+
+# ------------------------------------------------------------------------------
+# kafka logger
+# ------------------------------------------------------------------------------
+
+logger:
+  enabled: true
+  image: snappyflowml/sfagent-logger
+  imageTag: latest
+  imagePullPolicy: Always

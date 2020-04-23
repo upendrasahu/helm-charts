@@ -81,7 +81,7 @@ spec:
       {{- end }}
       - name: {{ template "zookeeper.name" . }}-server
         imagePullPolicy: {{ .Values.imagePullPolicy }}
-        image: confluentinc/cp-zookeeper:5.3.1
+        image: mahendra0939/zookeeper-auditable:latest
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         ports:
@@ -143,11 +143,34 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: {{ .Values.persistence.mountPath | quote }}
+        - name: varlog
+          mountPath: /var/log/kafka
+{{- if .Values.logger.enabled }}
+      - name: {{ template "zookeeper.fullname" . }}-zookeeper-logger
+        image:  "{{ .Values.logger.image }}:{{ .Values.logger.imageTag }}"
+        imagePullPolicy: {{ .Values.logger.imagePullPolicy | quote }}
+        command:
+        - /app/sfagent
+        - -config
+        - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"zookeeper-general","enabled":true,"config":{"log_level":["info","notice","debug","error"],"log_path":"/var/log/kafka/server.log, /var/log/kafka/state-change.log, /var/log/kafka/controller.log"}}]}}'
+        env:
+        - name: APP_NAME
+          value: {{ .Values.global.sfappname }}
+        - name: PROJECT_NAME
+          value: {{ .Values.global.sfprojectname }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log/kafka
+{{- end }}
       {{ if not .Values.persistence.enabled }}
       volumes:
       - name: datadir
         emptyDir: {}
       {{- end }}
+      - name: varlog
+        emptyDir: {}
       {{- if .Values.prometheus.jmx.enabled }}
       - name: jmx-config
         configMap:
