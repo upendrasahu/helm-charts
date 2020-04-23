@@ -177,6 +177,8 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: {{ .Values.persistence.mountPath | quote }}
+        - name: varlog
+          mountPath: /var/log/kafka
 {{- if .Values.logger.enabled }}
       - name: {{ template "fullname" . }}-client-logger
         image:  "{{ .Values.logger.image }}:{{ .Values.logger.imageTag }}"
