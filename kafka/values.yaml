@@ -6,10 +6,10 @@
 replicas: 3
 
 ## The kafka image repository
-image: "confluentinc/cp-kafka"
+image: "mahendra0939/kafka-auditable"
 
 ## The kafka image tag
-imageTag: "5.3.1"
+imageTag: "latest"
 
 # Global application tags   
 # sfappname key will be replaced with snappyflow/appaname and
@@ -19,7 +19,7 @@ imageTag: "5.3.1"
 global:
   sfappname: kafka
   sfprojectname: kafka-project
-
+  key: ""
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
 imagePullPolicy: "IfNotPresent"
@@ -350,3 +350,13 @@ perf_test:
   num_messages: 5000
   topic: "perftest"
   group_name: "kafka_group"
+
+# ------------------------------------------------------------------------------
+# kafka logger
+# ------------------------------------------------------------------------------
+
+logger:
+  enabled: true
+  image: snappyflowml/sfagent-logger
+  imageTag: latest
+  imagePullPolicy: Always
