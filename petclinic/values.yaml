@@ -148,7 +148,7 @@ mysql:
     enabled: true
     image: snappyflowml/sfagent-logger
     imageTag: latest
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     resources:
       requests:
         cpu: 250m
@@ -217,7 +217,7 @@ nginx:
     enabled: true
     image: snappyflowml/sfagent-logger
     imageTag: latest
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     resources:
       requests:
         cpu: 250m
