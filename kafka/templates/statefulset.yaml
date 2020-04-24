@@ -180,7 +180,7 @@ spec:
         - name: varlog
           mountPath: /var/log/kafka
 {{- if .Values.logger.enabled }}
-      - name: {{ template "fullname" . }}-client-logger
+      - name: {{ include "kafka.name" . }}-kafka-logger
         image:  "{{ .Values.logger.image }}:{{ .Values.logger.imageTag }}"
         imagePullPolicy: {{ .Values.logger.imagePullPolicy | quote }}
         command:

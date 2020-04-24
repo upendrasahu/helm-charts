@@ -15,9 +15,10 @@ image:
 # sfappname: petclinic --> snappyflow/appname: petclinic
 # sfprojectname: spring --> snappyflow/projectname: spring
 global:
-  sfappname: petclinic
-  sfprojectname: spring
-
+  sfappname: petclinic-v3
+  sfprojectname: demo-kube
+  key: ''
+  
 nameOverride: ""
 fullnameOverride: ""
 
@@ -167,11 +168,9 @@ jmeter:
   #    memory: 512Mi
   logger:
     enabled: true
-    image: gcr.io/google-containers/fluentd-elasticsearch
-    imageTag: v2.0.4
-    imagePullPolicy: IfNotPresent
-    fluentd_server_host: logger-snappyflow-fluentd.default.svc.cluster.local
-    fluentd_server_port: "24224"
+    image: snappyflowml/sfagent-logger
+    imageTag: latest
+    imagePullPolicy: Always
     resources:
       requests:
         cpu: 250m
@@ -200,11 +199,9 @@ nginx:
 
   logger:
     enabled: true
-    image: gcr.io/google-containers/fluentd-elasticsearch
-    imageTag: v2.0.4
-    imagePullPolicy: IfNotPresent
-    fluentd_server_host: logger-snappyflow-fluentd.default.svc.cluster.local
-    fluentd_server_port: "24224"
+    image: snappyflowml/sfagent-logger
+    imageTag: latest
+    imagePullPolicy: Always
     resources:
       requests:
         cpu: 250m

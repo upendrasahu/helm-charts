@@ -155,32 +155,21 @@ spec:
         - name: jmeter-logger
           image:  "{{ .Values.jmeter.logger.image }}:{{ .Values.jmeter.logger.imageTag }}"
           imagePullPolicy: {{ .Values.jmeter.logger.imagePullPolicy | quote }}
+          command:
+          - /app/sfagent
+          - -config
+          - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"jmeter","enabled":true,"config":{"log_path":"/var/log/test_plan.jtl"}}]}}'
           env:
-          - name: FLUENTD_ARGS
-            value: --no-supervisor -q
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: DEEPINSIGHT_APPLICATION_NAME
-            value: {{ default .Release.Name .Values.global.sfappname }}
-          - name: DEEPINSIGHT_PROJECT_NAME
-            value: {{ default .Release.Name .Values.global.sfprojectname }}
-          - name: FLUENTD_FORWARD_HOST
-            value: "{{ .Values.jmeter.logger.fluentd_server_host }}"
-          - name: FLUENTD_FORWARD_PORT
-            value: "{{ .Values.jmeter.logger.fluentd_server_port }}"
+          - name: APP_NAME
+            value: {{ .Values.global.sfappname }}
+          - name: PROJECT_NAME
+            value: {{ .Values.global.sfprojectname }}
           resources:
 {{ toYaml .Values.jmeter.logger.resources | indent 12 }}
           volumeMounts:
           - name: jmeterlog
             mountPath: /var/log
-          - name: jmeter-logger-conf
-            mountPath: /etc/fluent/config.d
+
 {{- end }}
 {{- if .Values.logrotate.enabled }}
         - name: logrotate
@@ -236,11 +225,6 @@ spec:
             name: {{ include "spring.fullname" . }}-scripts
         - name: jmeterlog
           emptyDir: {}
-        {{- if .Values.jmeter.logger.enabled }}
-        - name: jmeter-logger-conf
-          configMap:
-            name: {{ template "spring.fullname" . }}-jmeter-logger-conf
-        {{- end }}
 {{- if .Values.jmx_exporter.enabled }}
         - name: jmx-exporter
           configMap:
