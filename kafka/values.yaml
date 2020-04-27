@@ -19,6 +19,8 @@ imageTag: "latest"
 global:
   sfappname: kafka
   sfprojectname: kafka-project
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
   key: ""
 ## Specify a imagePullPolicy
 ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images

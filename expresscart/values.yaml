@@ -17,6 +17,8 @@ image:
 global:
   sfappname: expresscart
   sfprojectname: nodejs
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
 
 initContainerImage: "alpine:3.6"
 replicaCount: 1

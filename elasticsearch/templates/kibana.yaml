@@ -10,8 +10,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}-kibana
-    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   replicas: {{ .Values.kibana.replicas }}
   selector:
@@ -24,8 +24,8 @@ spec:
         release: "{{ .Release.Name }}"
         component: {{ template "fullname" . }}-kibana
         service: kibana
-        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+        {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
       containers:
       - name: kibana

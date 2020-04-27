@@ -18,6 +18,8 @@ image:
 global:
   sfappname: petclinic
   sfprojectname: spring
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
   key: ""
 
 nameOverride: ""

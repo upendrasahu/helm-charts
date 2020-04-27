@@ -8,8 +8,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
-    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     role: exporter
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -27,8 +27,8 @@ spec:
       labels:
         release: "{{ .Release.Name }}"
         component: {{ template "fullname" . }}
-        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+        {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
         role: exporter
     spec:
       restartPolicy: {{ .Values.exporter.restartPolicy }}

@@ -17,6 +17,8 @@ image:
 global:
   sfappname: petclinic-v3
   sfprojectname: demo-kube
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
   key: ''
   
 nameOverride: ""

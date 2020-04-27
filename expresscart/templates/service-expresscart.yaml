@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: {{ include "expressCart.fullname" . }}
   labels:
-    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     snappyflow/prometheus: "true"
 {{ include "expressCart.labels" . | indent 4 }}
 {{- with .Values.annotations }}

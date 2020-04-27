@@ -11,11 +11,13 @@ image:
 # Global application tags   
 # sfappname key will be replaced with snappyflow/appaname and
 # sfprojectname key replaced with snappyflow/projectname during helm chart deployment
-# sfappname: petclinic --> snappyflow/appname: elasticsearch
+# sfappname: petclinic --> {{ default "snappyflow/appName" .Values.global.sfappname_key }}: elasticsearch
 # sfprojectname: spring --> snappyflow/projectname: demo-kube
 global:
   sfappname: elasticsearch
   sfprojectname: demo-kube
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
   key: ""
 
 common:

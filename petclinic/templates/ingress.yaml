@@ -13,8 +13,8 @@ metadata:
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     snappyflow/component: petclinic
   name: {{ template "spring.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}

@@ -7,8 +7,8 @@ metadata:
     chart: {{ template "mongodb.chart" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 {{- with .Values.service.annotations }}
   annotations: {{ tpl (toYaml .) $ | nindent 4 }}
 {{- end }}
