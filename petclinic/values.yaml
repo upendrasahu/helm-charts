@@ -11,8 +11,7 @@ image:
 
 # key --> apm key for logger
 # Global application tags   
-# sfappname key will be replaced with snappyflow/appaname and
-# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname_key and sfprojectname_key should be in lowercase. 
 # sfappname: petclinic --> snappyflow/appname: petclinic
 # sfprojectname: spring --> snappyflow/projectname: spring
 global:

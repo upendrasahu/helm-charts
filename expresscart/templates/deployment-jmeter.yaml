@@ -8,8 +8,8 @@ metadata:
     chart: {{ include "expressCart.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
-    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     snappyflow/component: jmeter
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -17,16 +17,16 @@ spec:
     matchLabels:
       app: {{ include "expressCart.name" . }}
       release: {{ .Release.Name }}
-      {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
-      {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+      {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
       snappyflow/component: jmeter
   template:
     metadata:
       labels:
         app: {{ include "expressCart.name" . }}
         release: {{ .Release.Name }}
-        {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
-        {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
         snappyflow/component: jmeter
       annotations:
         {{ toYaml .Values.podAnnotations | indent 8 }}

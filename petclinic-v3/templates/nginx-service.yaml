@@ -10,14 +10,14 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
     service.beta.kubernetes.io/aws-load-balancer-type: nlb
-    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name={{ .Values.elb.name }},Stack={{ .Values.elb.stack }},{{ default "snappyflow/appName" .Values.global.sfappname_key }}={{ .Values.global.sfappname }},{{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}={{ .Values.global.sfprojectname }}
+    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Name={{ .Values.elb.name }},Stack={{ .Values.elb.stack }},{{ default "snappyflow/appname" .Values.global.sfappname_key }}={{ .Values.global.sfappname }},{{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}={{ .Values.global.sfprojectname }}
   labels:
     app: {{ template "spring.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    {{ default "snappyflow/appName" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
-    {{ default "snappyflow/projectName" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     snappyflow/component: nginx
 spec:
   type: {{ .Values.nginx.service.type }}

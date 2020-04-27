@@ -10,8 +10,7 @@ image:
   pullPolicy: IfNotPresent
 
 # Global application tags   
-# sfappname key will be replaced with snappyflow/appaname and
-# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname_key and sfprojectname_key should be in lowercase. 
 # sfappname: petclinic --> snappyflow/appname: expresscart
 # sfprojectname: spring --> snappyflow/projectname: nodejs
 global:

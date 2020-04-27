@@ -9,9 +9,8 @@ image:
     pullPolicy: IfNotPresent
 
 # Global application tags   
-# sfappname key will be replaced with snappyflow/appaname and
-# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
-# sfappname: petclinic --> {{ default "snappyflow/appName" .Values.global.sfappname_key }}: elasticsearch
+# sfappname_key and sfprojectname_key should be in lowercase. 
+# sfappname: petclinic --> snappyflow/projectname: elasticsearch
 # sfprojectname: spring --> snappyflow/projectname: demo-kube
 global:
   sfappname: elasticsearch

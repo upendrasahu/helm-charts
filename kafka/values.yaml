@@ -12,8 +12,7 @@ image: "mahendra0939/kafka-auditable"
 imageTag: "latest"
 
 # Global application tags   
-# sfappname key will be replaced with snappyflow/appaname and
-# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname_key and sfprojectname_key should be in lowercase. 
 # sfappname: petclinic --> snappyflow/appname: kafka
 # sfprojectname: spring --> snappyflow/projectname: kafka-project
 global:
