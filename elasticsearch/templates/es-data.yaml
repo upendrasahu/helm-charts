@@ -8,8 +8,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
-    snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-    snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     role: data
 spec:
   {{- if .Values.common.stateful.enabled }}
@@ -22,8 +22,8 @@ spec:
       component: {{ template "fullname" . }}
       role: data
       service: ES
-      snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-      snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+      {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
   template:
     metadata:
       labels:
@@ -31,8 +31,8 @@ spec:
         component: {{ template "fullname" . }}
         role: data
         service: ES
-        snappyflow/appname: {{ default .Release.Name .Values.global.sfappname }}
-        snappyflow/projectname: {{ default .Release.Name .Values.global.sfprojectname }}
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:

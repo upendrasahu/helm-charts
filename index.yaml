@@ -2,12 +2,12 @@ apiVersion: v1
 entries:
   elasticsearch:
   - apiVersion: v1
-    created: 2020-04-27T09:21:14.034135575+05:30
+    created: "2020-04-27T10:52:21.244627001+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
       logs
-    digest: c16706b352e916d54024a83ac8bc24b645a199912d98d60bb602b576ea381da8
+    digest: 1f0162baa60723febba9ca79f38d9f88fbbdbb89006d7e506d7e41290f141767
     engine: gotpl
     home: https://www.elastic.co/products/elasticsearch
     icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
@@ -19,44 +19,24 @@ entries:
     - https://www.elastic.co/products/elasticsearch
     - https://github.com/pires/kubernetes-elasticsearch-cluster
     urls:
-    - elasticsearch-0.3.1.tgz
-    version: 0.3.1
-  - apiVersion: v1
-    created: 2020-04-27T09:21:14.033028042+05:30
-    description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
-      and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
-      Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
-      logs
-    digest: a5dc9e9ccc4ae4362c9ce74c24eb5735c650f7d9cc95f2443da8fec1df8ea165
-    engine: gotpl
-    home: https://www.elastic.co/products/elasticsearch
-    icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
-    maintainers:
-    - email: matthew.titmus@gmail.com
-      name: Matt Titmus
-    name: elasticsearch
-    sources:
-    - https://www.elastic.co/products/elasticsearch
-    - https://github.com/pires/kubernetes-elasticsearch-cluster
-    urls:
-    - elasticsearch-0.3.0.tgz
-    version: 0.3.0
+    - elasticsearch-0.3.3.tgz
+    version: 0.3.3
   expresscart:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-04-27T09:21:14.037379196+05:30
+    created: "2020-04-27T10:52:21.246666069+05:30"
     description: A Helm chart to deploy expressCart nodejs application
-    digest: a53d15fbdaf5069a45f080e4d0585f0ba3a35b167ca9b01acd351abf5066dec5
+    digest: 1445a2be5cc36d1e04428d49b1ebb763dd5cdb480010792188b5c6ccf996e296
     icon: https://raw.githubusercontent.com/mrvautin/expressCart/master/public/images/logo.png
     name: expresscart
     sources:
     - https://github.com/mrvautin/expressCart
     urls:
-    - expresscart-0.1.8.tgz
-    version: 0.1.8
+    - expresscart-0.2.0.tgz
+    version: 0.2.0
   fluentd-elasticsearch:
   - appVersion: 2.3.2
-    created: 2020-04-27T09:21:14.038681722+05:30
+    created: "2020-04-27T10:52:21.247441114+05:30"
     description: A Fluentd Helm chart for Kubernetes with Elasticsearch output
     digest: 3a091e75d9e755856676639285ec95e9ebbbaae4d3e25ffb5e2e19ca5343f1f7
     engine: gotpl
@@ -80,11 +60,11 @@ entries:
   kafka:
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-04-27T09:21:14.044603645+05:30
+    created: "2020-04-27T10:52:21.248431464+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
-    digest: 472aca39d9a0f1eb54149be659797ec580387e866fdd40e09c05526a988cf84d
+    digest: ec8e176f3645a3cc9478376caea4aaf18b31fbdcd319b78442dfd641f0932d67
     home: https://kafka.apache.org/
     icon: https://kafka.apache.org/images/logo.png
     keywords:
@@ -98,58 +78,14 @@ entries:
     - https://github.com/confluentinc/cp-docker-images
     - https://github.com/apache/kafka
     urls:
-    - kafka-2.3.7.tgz
-    version: 2.3.7
-  - apiVersion: v1
-    appVersion: 5.3.1
-    created: 2020-04-27T09:21:14.042620975+05:30
-    description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
-      monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
-      Topic Metrics, and logs
-    digest: fee30c8c362c7d4953bc8b44932efa9926d1286cb634e978ff96665046562baf
-    home: https://kafka.apache.org/
-    icon: https://kafka.apache.org/images/logo.png
-    keywords:
-    - kafka
-    - zookeeper
-    - kafka statefulset
-    name: kafka
-    sources:
-    - https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
-    - https://github.com/Yolean/kubernetes-kafka
-    - https://github.com/confluentinc/cp-docker-images
-    - https://github.com/apache/kafka
-    urls:
-    - kafka-2.3.6.tgz
-    version: 2.3.6
-  - apiVersion: v1
-    appVersion: 5.3.1
-    created: 2020-04-27T09:21:14.040567889+05:30
-    description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
-      monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
-      Topic Metrics, and logs
-    digest: 7105bae74cd57365cc0b57952999a53830d0e897378cce8b5fa8c487634072a5
-    home: https://kafka.apache.org/
-    icon: https://kafka.apache.org/images/logo.png
-    keywords:
-    - kafka
-    - zookeeper
-    - kafka statefulset
-    name: kafka
-    sources:
-    - https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
-    - https://github.com/Yolean/kubernetes-kafka
-    - https://github.com/confluentinc/cp-docker-images
-    - https://github.com/apache/kafka
-    urls:
-    - kafka-2.3.5.tgz
-    version: 2.3.5
+    - kafka-2.3.9.tgz
+    version: 2.3.9
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-27T09:21:14.049833089+05:30
+    created: "2020-04-27T10:52:21.249705487+05:30"
     description: Helm chart for deploying basic Spring applications
-    digest: 80faa95618f7c2fde79cbff271f6193ba6bcc5b3fb4a426e3e2d15ca942472d2
+    digest: abd62eeea5268e3dd8f640cbe4811d689756451907228119111ca5c7627e92b8
     home: https://spring.io
     icon: https://spring.io/img/homepage/icon-spring-boot.svg
     keywords:
@@ -159,30 +95,14 @@ entries:
     sources:
     - https://github.com/spring-projects/spring-petclinic
     urls:
-    - petclinic-0.3.1.tgz
-    version: 0.3.1
-  - apiVersion: v1
-    appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-27T09:21:14.047240469+05:30
-    description: Helm chart for deploying basic Spring applications
-    digest: 9b83b6b8d3064d06b73127c44f2a10b33f62b9cfad880501657d789a87bbd88e
-    home: https://spring.io
-    icon: https://spring.io/img/homepage/icon-spring-boot.svg
-    keywords:
-    - spring
-    - petclinic
-    name: petclinic
-    sources:
-    - https://github.com/spring-projects/spring-petclinic
-    urls:
-    - petclinic-0.3.0.tgz
-    version: 0.3.0
+    - petclinic-0.3.3.tgz
+    version: 0.3.3
   petclinic-v3:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-27T09:21:14.055587841+05:30
+    created: "2020-04-27T10:52:21.250679355+05:30"
     description: Helm chart for deploying basic Spring applications
-    digest: 278433e1465da4051ff05fdc69aada5f46fe5d3cd1c02d2c18a52202eaf010c7
+    digest: e108c173cdfdc3175fc8ef52254ab309d9755371d6879d67dc147a62f94d17db
     home: https://spring.io
     icon: https://spring.io/img/homepage/icon-spring-boot.svg
     keywords:
@@ -193,39 +113,22 @@ entries:
     sources:
     - https://github.com/spring-projects/spring-petclinic
     urls:
-    - petclinic-v3-0.4.1.tgz
-    version: 0.4.1
-  - apiVersion: v1
-    appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-04-27T09:21:14.053405979+05:30
-    description: Helm chart for deploying basic Spring applications
-    digest: 4c6ef5ce460110fd79c54af0940b289181b38c9ba599ef38b852c9b3e9d2a82c
-    home: https://spring.io
-    icon: https://spring.io/img/homepage/icon-spring-boot.svg
-    keywords:
-    - spring
-    - petclinic
-    - v3
-    name: petclinic-v3
-    sources:
-    - https://github.com/spring-projects/spring-petclinic
-    urls:
-    - petclinic-v3-0.4.0.tgz
-    version: 0.4.0
+    - petclinic-v3-0.4.3.tgz
+    version: 0.4.3
   sample-petclinic:
   - apiVersion: v1
     appVersion: "1"
-    created: 2020-04-27T09:21:14.058868366+05:30
+    created: "2020-04-27T10:52:21.252199224+05:30"
     description: Helm chart for deploying basic Spring applications
-    digest: 40b36f34373f8d795453bb79f93544c970dbc3953a7ef44754ea00128659d2fa
+    digest: 0f2d2dd34b3d12b947b41aafb0a622b97aa0659ab79db5b6ac68f3702da3638f
     name: sample-petclinic
     urls:
-    - sample-petclinic-1.1.0.tgz
-    version: 1.1.0
+    - sample-petclinic-1.1.1.tgz
+    version: 1.1.1
   sfagent:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-04-27T09:21:14.060052612+05:30
+    created: "2020-04-27T10:52:21.252567582+05:30"
     description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
       APM.
     digest: 83918703383bd62e739f075f5e47c0a4b7570ac0481ee5815cb1045cadb1a5cb
@@ -242,4 +145,4 @@ entries:
     urls:
     - sfagent-2.0.0.tgz
     version: 2.0.0
-generated: 2020-04-27T09:21:14.031720046+05:30
+generated: "2020-04-27T10:52:21.243200271+05:30"

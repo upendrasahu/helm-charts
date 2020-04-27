@@ -10,13 +10,14 @@ image:
   pullPolicy: IfNotPresent
 
 # Global application tags   
-# sfappname key will be replaced with snappyflow/appaname and
-# sfprojectname key replaced with snappyflow/projectname during helm chart deployment
+# sfappname_key and sfprojectname_key should be in lowercase. 
 # sfappname: petclinic --> snappyflow/appname: expresscart
 # sfprojectname: spring --> snappyflow/projectname: nodejs
 global:
   sfappname: expresscart
   sfprojectname: nodejs
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
 
 initContainerImage: "alpine:3.6"
 replicaCount: 1
