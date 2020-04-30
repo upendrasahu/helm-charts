@@ -24,8 +24,8 @@ spec:
       serviceAccountName: {{ if .Values.rbac.create }}{{ template "sf-apm-agents.name" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
       initContainers:
       - name: config
-        image: "{{ .Values.fluentds.image.config.repository }}:{{ .Values.fluentds.image.config.tag }}"
-        imagePullPolicy: "{{ .Values.fluentds.image.pullPolicy }}"
+        image: "{{ .Values.fluentbit.image.config.repository }}:{{ .Values.fluentbit.image.config.tag }}"
+        imagePullPolicy: "{{ .Values.fluentbit.image.pullPolicy }}"
         volumeMounts:
           - name: config-apm
             mountPath: /opt/config
@@ -33,8 +33,8 @@ spec:
             mountPath: /etc/td-agent-bit
       containers:
       - name: fluent-bit
-        image: "{{ .Values.fluentds.image.fluent_bit.repository }}:{{ .Values.fluentds.image.fluent_bit.tag }}"
-        imagePullPolicy: "{{ .Values.fluentds.image.pullPolicy }}"
+        image: "{{ .Values.fluentbit.image.fluent_bit.repository }}:{{ .Values.fluentbit.image.fluent_bit.tag }}"
+        imagePullPolicy: "{{ .Values.fluentbit.image.pullPolicy }}"
         command:
          - source
          - "/etc/config-gen/env"
@@ -55,13 +55,13 @@ spec:
           - name: config
             mountPath: /etc/config-gen
       terminationGracePeriodSeconds: 30
-    {{- if .Values.fluentds.nodeSelector }}
+    {{- if .Values.fluentbit.nodeSelector }}
       nodeSelector:
-{{ toYaml .Values.fluentds.nodeSelector | indent 8 }}
+{{ toYaml .Values.fluentbit.nodeSelector | indent 8 }}
     {{- end }}
-    {{- if .Values.fluentds.tolerations }}
+    {{- if .Values.fluentbit.tolerations }}
       tolerations:
-{{ toYaml .Values.fluentds.tolerations | indent 8 }}
+{{ toYaml .Values.fluentbit.tolerations | indent 8 }}
     {{- end }}
       volumes:
         - name: config

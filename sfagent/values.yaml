@@ -164,7 +164,7 @@ application_monitoring:
     #        name: demokube-metric
     #        type: elasticsearch
 
-fluentds:
+fluentbit:
   image:
     fluent_bit:
       repository: snappyflowml/fluent-bit-custom
