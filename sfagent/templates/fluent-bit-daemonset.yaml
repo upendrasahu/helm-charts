@@ -35,15 +35,8 @@ spec:
       - name: fluent-bit
         image: "{{ .Values.fluentbit.image.fluent_bit.repository }}:{{ .Values.fluentbit.image.fluent_bit.tag }}"
         imagePullPolicy: "{{ .Values.fluentbit.image.pullPolicy }}"
-        command:
-         - source
-         - "/etc/config-gen/env"
-         - cp
-         - "/etc/config-gen/env/output.conf"
-         - "/etc/td-agent-bit/output.conf"
-         - "/fluent-bit/bin/fluent-bit"
-         - "-c"
-         - "/etc/td-agent-bit/fluent-bit.conf"
+        command: ["/bin/bash","-c"]
+        args: ["source /etc/config-gen/env && cp -f /etc/config-gen/output.conf /etc/td-agent-bit/output.conf && /fluent-bit/bin/fluent-bit -c /etc/td-agent-bit/fluent-bit.conf"]
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
