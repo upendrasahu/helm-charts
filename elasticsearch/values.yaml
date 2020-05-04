@@ -208,7 +208,7 @@ kubeplugins:
       cpu: 256m
       memory: 512Mi
   pluginserver_port: 9001
-  pluginserver_host: sfagent-default.default.svc.cluster.local
+  pluginserver_host: sfagent-sfagent.sfagent.svc.cluster.local
 
 
 
