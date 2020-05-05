@@ -167,7 +167,7 @@ application_monitoring:
 fluentbit:
   image:
     fluent_bit:
-      repository: snappyflowml/fluent-bit-custom
+      repository: snappyflowml/fluentbit-sfapm
       tag: latest
     config:
       repository: snappyflowml/kube-fluent-init
