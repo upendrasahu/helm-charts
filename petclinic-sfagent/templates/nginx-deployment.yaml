@@ -77,10 +77,10 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.nginx.resources | indent 12 }}
-{{- if .Values.nginx.logger.enabled }}
+{{- if .Values.nginx.sfagent.enabled }}
         - name: sfagent
-          image:  "{{ .Values.nginx.logger.image }}:{{ .Values.nginx.logger.imageTag }}"
-          imagePullPolicy: {{ .Values.nginx.logger.imagePullPolicy | quote }}
+          image:  "{{ .Values.nginx.sfagent.image }}:{{ .Values.nginx.sfagent.imageTag }}"
+          imagePullPolicy: {{ .Values.nginx.sfagent.imagePullPolicy | quote }}
           command:
           - /app/sfagent
           - -enable-console-log
@@ -90,7 +90,7 @@ spec:
           - name: PROJECT_NAME
             value: "{{ .Values.global.sfprojectname }}"
           resources:
-{{ toYaml .Values.nginx.logger.resources | indent 12 }}
+{{ toYaml .Values.nginx.sfagent.resources | indent 12 }}
           volumeMounts:
           - name: varlog
             mountPath: /var/log/nginx
