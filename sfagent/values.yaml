@@ -165,6 +165,7 @@ application_monitoring:
     #        type: elasticsearch
 
 fluentbit:
+  enabled: true
   image:
     fluent_bit:
       repository: snappyflowml/fluentbit-sfapm

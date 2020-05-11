@@ -1,3 +1,4 @@
+{{- if .Values.fluentbit.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -36,7 +37,7 @@ spec:
         image: "{{ .Values.fluentbit.image.fluent_bit.repository }}:{{ .Values.fluentbit.image.fluent_bit.tag }}"
         imagePullPolicy: "{{ .Values.fluentbit.image.pullPolicy }}"
         command: ["/bin/bash","-c"]
-        args: ["source /etc/config-gen/env && cp -f /etc/config-gen/output.conf /etc/td-agent-bit/output.conf && /fluent-bit/bin/fluent-bit -c /etc/td-agent-bit/fluent-bit.conf"]
+        args: ["source /etc/config-gen/env && cp -f /etc/config-gen/output.conf /etc/td-agent-bit/output.conf && cd /etc/td-agent-bit/ && /fluent-bit/bin/fluent-bit -c /etc/td-agent-bit/fluent-bit.conf"]
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
@@ -68,3 +69,4 @@ spec:
         - name: config-apm
           configMap:
             name: "{{ template "sf-apm-agents.application.fullname" . }}"
+{{- end }}
