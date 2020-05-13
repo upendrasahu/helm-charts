@@ -41,12 +41,12 @@ spec:
             - sh
             - -c
             - -x
-            - apk add --no-cache curl && curl ${JOLOKIA_JAR_URL} -o /data/jolokia.jar && curl ${MYSQL_CONNECTOR} -o /data/mysql-connector.tar.gz && tar -zxvf /data/mysql-connector.tar.gz mysql-connector-java-8.0.18/mysql-connector-java-8.0.18.jar -C /data
+            - apk add --no-cache curl tar && curl -L ${JOLOKIA_JAR_URL} -o /data/jolokia.jar && curl -L ${MYSQL_CONNECTOR} -o /data/mysql-connector.tar.gz && tar xvf /data/mysql-connector.tar.gz mysql-connector-java-8.0.18/mysql-connector-java-8.0.18.jar -C /data
           env:
             - name: JOLOKIA_JAR_URL
               value: https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jvm-1.6.2-agent.jar
             - name: MYSQL_CONNECTOR
-              value: https://cdn.mysql.com/Downloads/Connector-J/mysql-connector-java-8.0.18.tar.gz
+              value: https://dev.mysql.com/Downloads/Connector-J/mysql-connector-java-8.0.18.tar.gz
           volumeMounts:
             - name: data
               mountPath: /data
