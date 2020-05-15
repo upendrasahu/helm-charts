@@ -36,6 +36,11 @@ spec:
       - name: fluent-bit
         image: "{{ .Values.fluentbit.image.fluent_bit.repository }}:{{ .Values.fluentbit.image.fluent_bit.tag }}"
         imagePullPolicy: "{{ .Values.fluentbit.image.pullPolicy }}"
+        {{- if .Values.fluentbit.drop_cluster_logs }}
+        env:
+          - name: DORP_CLUSTER_LOGS
+            value: "1"
+        {{- end }}
         command: ["/bin/bash","-c"]
         args: ["source /etc/config-gen/env && cp -f /etc/config-gen/output.conf /etc/td-agent-bit/output.conf && cd /etc/td-agent-bit/ && /fluent-bit/bin/fluent-bit -c /etc/td-agent-bit/fluent-bit.conf"]
         resources:

@@ -166,6 +166,7 @@ application_monitoring:
 
 fluentbit:
   enabled: true
+  drop_cluster_logs: false
   image:
     fluent_bit:
       repository: snappyflowml/fluentbit-sfapm
