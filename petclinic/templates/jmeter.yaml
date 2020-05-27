@@ -46,7 +46,7 @@ spec:
             - name: JOLOKIA_JAR_URL
               value: https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jvm-1.6.2-agent.jar
             - name: MYSQL_CONNECTOR
-              value: https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-8.0.18.tar.gz
+              value: https://cdn.mysql.com/archives/mysql-connector-java-8.0/mysql-connector-java-8.0.18.tar.gz
           volumeMounts:
             - name: data
               mountPath: /data
