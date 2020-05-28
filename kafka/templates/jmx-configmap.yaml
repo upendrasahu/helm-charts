@@ -41,7 +41,7 @@ data:
       name: kafka_network_$1_$2_$4
       labels:
         network_processor: $3
-    - pattern : kafka.network<type=(RequestMetrics), name=(.+), request=(.+)><>(Count|OneMinuteRate|Mean)
+    - pattern : kafka.network<type=(RequestMetrics), name=(.+), request=([^,]+).+><>(Count|OneMinuteRate|Mean)
       name: kafka_network_$1_$2_$4
       labels:
         request: $3
