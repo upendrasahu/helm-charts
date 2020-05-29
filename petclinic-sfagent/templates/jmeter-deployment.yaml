@@ -41,12 +41,12 @@ spec:
             - sh
             - -c
             - -x
-            - apk add --no-cache curl tar && curl -L ${JOLOKIA_JAR_URL} -o /data/jolokia.jar && curl -L ${MYSQL_CONNECTOR} -o /data/mysql-connector.tar.gz && tar xvf /data/mysql-connector.tar.gz mysql-connector-java-8.0.18/mysql-connector-java-8.0.18.jar -C /data
+            - apk add --no-cache curl && curl ${JOLOKIA_JAR_URL} -o /data/jolokia.jar && curl ${MYSQL_CONNECTOR} -o /data/mysql-connector.tar.gz && tar -zxvf /data/mysql-connector.tar.gz mysql-connector-java-8.0.18/mysql-connector-java-8.0.18.jar -C /data  
           env:
             - name: JOLOKIA_JAR_URL
               value: https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jvm-1.6.2-agent.jar
             - name: MYSQL_CONNECTOR
-              value: https://dev.mysql.com/Downloads/Connector-J/mysql-connector-java-8.0.18.tar.gz
+              value: https://cdn.mysql.com/archives/mysql-connector-java-8.0/mysql-connector-java-8.0.18.tar.gz
           volumeMounts:
             - name: data
               mountPath: /data
@@ -83,7 +83,7 @@ spec:
             - name: JAVA_ARGS
               value: "-XX:+HeapDumpOnOutOfMemoryError -Xms1g -Xmx1g -XX:MaxMetaspaceSize=256m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:G1ReservePercent=20 -Djava.security.egd=file:/dev/urandom -Duser.language=en -Duser.region=EN"
             - name: JAVA_AGENT
-              value: "-javaagent:/opt/apache-jmeter-5.1.1/lib/jolokia.jar=port=8778,host=0.0.0.0"
+              value: "-javaagent:/opt/apache-jmeter-5.1.1/lib/jolokia.jar=port=8778,host=127.0.0.1"
             {{- range $key, $value := .Values.jmeter.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
