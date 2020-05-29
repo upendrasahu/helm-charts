@@ -17,4 +17,15 @@ data:
         enabled: true
         config:
           log_path: "/var/log/test_plan.jtl"
+    metrics:
+      plugins:
+      - name: jvmjolokia
+        enabled: true
+        interval: 300
+        config:
+          username: admin
+          password: admin
+          protocol: http
+          port: 8778
+          context: jolokia
 {{- end }}
