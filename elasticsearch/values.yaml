@@ -151,7 +151,7 @@ exporter:
 
   image:
     repository: justwatch/elasticsearch_exporter
-    tag: 1.0.2
+    tag: 1.1.0
     pullPolicy: IfNotPresent
 
   resources: {}
@@ -168,15 +168,6 @@ exporter:
     annotations: {"snappyflow/prometheus": "true"}
 
   es:
-    ## If true, query stats for all nodes in the cluster, rather than just the
-    ## node we connect to.
-    ##
-    all: true
-
-    ## If true, query stats for all indices in the cluster.
-    ##
-    indices: true
-
     ## Timeout for trying to get stats from Elasticsearch. (ex: 20s)
     ##
     timeout: 30s

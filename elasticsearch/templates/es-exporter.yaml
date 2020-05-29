@@ -40,12 +40,14 @@ spec:
           image: "{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["elasticsearch_exporter",
-                    "-es.uri=http://{{ template "fullname" . }}:9200",
-                    "-es.all={{ .Values.exporter.es.all }}",
-                    "-es.indices={{ .Values.exporter.es.indices }}",
-                    "-es.timeout={{ .Values.exporter.es.timeout }}",
-                    "-web.listen-address=:{{ .Values.exporter.service.httpPort }}",
-                    "-web.telemetry-path={{ .Values.exporter.web.path }}"]
+                    "--es.uri=http://{{ template "fullname" . }}:9200",
+                    "--es.all",
+                    "--es.shards",
+                    "--es.cluster_settings",
+                    "--es.indices",
+                    "--es.timeout={{ .Values.exporter.es.timeout }}",
+                    "--web.listen-address=:{{ .Values.exporter.service.httpPort }}",
+                    "--web.telemetry-path={{ .Values.exporter.web.path }}"]
           securityContext:
             capabilities:
               drop:
