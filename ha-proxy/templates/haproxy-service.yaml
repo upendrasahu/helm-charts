@@ -1,0 +1,38 @@
+{{- if and .Values.service.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "spring.fullname" . }}-haproxy
+  namespace: {{ .Release.Namespace | quote }}
+  annotations:
+  {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  labels:
+    app: {{ template "spring.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+    snappyflow/component: haproxy
+spec:
+  type: {{ .Values.haproxy.service.type }}
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    nodePort: 31000
+  - name: https
+    port: 9000
+    targetPort: https
+    nodePort: 31001
+  - name: stats
+    port: 26999
+    targetPort: stats
+    nodePort: 31002
+  selector:
+    app: {{ template "spring.name" . }}
+    release: {{ .Release.Name | quote }}
+    snappyflow/component: haproxy
+{{- end }}

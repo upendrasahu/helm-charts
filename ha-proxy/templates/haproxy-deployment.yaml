@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spring.fullname" . }}-haproxy
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ include "spring.name" . }}
+    chart: {{ include "spring.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+    snappyflow/component: haproxy
+spec:
+  replicas: {{ .Values.haproxy.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "spring.name" . }}
+      release: {{ .Release.Name }}
+      {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+      snappyflow/component: haproxy
+  template:
+    metadata:
+      labels:
+        app: {{ include "spring.name" . }}
+        release: {{ .Release.Name }}
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+        snappyflow/component: haproxy
+      annotations:
+        {{ toYaml .Values.podAnnotations | indent 8 }}
+    spec:
+      serviceAccountName: {{ template "spring.serviceAccountName" . }}
+      securityContext:
+        {{ toYaml .Values.securityContext | indent 8 }}
+      initContainers:
+        - name: wait-for-endpoints
+          image: alpine
+          command:
+            - sh
+            - -c
+            - -x
+            - apk add --no-cache curl && while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' ${HOST})" != "200" ]]; do sleep 5; done
+          env:
+            - name: HOST
+              value: {{ template "spring.fullname" . }}-headless:{{ .Values.containerPort }}
+      containers:
+        - name: haproxy
+          image: "{{ .Values.haproxy.image.repository }}:{{ .Values.haproxy.image.tag }}"
+          imagePullPolicy: {{ .Values.haproxy.image.pullPolicy }}
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{- range $key, $value := .Values.haproxy.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: haproxy-config-file
+              mountPath: /usr/local/etc/haproxy
+            - name: varlog
+              mountPath: /var/log/haproxy
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: https
+              containerPort: 9000
+              protocol: TCP
+            - name: stats
+              containerPort: 26999	
+              protocol: TCP            
+          {{- if .Values.haproxy.livenessProbe }}
+          livenessProbe:
+{{ toYaml .Values.haproxy.livenessProbe | indent 12 }}
+          {{- end }}
+          {{- if .Values.haproxy.readinessProbe }}
+          readinessProbe:
+{{ toYaml .Values.haproxy.readinessProbe | indent 12 }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.haproxy.resources | indent 12 }}
+      volumes:
+        - name: varlog
+          emptyDir: {} 
+        - name: haproxy-config-file
+          configMap:
+            name: {{ include "spring.fullname" . }}-haproxy-config
