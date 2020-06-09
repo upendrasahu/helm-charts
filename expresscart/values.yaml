@@ -18,7 +18,7 @@ global:
   sfprojectname: nodejs
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
-
+  key: ""
 initContainerImage: "alpine:3.6"
 replicaCount: 1
 
@@ -118,7 +118,7 @@ mongodb:
   metrics:
     enabled: true
   logger:
-    enabled: true
+    enabled: false
     
   sfappname: expresscart
   sfprojectname: nodejs
@@ -126,7 +126,7 @@ mongodb:
 jmeter:
   image:
       repository: justb4/jmeter
-      tag: 5.1.1
+      tag: latest
       pullPolicy: IfNotPresent
   env: {}
   resources: 
@@ -137,7 +137,7 @@ jmeter:
       cpu: 250m
       memory: 512Mi
   logger:
-    enabled: true
+    enabled: false
     image: gcr.io/google-containers/fluentd-elasticsearch
     imageTag: v2.0.4
     imagePullPolicy: IfNotPresent

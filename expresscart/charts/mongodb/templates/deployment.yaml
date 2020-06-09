@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "mongodb.fullname" . }}
   labels:
+    snappyflow/component: mongodb
     app: {{ template "mongodb.name" . }}
     chart: {{ template "mongodb.chart" . }}
     release: "{{ .Release.Name }}"
@@ -21,9 +22,11 @@ spec:
     matchLabels:
       app: {{ template "mongodb.name" . }}
       release: "{{ .Release.Name }}"
+      snappyflow/component: mongodb
   template:
     metadata:
       labels:
+        snappyflow/component: mongodb
         app: {{ template "mongodb.name" . }}
         release: "{{ .Release.Name }}"
         chart: {{ template "mongodb.chart" . }}
@@ -82,6 +85,12 @@ spec:
           mountPath: {{ .Values.persistence.mountPath }}
       {{- end }}
       containers:
+      - name: mongodblog
+        image: busybox
+        args: [/bin/sh, -c, 'tail -n+1 -F /opt/bitnami/mongodb/logs/mongodb.log']
+        volumeMounts:
+        - name: varlog
+          mountPath: /opt/bitnami/mongodb/logs/
       - name: {{ template "mongodb.fullname" . }}
         image: {{ template "mongodb.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
