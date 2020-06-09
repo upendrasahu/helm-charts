@@ -59,6 +59,7 @@ data:
       bind *:8080
       stats uri /haproxy?stats
       default_backend app
+      capture request header User-Agent len 120
 
 
 
