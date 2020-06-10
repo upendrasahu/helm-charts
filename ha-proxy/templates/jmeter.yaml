@@ -65,7 +65,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: PETCLINC_HOST
-              value: {{ template "spring.fullname" . }}-nginx
+              value: {{ template "spring.fullname" . }}-haproxy
             - name: PETCLINIC_PORT
               value: "{{ .Values.service.httpPort }}"
             - name: DATABASE_HOST
