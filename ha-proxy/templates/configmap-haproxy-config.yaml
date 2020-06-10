@@ -14,8 +14,7 @@ metadata:
 data:
   haproxy.cfg: |
     global
-      log         127.0.0.1 local2
-
+      log stdout format raw local0
       chroot      /var/lib/haproxy
       pidfile     /var/run/haproxy.pid
       maxconn     4000
@@ -31,7 +30,6 @@ data:
       mode                    http
       log                     global
       option                  httplog
-      option                  dontlognull
       option http-server-close
       option forwardfor       except 127.0.0.0/8
       option                  redispatch
@@ -45,9 +43,6 @@ data:
       timeout check           10s
       maxconn                 3000
 
-
-
-
     frontend stats
        bind *:26999
        option http-use-htx
@@ -55,18 +50,14 @@ data:
        stats enable
        stats uri /stats
        stats refresh 10s
+       
     frontend  main
       bind *:8080
+      capture request header User-Agent len 120
       stats uri /haproxy?stats
       default_backend app
-      capture request header User-Agent len 120
-
-
-
 
     backend app
       balance     roundrobin
       server  app1 {{ template "spring.fullname" . }}-app1:80
       server  app2 {{ template "spring.fullname" . }}-app2:80
-      
-        
