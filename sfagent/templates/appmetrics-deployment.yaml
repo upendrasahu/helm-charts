@@ -46,23 +46,6 @@ spec:
             mountPath: /opt/clusterconfig
             readOnly: true
           {{- end }}
-      - name: {{ template "sf-apm-agents.name" . }}-agentserver
-        image: "{{ .Values.application_monitoring.apm_agent_server.image.repository }}:{{ .Values.application_monitoring.apm_agent_server.image.tag }}"
-        imagePullPolicy: {{ .Values.application_monitoring.apm_agent_server.image.pullPolicy }}
-        command: ["python",
-                    "plugin_server/plugin_server.py"]
-        ports:
-          - name: pluginserver
-            containerPort: 9001
-        resources:
-{{ toYaml .Values.application_monitoring.apm_agent_server.resources | indent 12 }}
-        volumeMounts:
-          - name: config
-            mountPath: /opt/config
-            readOnly: true
-          - name: hbconfig
-            mountPath: /opt/hbconfig
-            readOnly: true
       volumes:
         - name: config
           configMap:

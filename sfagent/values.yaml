@@ -15,7 +15,7 @@ config:
   #
   # SnappyFlow APM Elasticsearch Target key copied from APM cloudprofile
   # This is used for application inventory documents, application heartbeats.
-  key: "encrypted"
+  key: ""
   #
   # SnappyFlow Key for cloud heartbeat and metrics, 
   # If not provided then key used
@@ -95,21 +95,6 @@ application_monitoring:
       limits:
         cpu: 256m
         memory: 512Mi
-  apm_agent_server:
-    image:
-      repository: snappyflowml/kube-plugins
-      tag: latest
-      pullPolicy: Always
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 256m
-        memory: 512Mi
-    service:
-      port: 9001
-      type: ClusterIP
   event_metrics:
     image:
       repository: snappyflowml/kube-events
