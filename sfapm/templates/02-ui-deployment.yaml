@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sfapm.fullname" . }}-ui
+  labels:
+    {{- include "sfapm.labels" . | nindent 4 }}
+    app: sfapm
+    role: ui
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "sfapm.selectorLabels" . | nindent 6 }}
+      app: sfapm
+      role: ui
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "sfapm.selectorLabels" . | nindent 8 }}
+        app: sfapm
+        role: ui
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sfapm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: ui
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.sfapmui.image.repository }}:{{ .Values.sfapmui.image.tag }}"
+          imagePullPolicy: {{ .Values.sfapmui.image.pullPolicy }}
+          env:          
+          {{- range .Values.sfapmui.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+          {{- end }}
+          {{- if .Values.sfapmui.tls.enabled }}
+            - name: SSL
+              value: "true"
+            - name: SSL_CERT_PATH
+              value: "/etc/ssl/nginx/tls.crt"
+            - name: SSL_KEY_PATH
+              value: "/etc/ssl/nginx/tls.key"
+          {{- else }}
+            - name: SSL
+              value: "false"
+          {{- end }}
+            - name: API_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "sfapm.fullname" . }}-ui
+                  key: API_HOST
+            - name: API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "sfapm.fullname" . }}-ui
+                  key: API_PORT
+          ports:
+          {{- if .Values.sfapmui.tls.enabled }}
+            - name: http
+              containerPort: 443
+              protocol: TCP
+          {{- else }}
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          {{- end }}
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /status
+              port: http
+              {{- if .Values.sfapmui.tls.enabled }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /status
+              port: http
+              {{- if .Values.sfapmui.tls.enabled }}
+              scheme: HTTPS
+              {{- else }}
+              scheme: HTTP
+              {{- end }}
+          resources:
+            {{- toYaml .Values.sfapmui.resources | nindent 12 }}
+          volumeMounts:
+            - name: tls
+              mountPath: /etc/ssl/nginx
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ include "sfapm.fullname" . }}-ui-tls
