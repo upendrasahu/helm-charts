@@ -147,7 +147,7 @@ mysql:
     size: 8Gi
   logger:
     enabled: true
-    image: snappyflowml/sfagent-logger
+    image: snappyflowml/sfagent
     imageTag: latest
     imagePullPolicy: Always
     resources:
@@ -186,7 +186,7 @@ jmeter:
       memory: 512Mi
   logger:
     enabled: true
-    image: snappyflowml/sfagent-logger
+    image: snappyflowml/sfagent
     imageTag: latest
     imagePullPolicy: Always
     resources:
@@ -216,7 +216,7 @@ nginx:
 
   logger:
     enabled: true
-    image: snappyflowml/sfagent-logger
+    image: snappyflowml/sfagent
     imageTag: latest
     imagePullPolicy: Always
     resources:
