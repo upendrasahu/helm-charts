@@ -87,7 +87,7 @@ service:
 mysql_exporter:
   enabled: false
   image: prom/mysqld-exporter
-  imageTag: v0.10.0
+  imageTag: latest
   imagePullPolicy: IfNotPresent
   resources: {}
   annotations:
