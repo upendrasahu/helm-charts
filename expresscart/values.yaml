@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: mahendra0939/express
-  tag: v1
+  repository: rashmivs2408/express
+  tag: latest
   pullPolicy: IfNotPresent
 
 # Global application tags   
@@ -43,11 +43,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-annotations:
-  prometheus.io/scrape: "true"
-  prometheus.io/port: "8080"
-  snappyflow/prometheus: 'true'
-  prometheus.io/path: "swagger-stats/metrics"
 
 service:
   type: ClusterIP
