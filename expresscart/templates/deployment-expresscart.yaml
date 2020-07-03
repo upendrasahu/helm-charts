@@ -43,7 +43,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ['sh', '-c', until nc -z -w 2 {{ .Release.Name }}-mongodb 27017 && echo mongodb ok;do sleep 2;done]
       - name: init-db
-        image: mahendra0939/expresslog:v1
+        image: rashmivs2408/expresslog:latest
         imagePullPolicy: IfNotPresent
         command: ['npm','run','testdata']
         volumeMounts:
