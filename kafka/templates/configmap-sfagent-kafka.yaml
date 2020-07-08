@@ -23,7 +23,7 @@ data:
     metrics:
       plugins:
       - name: kafkatopic
-        enabled: true
+        enabled: {{ .Values.sfagent.metric_collection }}
         interval: 300
         config:
           documentsTypes:
@@ -39,7 +39,7 @@ data:
           port: 9092
           process: kafka.Kafka
       - name: kafkajmx
-        enabled: true
+        enabled: {{ .Values.sfagent.metric_collection }}
         interval: 300
         config:
           process: kafka.Kafka

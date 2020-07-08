@@ -149,6 +149,7 @@ sfagent:
   enabled: true
   image: snappyflowml/sfagent
   imageTag: latest
+  metric_collection: false
   imagePullPolicy: Always
   resources:
     requests:

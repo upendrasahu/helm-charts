@@ -23,7 +23,7 @@ data:
     metrics:
       plugins:
       - name: zookeeperjmx
-        enabled: true
+        enabled: {{ .Values.sfagent.metric_collection }}
         interval: 300
         config:
           documentsTypes:

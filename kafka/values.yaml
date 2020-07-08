@@ -360,6 +360,7 @@ sfagent:
   image: snappyflowml/sfagent
   imageTag: latest
   imagePullPolicy: Always
+  metric_collection: false
   resources:
     requests:
       cpu: 250m
