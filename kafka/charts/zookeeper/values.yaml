@@ -145,8 +145,15 @@ jmx:
 # kafka logger
 # ------------------------------------------------------------------------------
 
-logger:
+sfagent:
   enabled: true
   image: snappyflowml/sfagent
   imageTag: latest
   imagePullPolicy: Always
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi

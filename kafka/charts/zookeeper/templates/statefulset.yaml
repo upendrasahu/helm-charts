@@ -16,7 +16,7 @@ spec:
       release: {{ .Release.Name | quote }}
       service: zookeeper
       {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
-      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }} 
+      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
   serviceName: {{ template "zookeeper.fullname" . }}-headless
   replicas: {{ .Values.servers }}
   updateStrategy:
@@ -57,6 +57,20 @@ spec:
                     values:
                     - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
+      initContainers:
+      - name: get-jolokia
+        image: alpine
+        command:
+          - sh
+          - -c
+          - -x
+          - apk add --no-cache curl && curl ${JOLOKIA_JAR_URL} -o /agent/jolokia.jar
+        env:
+          - name: JOLOKIA_JAR_URL
+            value: https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jvm-1.6.2-agent.jar
+        volumeMounts:
+          - name: javaagentdir
+            mountPath: /agent
       containers:
       {{- if .Values.prometheus.jmx.enabled }}
       - name: metrics
@@ -87,6 +101,8 @@ spec:
         ports:
         - containerPort: {{ .Values.clientPort }}
           name: client
+        - containerPort: 8778
+          name: jolokia
         - containerPort: {{ .Values.serverPort }}
           name: server
         - containerPort: {{ .Values.leaderElectionPort }}
@@ -128,6 +144,8 @@ spec:
         - name: KAFKA_JMX_PORT
           value: "{{ .Values.jmx.port }}"
         {{- end }}
+        - name: KAFKA_JMX_OPTS
+          value: "-javaagent:/agent/jolokia.jar=port=8778,host=127.0.0.1 -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false"
         - name : ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT
           value: "{{ .Values.autoPurgeSnapRetainCount}}"
         - name : ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL
@@ -145,32 +163,43 @@ spec:
           mountPath: {{ .Values.persistence.mountPath | quote }}
         - name: varlog
           mountPath: /var/log/kafka
-{{- if .Values.logger.enabled }}
-      - name: {{ template "zookeeper.fullname" . }}-zookeeper-logger
-        image:  "{{ .Values.logger.image }}:{{ .Values.logger.imageTag }}"
-        imagePullPolicy: {{ .Values.logger.imagePullPolicy | quote }}
+        - name: javaagentdir
+          mountPath: /agent
+{{- if .Values.sfagent.enabled }}
+      - name: sfagent
+        image:  "{{ .Values.sfagent.image }}:{{ .Values.sfagent.imageTag }}"
+        imagePullPolicy: {{ .Values.sfagent.imagePullPolicy | quote }}
         command:
         - /app/sfagent
-        - -config
-        - '{"key":"{{ .Values.global.key }}","logging":{"plugins":[{"name":"zookeeper-general","enabled":true,"config":{"log_level":["info","notice","debug","error"],"log_path":"/var/log/kafka/server.log, /var/log/kafka/state-change.log, /var/log/kafka/controller.log"}}]}}'
+        - -enable-console-log
         env:
         - name: APP_NAME
           value: {{ .Values.global.sfappname }}
         - name: PROJECT_NAME
           value: {{ .Values.global.sfprojectname }}
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+{{ toYaml .Values.sfagent.resources | indent 12 }}
         volumeMounts:
         - name: varlog
           mountPath: /var/log/kafka
+        - name: sfagent-config
+          mountPath: /opt/sfagent/config.yaml
+          subPath: config.yaml
 {{- end }}
       {{ if not .Values.persistence.enabled }}
       volumes:
       - name: datadir
         emptyDir: {}
       {{- end }}
+      - emptyDir: {}
+        name: javaagentdir
       - name: varlog
         emptyDir: {}
+      {{- if .Values.sfagent.enabled }}
+      - name: sfagent-config
+        configMap:
+          name: {{ include "zookeeper.fullname" . }}-sfagent-zookeeper
+      {{- end }}
       {{- if .Values.prometheus.jmx.enabled }}
       - name: jmx-config
         configMap:
@@ -197,3 +226,4 @@ spec:
         requests:
           storage: {{ .Values.persistence.size }}
   {{- end }}
+
