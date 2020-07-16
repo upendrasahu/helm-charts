@@ -19,7 +19,7 @@ spec:
         release: {{ .Release.Name }}
     spec:
       containers:
-      - name: {{ template "sf-apm-agents.name" . }}-cluster
+      - name: cluster
         image: "{{ .Values.cluster_agent.cluster_monitoring.image.repository }}:{{ .Values.cluster_agent.cluster_monitoring.image.tag }}"
         imagePullPolicy: {{ .Values.cluster_agent.cluster_monitoring.image.pullPolicy }}
         resources:
@@ -28,7 +28,7 @@ spec:
           - name: config
             mountPath: /opt/config
             readOnly: true
-      - name: {{ template "sf-apm-agents.name" . }}-event
+      - name: events
         image: "{{ .Values.cluster_agent.event_metrics.image.repository }}:{{ .Values.cluster_agent.event_metrics.image.tag }}"
         imagePullPolicy: {{ .Values.cluster_agent.event_metrics.image.pullPolicy }}
         resources:

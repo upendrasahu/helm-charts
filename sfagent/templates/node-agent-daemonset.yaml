@@ -35,7 +35,7 @@ spec:
             mountPath: /etc/td-agent-bit
     {{- end }}
       containers:
-      - name: {{ template "sf-apm-agents.name" . }}-inventory
+      - name: inventory
         image: "{{ .Values.node_agent.node_inventory.image.repository }}:{{ .Values.node_agent.node_inventory.image.tag }}"
         imagePullPolicy: {{ .Values.node_agent.node_inventory.image.pullPolicy }}
         resources:
@@ -57,7 +57,7 @@ spec:
           - name: config
             mountPath: /opt/config
             readOnly: true
-      - name: {{ template "sf-apm-agents.name" . }}-prometheus
+      - name: prometheus
         image: "{{ .Values.node_agent.prometheus_poller.image.repository }}:{{ .Values.node_agent.prometheus_poller.image.tag }}"
         imagePullPolicy: {{ .Values.node_agent.prometheus_poller.image.pullPolicy }}
         command: ["/bin/sh","-c"]
@@ -81,7 +81,7 @@ spec:
           - name: config
             mountPath: /opt/config
             readOnly: true
-      - name: {{ template "sf-apm-agents.name" . }}-node
+      - name: nodekubelet
         image: "{{ .Values.node_agent.node_metrics.image.repository }}:{{ .Values.node_agent.node_metrics.image.tag }}"
         imagePullPolicy: {{ .Values.node_agent.node_metrics.image.pullPolicy }}
         resources:
