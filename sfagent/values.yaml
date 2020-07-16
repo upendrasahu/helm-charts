@@ -20,72 +20,58 @@ config:
   # SnappyFlow Key for cloud heartbeat and metrics, 
   # If not provided then key used
   # cloud_key: "cluster_key"
+  
+  # Heartbeat interval
+  interval: 300
+  
 
-# HeartBeat and Inventory agent config
-heartbeat:
-  image:
-    repository: snappyflowml/kube-inventory
-    tag: latest
-    pullPolicy: Always
+# Node Agent
+# Per node Plugin Pod
+#  container for prometheus poller
+#  container for node/pod kubelet monitoring + storage metrics
+#  container for fluent-bit logs
+#  container for inventory heartbeat
+node_agent:
+  node_inventory:
+    image:
+      repository: snappyflowml/sfkube-node-inventory
+      tag: latest
+      pullPolicy: Always
 
-  configmap:
-    # Heartbeat and inventory interval, default 300 sec
-    interval: 300
-    #
-    # If key is not provided
-    # Elasticsearch target details to send inventory and heartbeat data
-    #target: {}
+    ## container resource requests and limits
+    ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
 
-  ## container resource requests and limits
-  ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ##
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 256m
-      memory: 256Mi
-
-  tolerations: []
-
-  nodeSelector: {}
-
-# Cluster monitoring
-cluster_monitoring:
-  enabled: true
-  image:
-    repository: snappyflowml/kube-cluster
-    tag: latest
-    pullPolicy: Always
-  # if enabled
-  configmap:
-    # cluster monitoring interval, default is 300 seconds
-    interval: 300
-    # Tags to be added in cluster metrics document
-    #tags: {}
-    #target: {}
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 256m
-      memory: 512Mi
-
-  tolerations: []
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-# Application monitoring.
-application_monitoring:
-  enabled: true
+  node_metrics:
+    image:
+      repository: snappyflowml/sfkube-node-metrics
+      tag: latest
+      pullPolicy: Always
+    # if enabled
+    configmap:
+      # cluster monitoring interval, default is 300 seconds
+      interval: 300
+      # Tags to be added in cluster metrics document
+      #tags: {}
+      #target: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+  
   prometheus_poller:
     image:
-      repository: snappyflowml/kube-prom
+      repository: snappyflowml/sfkube-node-prom
       tag: latest
       pullPolicy: Always
     resources:
@@ -95,85 +81,99 @@ application_monitoring:
       limits:
         cpu: 256m
         memory: 512Mi
-  event_metrics:
+    configmap:
+      log_dir: /tmp
+      interval: 30
+    plugin_interval:
+      elasticsearch:
+        cluster: 300
+        node: 300
+        index: 900
+      nginx:
+        default: 300
+      mysql:
+        default: 300
+      kafka:
+        default: 300
+      jmx:
+        default: 300
+      kafka-jmx:
+        default: 300
+      zookeeper-zmx:
+        default: 300
+
+  fluentbit:
+    enabled: true
+    drop_cluster_logs: false
     image:
-      repository: snappyflowml/kube-events
-      tag: latest
+      fluent_bit:
+        repository: snappyflowml/fluentbit-sfapm
+        tag: latest
+      config:
+        repository: snappyflowml/kube-fluent-init
+        tag: latest
       pullPolicy: Always
 
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 256m
-        memory: 512Mi
-  storage_monitoring:
-    image:
-      repository: snappyflowml/kube-storage
-      tag: latest
-      pullPolicy: Always
+    podAnnotations: {}
 
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 256m
-        memory: 512Mi
-
-  tolerations: []
-
-  ## Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-
-  configmap:
-    log_dir: /tmp
-    interval: 300
-    apps: {}
-    #apps:
-    #  demo-kube:
-    #    petclinic:
-    #      deployments: {}
-    #      enabled: true
-    #      tags:
-    #        appName: petclinic
-    #        projectName: demo-kube
-    #      target:
-    #        config:
-    #          host: tf-lb-2020032314000363840
-    #          index: demokube-66fzeofhdw-metric
-    #          port: 9200
-    #        name: demokube-metric
-    #        type: elasticsearch
-
-fluentbit:
-  enabled: true
-  drop_cluster_logs: false
-  image:
-    fluent_bit:
-      repository: snappyflowml/fluentbit-sfapm
-      tag: latest
-    config:
-      repository: snappyflowml/kube-fluent-init
-      tag: latest
-    pullPolicy: Always
-
-  podAnnotations: {}
-
-  resources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 10m
-    #   memory: 8Mi
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 10m
+      #   memory: 8Mi
 
   tolerations:
     - key: "node-role.kubernetes.io/master"
       effect: NoSchedule
 
   nodeSelector: {}
+
+# cluster level plugin Pod
+#   Container with cloud heartbeat + cluster document
+#   Container for kube events
+cluster_agent:
+  # Cluster monitoring
+  cluster_monitoring:
+    image:
+      repository: snappyflowml/sfkube-cluster
+      tag: latest
+      pullPolicy: Always
+    # if enabled
+    configmap:
+      # cluster monitoring interval, default is 300 seconds
+      interval: 300
+      # Tags to be added in cluster metrics document
+      #tags: {}
+      #target: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 256m
+        memory: 256Mi
+
+  event_metrics:
+    image:
+      repository: snappyflowml/sfkube-events
+      tag: latest
+      pullPolicy: Always
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+
+  tolerations: []
+
+  ## Node labels for pod assignment
+  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+
 

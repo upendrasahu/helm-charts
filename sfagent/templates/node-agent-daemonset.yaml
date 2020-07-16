@@ -1,0 +1,185 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ template "sf-apm-agents.fullname" . }}-node
+  labels:
+    app: {{ template "sf-apm-agents.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "sf-apm-agents.name" . }}
+      release: {{ .Release.Name }}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1      
+  template:
+    metadata:
+      labels:
+        app: {{ template "sf-apm-agents.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ if .Values.rbac.create }}{{ template "sf-apm-agents.name" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
+      hostPID: true
+    {{- if .Values.node_agent.fluentbit.enabled }}
+      initContainers:   
+      - name: config
+        image: "{{ .Values.node_agent.fluentbit.image.config.repository }}:{{ .Values.node_agent.fluentbit.image.config.tag }}"
+        imagePullPolicy: "{{ .Values.node_agent.fluentbit.image.pullPolicy }}"
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+          - name: fluentconfig
+            mountPath: /etc/td-agent-bit
+    {{- end }}
+      containers:
+      - name: {{ template "sf-apm-agents.name" . }}-inventory
+        image: "{{ .Values.node_agent.node_inventory.image.repository }}:{{ .Values.node_agent.node_inventory.image.tag }}"
+        imagePullPolicy: {{ .Values.node_agent.node_inventory.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.node_agent.node_inventory.resources | indent 12 }}
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+      - name: {{ template "sf-apm-agents.name" . }}-prometheus
+        image: "{{ .Values.node_agent.prometheus_poller.image.repository }}:{{ .Values.node_agent.prometheus_poller.image.tag }}"
+        imagePullPolicy: {{ .Values.node_agent.prometheus_poller.image.pullPolicy }}
+        command: ["/bin/sh","-c"]
+        args: ["/app/kube-prom -nodename $NODE_NAME"]
+        resources:
+{{ toYaml .Values.node_agent.prometheus_poller.resources | indent 12 }}
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+      - name: {{ template "sf-apm-agents.name" . }}-node
+        image: "{{ .Values.node_agent.node_metrics.image.repository }}:{{ .Values.node_agent.node_metrics.image.tag }}"
+        imagePullPolicy: {{ .Values.node_agent.node_metrics.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.node_agent.node_metrics.resources | indent 12 }}
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+            - SYS_ADMIN
+        resources:
+{{ toYaml .Values.node_agent.node_metrics.resources | indent 12 }}
+        volumeMounts:
+          - name: proc
+            mountPath: /host/proc
+            mountPropagation: Bidirectional
+          - name: sys
+            mountPath: /host/sys
+            mountPropagation: Bidirectional
+          - name: root-fs
+            mountPath: /rootfs
+            mountPropagation: Bidirectional
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+      {{- if .Values.node_agent.fluentbit.enabled }}
+      - name: fluent-bit
+        image: "{{ .Values.node_agent.fluentbit.image.fluent_bit.repository }}:{{ .Values.node_agent.fluentbit.image.fluent_bit.tag }}"
+        imagePullPolicy: "{{ .Values.node_agent.fluentbit.image.pullPolicy }}"
+        {{- if .Values.node_agent.fluentbit.drop_cluster_logs }}
+        env:
+          - name: DORP_CLUSTER_LOGS
+            value: "1"
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        {{- end }}
+        command: ["/bin/bash","-c"]
+        args: ["source /etc/config-gen/env && cp -f /etc/config-gen/output.conf /etc/td-agent-bit/output.conf && cd /etc/td-agent-bit/ && /fluent-bit/bin/fluent-bit -c /etc/td-agent-bit/fluent-bit.conf"]
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        volumeMounts:
+          - name: varlog
+            mountPath: /var/log
+          - name: varlibdockercontainers
+            mountPath: /var/lib/docker/containers
+            readOnly: true
+          - name: fluentconfig
+            mountPath: /etc/config-gen
+        {{- end }}
+      terminationGracePeriodSeconds: 30
+    {{- if .Values.node_agent.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.node_agent.nodeSelector | indent 8 }}
+    {{- end }}
+    {{- if .Values.node_agent.tolerations }}
+      tolerations:
+{{ toYaml .Values.node_agent.tolerations | indent 8 }}
+    {{- end }}
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: root-fs
+          hostPath:
+            path: /
+        - name: fluentconfig
+          emptyDir: {}
+        - name: varlog
+          hostPath:
+            path: /var/log
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+        - name: config
+          configMap:
+            name: {{ template "sf-apm-agents.fullname" . }}

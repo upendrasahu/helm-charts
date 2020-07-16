@@ -4,7 +4,7 @@ Expand the name of the chart.
 */}}
 {{- define "sf-apm-agents.name" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s" $name .Release.Namespace | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -13,7 +13,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "sf-apm-agents.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s" $name .Release.Namespace | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -22,7 +22,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "sf-apm-agents.heartbeat.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-heartbeat" $name .Release.Namespace | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-heartbeat" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -31,16 +31,34 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "sf-apm-agents.cluster.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-cluster" $name .Release.Namespace | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-cluster" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Create a fully qualified application metrics name.
+Create a fully qualified node metrics name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "sf-apm-agents.application.fullname" -}}
+{{- define "sf-apm-agents.node.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- printf "%s-%s-application" $name .Release.Namespace | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-node" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a fully qualified prometheus metrics name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "sf-apm-agents.prom.fullname" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s-prom" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a fully qualified inventory metrics name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "sf-apm-agents.inventory.fullname" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- printf "%s-%s-inventory" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
