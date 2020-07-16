@@ -16,6 +16,6 @@ data:
 {{ toYaml .Values.node_agent.prometheus_poller.configmap | indent 4 }}
   nodeconfig.yaml: |
 {{ toYaml .Values.node_agent.node_metrics.configmap | indent 4 }}
-  interval.json: |
+  interval.yaml: |
 {{ toYaml .Values.node_agent.prometheus_poller.plugin_interval | indent 4 }}
 
