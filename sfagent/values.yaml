@@ -79,7 +79,7 @@ node_agent:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 500m
+        cpu: 1000m
         memory: 512Mi
     configmap:
       log_dir: /tmp
