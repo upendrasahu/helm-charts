@@ -99,6 +99,8 @@ spec:
           command:
           - /app/sfagent
           - -enable-console-log
+          securityContext:
+            runAsUser: 0
           env:
           - name: APP_NAME
             value: "{{ .Values.global.sfappname }}"
