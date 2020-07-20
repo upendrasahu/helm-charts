@@ -8,7 +8,7 @@ metadata:
     role: celery
     queue: notify
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}

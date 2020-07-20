@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}-celery-default
+  name: {{ include "sfapm.fullname" . }}-celery-logops
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
     role: celery
-    queue: default
+    queue: logops
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
       role: celery
-      queue: default
+      queue: logops
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -25,7 +25,7 @@ spec:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
         role: celery
-        queue: default
+        queue: logops
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -41,7 +41,7 @@ spec:
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           command: ["bash", "-c"]
-          args: [{{ .Values.celery.default.command }}]
+          args: [{{ .Values.celery.logops.command }}]
           env:
           {{- range $key, $value := .Values.celery.env }}
             - name: {{ $key }}

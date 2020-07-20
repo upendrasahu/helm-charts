@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}
+  name: {{ include "sfapm.fullname" . }}-server
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
-    role: apm
+    role: server
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.sfapm.replicaCount }}
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
-      role: apm
+      role: server
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -22,7 +22,7 @@ spec:
       labels:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
-        role: apm
+        role: server
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -32,7 +32,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: apm
+        - name: server
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
@@ -46,32 +46,32 @@ spec:
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
+                  name: {{ include "sfapm.fullname" . }}-server
                   key: DB_HOST
             - name: DB_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
+                  name: {{ include "sfapm.fullname" . }}-server
                   key: DB_PORT
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
+                  name: {{ include "sfapm.fullname" . }}-server
                   key: DB_NAME
             - name: DB_USER
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
+                  name: {{ include "sfapm.fullname" . }}-server
                   key: DB_USER
             - name: REDIS_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
+                  name: {{ include "sfapm.fullname" . }}-server
                   key: REDIS_HOST
             - name: REDIS_PORT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
+                  name: {{ include "sfapm.fullname" . }}-server
                   key: REDIS_PORT                                    
           ports:
             - name: http

@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "sfapm.fullname" . }}
+  name: {{ include "sfapm.fullname" . }}-server
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
-    role: apm
+    role: server
 data:
     DB_HOST: {{ .Release.Name }}-postgresql
     DB_PORT: "5432"

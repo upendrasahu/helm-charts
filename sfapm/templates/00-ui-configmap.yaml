@@ -9,5 +9,5 @@ metadata:
 data:
     # SSL_CERT_PATH: /etc/ssl/nginx/nginx.crt
     # SSL_KEY_PATH: /etc/ssl/nginx/nginx.key
-    API_HOST: {{ include "sfapm.fullname" . }}
+    API_HOST: {{ include "sfapm.fullname" . }}-server
     API_PORT: "{{ .Values.sfapm.service.port }}"
