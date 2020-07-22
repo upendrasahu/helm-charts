@@ -227,7 +227,7 @@ kibana:
 
 logger:
   enabled: true
-  image: snappyflowml/sfagent-logger
+  image: snappyflowml/sfagent
   imageTag: latest
   imagePullPolicy: Always
 
