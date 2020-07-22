@@ -19,6 +19,15 @@ spec:
         release: {{ .Release.Name }}
     spec:
       containers:
+      - name: inventory
+        image: "{{ .Values.cluster_agent.inventory.image.repository }}:{{ .Values.cluster_agent.inventory.image.tag }}"
+        imagePullPolicy: {{ .Values.cluster_agent.inventory.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.cluster_agent.inventory.resources | indent 12 }}
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
       - name: cluster
         image: "{{ .Values.cluster_agent.cluster_monitoring.image.repository }}:{{ .Values.cluster_agent.cluster_monitoring.image.tag }}"
         imagePullPolicy: {{ .Values.cluster_agent.cluster_monitoring.image.pullPolicy }}

@@ -30,25 +30,7 @@ config:
 #  container for prometheus poller
 #  container for node/pod kubelet monitoring + storage metrics
 #  container for fluent-bit logs
-#  container for inventory heartbeat
 node_agent:
-  node_inventory:
-    image:
-      repository: snappyflowml/sfkube-node-inventory
-      tag: latest
-      pullPolicy: Always
-
-    ## container resource requests and limits
-    ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    resources:
-      requests:
-        cpu: 100m
-        memory: 64Mi
-      limits:
-        cpu: 256m
-        memory: 256Mi
-
   node_metrics:
     image:
       repository: snappyflowml/sfkube-node-metrics
@@ -57,17 +39,17 @@ node_agent:
     # if enabled
     configmap:
       # cluster monitoring interval, default is 300 seconds
-      interval: 300
+      interval: 30
       # Tags to be added in cluster metrics document
       #tags: {}
       #target: {}
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 64Mi
       limits:
-        cpu: 256m
-        memory: 512Mi
+        cpu: 250m
+        memory: 256Mi
   
   prometheus_poller:
     image:
@@ -133,7 +115,24 @@ node_agent:
 # cluster level plugin Pod
 #   Container with cloud heartbeat + cluster document
 #   Container for kube events
+#   Container for application inventory
 cluster_agent:
+  inventory:
+    image:
+      repository: snappyflowml/sfkube-inventory
+      tag: latest
+      pullPolicy: Always
+
+    ## container resource requests and limits
+    ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ##
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
   # Cluster monitoring
   cluster_monitoring:
     image:
@@ -149,10 +148,10 @@ cluster_agent:
       #target: {}
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 64Mi
       limits:
-        cpu: 256m
+        cpu: 250m
         memory: 256Mi
 
   event_metrics:
@@ -163,11 +162,11 @@ cluster_agent:
 
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 10m
+        memory: 64Mi
       limits:
-        cpu: 256m
-        memory: 512Mi
+        cpu: 250m
+        memory: 256Mi
 
   tolerations: []
 
