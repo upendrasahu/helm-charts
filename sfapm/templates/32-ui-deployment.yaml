@@ -53,16 +53,9 @@ spec:
             - name: SSL
               value: "false"
           {{- end }}
-            - name: API_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}-ui
-                  key: API_HOST
-            - name: API_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}-ui
-                  key: API_PORT
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-ui
           ports:
           {{- if .Values.sfapmui.tls.enabled }}
             - name: http
@@ -114,7 +107,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.sfapmui.tls.enabled }}
       volumes:
         - name: tls
           secret:
             secretName: {{ include "sfapm.fullname" . }}-ui-tls
+      {{- end }}

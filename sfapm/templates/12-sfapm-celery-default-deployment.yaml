@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}-celery-periodic
+  name: {{ include "sfapm.fullname" . }}-apm-celery-default
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
     role: celery
-    queue: periodic
+    queue: default
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
       role: celery
-      queue: periodic
+      queue: default
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -25,7 +25,7 @@ spec:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
         role: celery
-        queue: periodic
+        queue: default
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -41,9 +41,9 @@ spec:
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           command: ["bash", "-c"]
-          args: [{{ .Values.celery.periodic.command }}]
+          args: [{{ .Values.sfapm_celery.default.command }}]
           env:
-          {{- range $key, $value := .Values.celery.env }}
+          {{- range $key, $value := .Values.sfapm_celery.env }}
             - name: {{ $key }}
               value: "{{ $value }}"
           {{- end }}
@@ -51,39 +51,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
-                  key: postgresql-password
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_PORT
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_NAME
-            - name: DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_USER
-            - name: REDIS_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: REDIS_HOST
-            - name: REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: REDIS_PORT 
+                  key: multidbUserPassord
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-apm
           resources:
-            {{- toYaml .Values.celery.resources | nindent 12 }}
+            {{- toYaml .Values.sfapm_celery.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data

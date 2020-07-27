@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}-celery-logops
+  name: {{ include "sfapm.fullname" . }}-vizbuilder-celery-alert
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
-    app: sfapm
+    app: vizbuilder
     role: celery
-    queue: logops
+    queue: alert
 spec:
   replicas: 1
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
-      app: sfapm
+      app: vizbuilder
       role: celery
-      queue: logops
+      queue: alert
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -23,9 +23,9 @@ spec:
     {{- end }}
       labels:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
-        app: sfapm
+        app: vizbuilder
         role: celery
-        queue: logops
+        queue: alert
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -38,12 +38,12 @@ spec:
         - name: celery
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
-          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
+          image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
+          imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
           command: ["bash", "-c"]
-          args: [{{ .Values.celery.logops.command }}]
+          args: [{{ .Values.vizbuilder_celery.alert.command }}]
           env:
-          {{- range $key, $value := .Values.celery.env }}
+          {{- range $key, $value := .Values.vizbuilder_celery.env }}
             - name: {{ $key }}
               value: "{{ $value }}"
           {{- end }}
@@ -51,39 +51,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
-                  key: postgresql-password
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_PORT
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_NAME
-            - name: DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_USER
-            - name: REDIS_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: REDIS_HOST
-            - name: REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: REDIS_PORT 
+                  key: multidbUserPassord
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-vizbuilder
           resources:
-            {{- toYaml .Values.celery.resources | nindent 12 }}
+            {{- toYaml .Values.vizbuilder_celery.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data

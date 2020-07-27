@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sfapm.fullname" . }}-vizbuilder-celery-logops
+  labels:
+    {{- include "sfapm.labels" . | nindent 4 }}
+    app: vizbuilder
+    role: celery
+    queue: logops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "sfapm.selectorLabels" . | nindent 6 }}
+      app: vizbuilder
+      role: celery
+      queue: logops
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "sfapm.selectorLabels" . | nindent 8 }}
+        app: vizbuilder
+        role: celery
+        queue: logops
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sfapm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: celery
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
+          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
+          command: ["bash", "-c"]
+          args: [{{ .Values.vizbuilder_celery.logops.command }}]
+          env:
+          {{- range $key, $value := .Values.vizbuilder_celery.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+          {{- end }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-vizbuilder
+          resources:
+            {{- toYaml .Values.vizbuilder_celery.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /data/snappyflow
+              name: data
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: data
+          emptyDir: {}

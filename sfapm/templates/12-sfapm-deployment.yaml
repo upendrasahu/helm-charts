@@ -1,20 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}-celery-default
+  name: {{ include "sfapm.fullname" . }}-apm
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
-    role: celery
-    queue: default
+    role: server
 spec:
-  replicas: 1
+  replicas: {{ .Values.sfapm.replicaCount }}
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
-      role: celery
-      queue: default
+      role: server
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -24,8 +22,7 @@ spec:
       labels:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
-        role: celery
-        queue: default
+        role: server
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -34,56 +31,59 @@ spec:
       serviceAccountName: {{ include "sfapm.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      containers:
-        - name: celery
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+      initContainers:
+        - name: migration
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
-          command: ["bash", "-c"]
-          args: [{{ .Values.celery.default.command }}]
+          command: ["bash"]
+          args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
           env:
-          {{- range $key, $value := .Values.celery.env }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-          {{- end }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
-                  key: postgresql-password
-            - name: DB_HOST
+                  key: multidbUserPassord
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-apm 
+          volumeMounts:
+            - mountPath: /data/snappyflow
+              name: data
+      containers:
+        - name: sfapm
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
+          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
+          env:
+            - name: DB_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_PORT
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_NAME
-            - name: DB_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: DB_USER
-            - name: REDIS_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: REDIS_HOST
-            - name: REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "sfapm.fullname" . }}
-                  key: REDIS_PORT 
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-apm                   
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /snappyflow/status
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /snappyflow/status
+              port: http
           resources:
-            {{- toYaml .Values.celery.resources | nindent 12 }}
+            {{- toYaml .Values.sfapm.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data

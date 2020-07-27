@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "sfapm.fullname" . }}-server
+  name: {{ include "sfapm.fullname" . }}-apm
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
