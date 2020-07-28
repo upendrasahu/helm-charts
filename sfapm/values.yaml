@@ -135,16 +135,24 @@ affinity: {}
 
 
 redis:
+  image:
+    repository: redis
+    pullPolicy: IfNotPresent
+    tag: "5.0"
   persistence:
-    enabled: false
-    storageClass: "longhorn"
+    enabled: true
+    storageClass: ""
     size: 4Gi
 
 postgresql:
+  image:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    tag: "9.6"
   persistence:
-    enabled: false
-    storageClass: "longhorn"
-    size: 4Gi
+    enabled: true
+    storageClass: ""
+    size: 8Gi
   rootPassword: postgres
   rootUser: postgres
   multidb: snappyflow;vizbuilder

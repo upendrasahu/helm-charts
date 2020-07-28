@@ -20,7 +20,7 @@ service:
 persistence:
   enabled: true
   ## if enabled storage class name and size in GiB
-  storageClass: "-"
+  storageClass: ""
   size: 8Gi
   accessMode: ReadWriteOnce
 
