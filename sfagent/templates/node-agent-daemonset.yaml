@@ -23,17 +23,6 @@ spec:
     spec:
       serviceAccountName: {{ if .Values.rbac.create }}{{ template "sf-apm-agents.name" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
       hostPID: true
-    {{- if .Values.node_agent.fluentbit.enabled }}
-      initContainers:   
-      - name: config
-        image: "{{ .Values.node_agent.fluentbit.image.config.repository }}:{{ .Values.node_agent.fluentbit.image.config.tag }}"
-        imagePullPolicy: "{{ .Values.node_agent.fluentbit.image.pullPolicy }}"
-        volumeMounts:
-          - name: config
-            mountPath: /opt/config
-          - name: fluentconfig
-            mountPath: /etc/td-agent-bit
-    {{- end }}
       containers:
       - name: prometheus
         image: "{{ .Values.node_agent.prometheus_poller.image.repository }}:{{ .Values.node_agent.prometheus_poller.image.tag }}"
@@ -99,16 +88,16 @@ spec:
             readOnly: true
       {{- if .Values.node_agent.fluentbit.enabled }}
       - name: fluent-bit
-        image: "{{ .Values.node_agent.fluentbit.image.fluent_bit.repository }}:{{ .Values.node_agent.fluentbit.image.fluent_bit.tag }}"
+        image: "{{ .Values.node_agent.fluentbit.image.fluent_init.repository }}:{{ .Values.node_agent.fluentbit.image.fluent_init.tag }}"
         imagePullPolicy: "{{ .Values.node_agent.fluentbit.image.pullPolicy }}"
-        {{- if .Values.node_agent.fluentbit.drop_cluster_logs }}
         env:
-          - name: DORP_CLUSTER_LOGS
-            value: "1"
           - name: NODE_NAME
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+        {{- if .Values.node_agent.fluentbit.drop_cluster_logs }}
+          - name: DORP_CLUSTER_LOGS
+            value: "1"
           - name: POD_NAME
             valueFrom:
               fieldRef:
@@ -118,8 +107,8 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         {{- end }}
-        command: ["/bin/bash","-c"]
-        args: ["source /etc/config-gen/env && cp -f /etc/config-gen/output.conf /etc/td-agent-bit/output.conf && cd /etc/td-agent-bit/ && /fluent-bit/bin/fluent-bit -c /etc/td-agent-bit/fluent-bit.conf"]
+        command: ["/bin/sh","-c"]
+        args: ["/app/fluent-init -nodename $NODE_NAME -debug"]
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
@@ -128,8 +117,8 @@ spec:
           - name: varlibdockercontainers
             mountPath: /var/lib/docker/containers
             readOnly: true
-          - name: fluentconfig
-            mountPath: /etc/config-gen
+          - name: config
+            mountPath: /opt/config
         {{- end }}
       terminationGracePeriodSeconds: 30
     {{- if .Values.node_agent.nodeSelector }}

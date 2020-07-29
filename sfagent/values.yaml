@@ -91,10 +91,7 @@ node_agent:
     enabled: true
     drop_cluster_logs: false
     image:
-      fluent_bit:
-        repository: snappyflowml/fluentbit-sfapm
-        tag: latest
-      config:
+      fluent_init:
         repository: snappyflowml/kube-fluent-init
         tag: latest
       pullPolicy: Always
