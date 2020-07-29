@@ -153,7 +153,7 @@ redis:
     pullPolicy: IfNotPresent
     tag: "5.0"
   persistence:
-    enabled: false
+    enabled: true
     storageClass: ""
     size: 4Gi
 
@@ -177,7 +177,7 @@ postgresql:
     pullPolicy: IfNotPresent
     tag: "9.6"
   persistence:
-    enabled: false
+    enabled: true
     storageClass: ""
     size: 8Gi
   # when local postgresql is enabled below values are used to configure database
