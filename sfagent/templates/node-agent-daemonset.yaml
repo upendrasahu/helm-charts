@@ -88,7 +88,7 @@ spec:
             readOnly: true
       {{- if .Values.node_agent.fluentbit.enabled }}
       - name: fluent-bit
-        image: "{{ .Values.node_agent.fluentbit.image.fluent_init.repository }}:{{ .Values.node_agent.fluentbit.image.fluent_init.tag }}"
+        image: "{{ .Values.node_agent.fluentbit.image.fluent_bit.repository }}:{{ .Values.node_agent.fluentbit.image.fluent_bit.tag }}"
         imagePullPolicy: "{{ .Values.node_agent.fluentbit.image.pullPolicy }}"
         env:
           - name: NODE_NAME
@@ -108,7 +108,7 @@ spec:
                 fieldPath: status.podIP
         {{- end }}
         command: ["/bin/sh","-c"]
-        args: ["/app/fluent-init -nodename $NODE_NAME -debug"]
+        args: ["/app/fluent-config-gen -nodename $NODE_NAME -debug"]
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         volumeMounts:
