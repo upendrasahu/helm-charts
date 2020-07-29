@@ -42,12 +42,14 @@ spec:
             - sh 
             - -c 
             - "until pg_isready -d postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}; do sleep 3; done"
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm
@@ -74,11 +76,13 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
           {{- end }}
+          {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm

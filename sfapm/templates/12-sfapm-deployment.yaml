@@ -7,7 +7,9 @@ metadata:
     app: sfapm
     role: server
 spec:
+{{- if not .Values.sfapm.autoscaling.enabled }}
   replicas: {{ .Values.sfapm.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
@@ -39,12 +41,14 @@ spec:
             - sh 
             - -c 
             - "until pg_isready -d postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}; do sleep 3; done"
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm
@@ -63,12 +67,14 @@ spec:
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           command: ["bash"]
           args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm 
@@ -81,12 +87,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm                   

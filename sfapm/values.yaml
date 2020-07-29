@@ -46,6 +46,12 @@ sfapm:
   service:
     type: ClusterIP
     port: 8000
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
 sfapm_celery:
   resources: 
@@ -87,6 +93,12 @@ vizbuilder:
   service:
     type: ClusterIP
     port: 8000
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
 vizbuilder_celery:
   resources: 
@@ -135,24 +147,40 @@ affinity: {}
 
 
 redis:
+  enabled: true
   image:
     repository: redis
     pullPolicy: IfNotPresent
     tag: "5.0"
   persistence:
-    enabled: true
+    enabled: false
     storageClass: ""
     size: 4Gi
 
 postgresql:
+  # enabled true deploys postgresql as statefull set on the same cluster
+  enabled: true
+
+  # if enabled false, chart will connect to external database
+  # create two data bases with names snappyflow and vizbuilder
+  # create a user and grant access to database snappyflow and vizbuilder
+  # provide external section if enabled is false
+
+  # external:
+  #   dbHost: "test-db-postgresql"
+  #   dbPort: ""
+  #   dbUser: "test"
+  #   dbPassword: "test123"
+
   image:
     repository: postgres
     pullPolicy: IfNotPresent
     tag: "9.6"
   persistence:
-    enabled: true
+    enabled: false
     storageClass: ""
     size: 8Gi
+  # when local postgresql is enabled below values are used to configure database
   rootPassword: postgres
   rootUser: postgres
   multidb: snappyflow;vizbuilder

@@ -7,7 +7,9 @@ metadata:
     app: sfapm
     role: vizbuilder
 spec:
-  replicas: {{ .Values.sfapm.replicaCount }}
+{{- if not .Values.vizbuilder.autoscaling.enabled }}
+  replicas: {{ .Values.vizbuilder.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
@@ -39,12 +41,14 @@ spec:
             - sh 
             - -c 
             - "until pg_isready -d postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}; do sleep 3; done"
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder
@@ -63,12 +67,14 @@ spec:
           imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
           command: ["bash"]
           args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder
@@ -81,12 +87,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
           imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
+          {{- if .Values.postgresql.enabled }}
           env:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder                                  
@@ -94,20 +102,20 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          # livenessProbe:
-          #   initialDelaySeconds: 60
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
-          #   httpGet:
-          #     path: /snappyflow/status
-          #     port: http
-          # readinessProbe:
-          #   initialDelaySeconds: 60
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
-          #   httpGet:
-          #     path: /snappyflow/status
-          #     port: http
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /vizbuilder/status
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /vizbuilder/status
+              port: http
           resources:
             {{- toYaml .Values.vizbuilder.resources | nindent 12 }}
           volumeMounts:
