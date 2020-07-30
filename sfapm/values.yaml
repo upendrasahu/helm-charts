@@ -66,15 +66,15 @@ sfapm_celery:
   beat:
     command: "celery beat -A snappyflow -l debug"
   default:
-    command: "celery worker -n default -A snappyflow -l debug -Q default -c4"
+    command: "celery worker -n default@%n -A snappyflow -l debug -Q default -c4"
   delete:
-    command: "celery worker -n delete -A snappyflow -l debug -Q queue -c1"
+    command: "celery worker -n delete@%n -A snappyflow -l debug -Q queue -c1"
   notify:
-    command: "celery worker -n notify -A snappyflow -l debug -Q notify -c2"
+    command: "celery worker -n notify@%n -A snappyflow -l debug -Q notify -c2"
   periodic:
-    command: "celery worker -n periodic -A snappyflow -l debug -Q periodic -c2"
+    command: "celery worker -n periodic@%n -A snappyflow -l debug -Q periodic -c2"
   provision:
-    command: "celery worker -n provision -A snappyflow -l debug -Q provision -c1"
+    command: "celery worker -n provision@%n -A snappyflow -l debug -Q provision -c1"
 
 
 vizbuilder:
@@ -113,9 +113,9 @@ vizbuilder_celery:
   beat:
     command: "celery beat -A snappyflow -l debug"
   alert:
-    command: "celery worker -n alert -A snappyflow -l debug -Q alert -c4"
+    command: "celery worker -n alert@%n -A snappyflow -l debug -Q alert -c4"
   logops:
-    command: "celery worker -n logops -A snappyflow -l debug -Q logops -c2"
+    command: "celery worker -n logops@%n -A snappyflow -l debug -Q logops -c2"
 
 serviceAccount:
   # Specifies whether a service account should be created
