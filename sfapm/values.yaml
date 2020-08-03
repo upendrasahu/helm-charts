@@ -111,11 +111,11 @@ vizbuilder_celery:
   env:
     C_FORCE_ROOT: true
   beat:
-    command: "celery beat -A snappyflow -l debug"
+    command: "celery beat -A vizbuilder -l debug"
   alert:
-    command: "celery worker -n alert@%n -A snappyflow -l debug -Q alert -c4"
+    command: "celery worker -n alert@%n -A vizbuilder -l debug -Q alert -c4"
   logops:
-    command: "celery worker -n logops@%n -A snappyflow -l debug -Q logops -c2"
+    command: "celery worker -n logops@%n -A vizbuilder -l debug -Q logops -c2"
 
 serviceAccount:
   # Specifies whether a service account should be created
