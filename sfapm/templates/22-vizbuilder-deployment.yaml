@@ -97,7 +97,7 @@ spec:
           {{- end }}
           {{- if .Values.enableDebug }}
             - name: DEBUG
-              value: True
+              value: "True"
           {{- end }}
           envFrom:
             - configMapRef:
