@@ -2,6 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# set to true to enable debug logs on
+# apm and vizbuilder
+enableDebug: false
+
 nameOverride: ""
 fullnameOverride: ""
 imagePullSecrets: []
@@ -147,7 +151,6 @@ affinity: {}
 
 
 redis:
-  enabled: true
   image:
     repository: redis
     pullPolicy: IfNotPresent

@@ -50,6 +50,10 @@ spec:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
           {{- end }}
+          {{- if .Values.enableDebug }}
+            - name: DEBUG
+              value: True
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder
