@@ -50,10 +50,6 @@ spec:
                   name: {{ .Release.Name }}-postgresql
                   key: multidbUserPassord
           {{- end }}
-          {{- if .Values.enableDebug }}
-            - name: DEBUG
-              value: "True"
-          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder
@@ -79,6 +75,17 @@ spec:
           {{- range $key, $value := .Values.vizbuilder_celery.env }}
             - name: {{ $key }}
               value: "{{ $value }}"
+          {{- end }}
+          {{- if .Values.enableDebug }}
+            - name: DEBUG
+              value: "True"
+          {{- end }}
+          {{- if .Values.enableDebug }}
+            - name: LOG_LEVEL
+              value: debug
+          {{- else }}
+            - name: LOG_LEVEL
+              value: info
           {{- end }}
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
