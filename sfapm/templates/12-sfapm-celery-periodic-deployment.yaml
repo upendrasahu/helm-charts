@@ -8,7 +8,7 @@ metadata:
     role: celery
     queue: periodic
 spec:
-  replicas: 1
+  replicas: {{ .Values.sfapm_celery.periodic.replicaCount }}
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}

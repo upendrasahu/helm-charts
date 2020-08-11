@@ -66,7 +66,8 @@ spec:
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           command: ["bash"]
-          args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
+          # args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
+          args: ["-c", "python manage.py migrate"]
           env:
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
