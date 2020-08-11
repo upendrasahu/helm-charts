@@ -72,9 +72,6 @@ sfapm_celery:
   default:
     replicaCount: 2
     command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2"
-  delete:
-    replicaCount: 1
-    command: "celery worker -n delete@%n -A snappyflow -l $LOG_LEVEL -Q queue -c1"
   notify:
     replicaCount: 1
     command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2"
