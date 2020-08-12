@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   elasticsearch:
   - apiVersion: v1
-    created: 2020-08-11T21:53:22.162284422+05:30
+    created: "2020-08-12T11:10:04.281467409+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
@@ -21,13 +21,12 @@ entries:
     - elasticsearch-0.3.6.tgz
     version: 0.3.6
   - apiVersion: v1
-    created: 2020-08-11T21:53:22.122951434+05:30
+    created: "2020-08-12T11:10:04.265549604+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
       logs
     digest: b3cf5b338af1d5cc922a41e7953e6471550f18463974fe9352c15f7058a4940b
-    engine: gotpl
     home: https://www.elastic.co/products/elasticsearch
     icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
     maintainers:
@@ -41,7 +40,7 @@ entries:
     - elasticsearch-0.3.5.tgz
     version: 0.3.5
   - apiVersion: v1
-    created: 2020-08-11T21:53:22.103271243+05:30
+    created: "2020-08-12T11:10:04.255603446+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
@@ -60,13 +59,12 @@ entries:
     - elasticsearch-0.3.4.tgz
     version: 0.3.4
   - apiVersion: v1
-    created: 2020-08-11T21:53:22.054615757+05:30
+    created: "2020-08-12T11:10:04.238796532+05:30"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
       Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
       logs
     digest: 1f0162baa60723febba9ca79f38d9f88fbbdbb89006d7e506d7e41290f141767
-    engine: gotpl
     home: https://www.elastic.co/products/elasticsearch
     icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
     maintainers:
@@ -82,7 +80,7 @@ entries:
   expresscart:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-08-11T21:53:22.298142997+05:30
+    created: "2020-08-12T11:10:04.314950637+05:30"
     description: A Helm chart to deploy expressCart nodejs application
     digest: 81a0c65c836b50ab91e0643e0c020e9656d78b6ac67ccf1006bf32279616ff4e
     icon: https://raw.githubusercontent.com/mrvautin/expressCart/master/public/images/logo.png
@@ -94,7 +92,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-08-11T21:53:22.220375034+05:30
+    created: "2020-08-12T11:10:04.296584263+05:30"
     description: A Helm chart to deploy expressCart nodejs application
     digest: 1445a2be5cc36d1e04428d49b1ebb763dd5cdb480010792188b5c6ccf996e296
     icon: https://raw.githubusercontent.com/mrvautin/expressCart/master/public/images/logo.png
@@ -105,11 +103,11 @@ entries:
     - expresscart-0.2.0.tgz
     version: 0.2.0
   fluentd-elasticsearch:
-  - appVersion: 2.3.2
-    created: 2020-08-11T21:53:22.321320498+05:30
+  - apiVersion: v1
+    appVersion: 2.3.2
+    created: "2020-08-12T11:10:04.320851167+05:30"
     description: A Fluentd Helm chart for Kubernetes with Elasticsearch output
     digest: 3a091e75d9e755856676639285ec95e9ebbbaae4d3e25ffb5e2e19ca5343f1f7
-    engine: gotpl
     home: https://www.fluentd.org/
     icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
     keywords:
@@ -130,7 +128,7 @@ entries:
   kafka:
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-08-11T21:53:22.434313062+05:30
+    created: "2020-08-12T11:10:04.389580978+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -152,7 +150,7 @@ entries:
     version: 2.4.4
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-08-11T21:53:22.414319325+05:30
+    created: "2020-08-12T11:10:04.381761205+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -174,7 +172,7 @@ entries:
     version: 2.4.3
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-08-11T21:53:22.407277161+05:30
+    created: "2020-08-12T11:10:04.364867132+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -196,7 +194,7 @@ entries:
     version: 2.4.2
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-08-11T21:53:22.392672461+05:30
+    created: "2020-08-12T11:10:04.356172831+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -218,7 +216,7 @@ entries:
     version: 2.4.1
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-08-11T21:53:22.37203592+05:30
+    created: "2020-08-12T11:10:04.348498984+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -240,7 +238,7 @@ entries:
     version: 2.4.0
   - apiVersion: v1
     appVersion: 5.3.1
-    created: 2020-08-11T21:53:22.359522678+05:30
+    created: "2020-08-12T11:10:04.328210446+05:30"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
       Topic Metrics, and logs
@@ -263,7 +261,7 @@ entries:
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-08-11T21:53:22.464935082+05:30
+    created: "2020-08-12T11:10:04.406997636+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: 1fc52af23cd65555562020e6b869610cfe9defbdca10e167c5049f9114ca25e4
     home: https://spring.io
@@ -279,7 +277,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-08-11T21:53:22.443125295+05:30
+    created: "2020-08-12T11:10:04.398345593+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: abd62eeea5268e3dd8f640cbe4811d689756451907228119111ca5c7627e92b8
     home: https://spring.io
@@ -296,7 +294,7 @@ entries:
   petclinic-sfagent:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-08-11T21:53:22.505796004+05:30
+    created: "2020-08-12T11:10:04.431356606+05:30"
     description: Helm chart for spring applicaton, monitoring using sfagent
     digest: 6cfdd08a6cdc98ffd87661bfc09937909e3b242fcb89fa8885d1db75031c1b8f
     home: https://spring.io
@@ -312,7 +310,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-08-11T21:53:22.487297647+05:30
+    created: "2020-08-12T11:10:04.417190957+05:30"
     description: Helm chart for spring applicaton, monitoring using sfagent
     digest: fdef6773f55c98a8ee343d6bb28bec8998281334851d3328c09050176150f2e0
     home: https://spring.io
@@ -329,7 +327,7 @@ entries:
   petclinic-v3:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
-    created: 2020-08-11T21:53:22.50975928+05:30
+    created: "2020-08-12T11:10:04.445546875+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: e108c173cdfdc3175fc8ef52254ab309d9755371d6879d67dc147a62f94d17db
     home: https://spring.io
@@ -347,27 +345,29 @@ entries:
   postgresql:
   - apiVersion: v2
     appVersion: "9.6"
-    created: 2020-08-11T21:53:22.514212291+05:30
+    created: "2020-08-12T11:10:04.450889041+05:30"
     description: A Helm chart for Postgresql server to use with sfapm
     digest: ddec79b352bf5938dbaf46f45f39be020c6c7009b6aa942231bd5f21ebe61de9
     name: postgresql
+    type: application
     urls:
     - postgresql-0.1.0.tgz
     version: 0.1.0
   redis:
   - apiVersion: v2
     appVersion: "5"
-    created: 2020-08-11T21:53:22.516130468+05:30
+    created: "2020-08-12T11:10:04.464902983+05:30"
     description: A Helm chart for Redis server for use with sfapm
     digest: 07a8f5cd478013389f0c825d911d923056574976485d5459bb931ef96f77b7bd
     name: redis
+    type: application
     urls:
     - redis-0.1.0.tgz
     version: 0.1.0
   sample-petclinic:
   - apiVersion: v1
     appVersion: "1"
-    created: 2020-08-11T21:53:22.527801429+05:30
+    created: "2020-08-12T11:10:04.481720035+05:30"
     description: Helm chart for deploying basic Spring applications
     digest: 0f2d2dd34b3d12b947b41aafb0a622b97aa0659ab79db5b6ac68f3702da3638f
     name: sample-petclinic
@@ -377,11 +377,10 @@ entries:
   sfagent:
   - apiVersion: v1
     appVersion: "1.1"
-    created: 2020-08-11T21:53:22.585526307+05:30
+    created: "2020-08-12T11:10:04.554947881+05:30"
     description: Cluster and Application Monitoring and Logging system for Maplelabs'
       snappyFlow APM.
     digest: 7a90c5875681918f22a31db68d4dac8c23a7faf5bf05f2cf9aa5c18ef8076cde
-    engine: gotpl
     home: http://www.snappyflow.io
     keywords:
     - monitoring
@@ -397,11 +396,10 @@ entries:
     version: 3.1.1
   - apiVersion: v1
     appVersion: "1.1"
-    created: 2020-08-11T21:53:22.582187296+05:30
+    created: "2020-08-12T11:10:04.536885462+05:30"
     description: Cluster and Application Monitoring and Logging system for Maplelabs'
       snappyFlow APM.
     digest: 64c73e0a004907d09586688306bc43c55ba7d4c661eeadb616448a3e8ec18765
-    engine: gotpl
     home: http://www.snappyflow.io
     keywords:
     - monitoring
@@ -417,11 +415,10 @@ entries:
     version: 3.1.0
   - apiVersion: v1
     appVersion: "1.1"
-    created: 2020-08-11T21:53:22.570816301+05:30
+    created: "2020-08-12T11:10:04.530940667+05:30"
     description: Cluster and Application Monitoring and Logging system for Maplelabs'
       snappyFlow APM.
     digest: 2d06bd9e140a83ba4510e73fa0e9996e6f17813ef4c7fbe44799616583d3ddb1
-    engine: gotpl
     home: http://www.snappyflow.io
     keywords:
     - monitoring
@@ -437,7 +434,7 @@ entries:
     version: 3.0.0
   - apiVersion: v1
     appVersion: "1.1"
-    created: 2020-08-11T21:53:22.555087303+05:30
+    created: "2020-08-12T11:10:04.524948945+05:30"
     description: Cluster and Application Monitoring and Logging system for Maplelabs'
       snappyFlow APM.
     digest: 038da35108a58cbe0e912301642234825b219b6eb76bf17c336a4d20b52bc984
@@ -455,11 +452,10 @@ entries:
     version: 2.0.3
   - apiVersion: v1
     appVersion: "1.1"
-    created: 2020-08-11T21:53:22.553606196+05:30
+    created: "2020-08-12T11:10:04.517726314+05:30"
     description: Cluster and Application Monitoring and Logging system for Maplelabs'
       snappyFlow APM.
     digest: d07917cc53b87cec0bd9665d32f25bbb2119f9e2a5e0edec7157454afcef1cfb
-    engine: gotpl
     home: http://www.snappyflow.io
     keywords:
     - monitoring
@@ -474,7 +470,7 @@ entries:
     version: 2.0.2
   - apiVersion: v1
     appVersion: "1.1"
-    created: 2020-08-11T21:53:22.538352577+05:30
+    created: "2020-08-12T11:10:04.506302152+05:30"
     description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
       APM.
     digest: d46ab38c70d2dc9ce29dc51a4a9286b736ca5e0f3f5c66315cb9efb2f67b9e42
@@ -492,11 +488,10 @@ entries:
     version: 2.0.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2020-08-11T21:53:22.53633003+05:30
+    created: "2020-08-12T11:10:04.488091968+05:30"
     description: Cluster and Application Monitoring system for Maplelabs' snappyFlow
       APM.
     digest: 83918703383bd62e739f075f5e47c0a4b7570ac0481ee5815cb1045cadb1a5cb
-    engine: gotpl
     home: http://www.snappyflow.io
     keywords:
     - monitoring
@@ -512,7 +507,26 @@ entries:
   sfapm:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.750861444+05:30
+    created: "2020-08-12T11:10:04.76617451+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    description: A Helm chart to deploy snappyflow on Kubernetes
+    digest: 71206501ff591a78bc61fa09459f358de0efaf7ea4cc740e912c764072f14fec
+    home: http://www.snappyflow.io
+    name: sfapm
+    type: application
+    urls:
+    - sfapm-0.3.10.tgz
+    version: 0.3.10
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2020-08-12T11:10:04.920094801+05:30"
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 2adc602a3b8d184aa0036727cdb577871bb2eae2e9a42fbe4eb4c5af9623b1bc
     home: http://www.snappyflow.io
@@ -522,141 +536,246 @@ entries:
     version: 0.3.9
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.745749496+05:30
+    created: "2020-08-12T11:10:04.907630351+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 41aca2584d99ac11052446e81a0fc3c2413f7a7fac057b05e489dbabd0c4e638
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.8.tgz
     version: 0.3.8
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.740204149+05:30
+    created: "2020-08-12T11:10:04.892417913+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 18eddc8414b3a23f974a55040a3e562fca92931b26c7fe75eca4a26402ac4c67
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.7.tgz
     version: 0.3.7
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.726862416+05:30
+    created: "2020-08-12T11:10:04.871962003+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 84b00d9fd8fa7f3f190996e2318218a458d51bac15af946bdddebddb2965896c
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.6.tgz
     version: 0.3.6
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.719320483+05:30
+    created: "2020-08-12T11:10:04.844301831+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 5acfaf160e8031fd6b2ae44be931c5a2b1e61bcff0c08ba9dcd565d177c96aa7
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.5.tgz
     version: 0.3.5
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.712103438+05:30
+    created: "2020-08-12T11:10:04.826164497+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 81ab456a92a6a7be4d5c1278d80b01fad08153515aa51fb2895525d7310db14e
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.4.tgz
     version: 0.3.4
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.704040249+05:30
+    created: "2020-08-12T11:10:04.810010848+05:30"
+    dependencies:
+    - name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: f3c0c1b9e726219b90415956d79d9a85a8fdb6f59b068eed40b9dc32850cd594
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.3.tgz
     version: 0.3.3
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.696339423+05:30
+    created: "2020-08-12T11:10:04.783194809+05:30"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 207935329a6f5244aac7c34d7e96f9e45d7f0531c8759ec78b94088f4544fb49
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.676755328+05:30
+    created: "2020-08-12T11:10:04.752125065+05:30"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 9606abd266f0e27d1c8a44a1f8ff3b660be48c3c6451d895615dd9024b912d07
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.660756703+05:30
+    created: "2020-08-12T11:10:04.712226819+05:30"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
+      version: 0.1.0
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 6ff8ef30f43ac05a3aa36d637a13745db1e928c6ecbc2d6538eb5e71a0dd9eb9
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.641118745+05:30
+    created: "2020-08-12T11:10:04.683893455+05:30"
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 366f1d581e98a20762ff116db55da885db466f20fd489b7696692ab04159b256
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.2.1.tgz
     version: 0.2.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.637465184+05:30
+    created: "2020-08-12T11:10:04.674344197+05:30"
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: 210c2ef1964cb4cafb1091b3637a979b3b244072b9e4421314a0143b838a5b23
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.633745695+05:30
+    created: "2020-08-12T11:10:04.656527707+05:30"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.7.1
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.10.5
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: e0eeaebca42b45dda3c45b478f687c066fbb2839195d149948597644fdc07863
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: 2020-08-11T21:53:22.608145586+05:30
+    created: "2020-08-12T11:10:04.60794259+05:30"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.7.1
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 8.10.5
     description: A Helm chart to deploy snappyflow on Kubernetes
     digest: e08bd28bf111826058351f5f947a5f4e812d0a22dbd8bb78b3b0ff1366c0436b
     home: http://www.snappyflow.io
     name: sfapm
+    type: application
     urls:
     - sfapm-0.1.0.tgz
     version: 0.1.0
   tomcat:
   - apiVersion: v1
     appVersion: 9.0.36
-    created: 2020-08-11T21:53:22.75513008+05:30
+    created: "2020-08-12T11:10:04.927030723+05:30"
     description: Chart for Apache Tomcat
     digest: 026e058479a8b080b715c92bba9f0565126d77ef91c44a76a8547d0726aa1017
-    engine: gotpl
     home: http://tomcat.apache.org
     icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-110x117.png
     keywords:
@@ -672,4 +791,4 @@ entries:
     urls:
     - tomcat-0.1.0.tgz
     version: 0.1.0
-generated: 2020-08-11T21:53:22.037993251+05:30
+generated: "2020-08-12T11:10:04.2132829+05:30"

@@ -12,6 +12,12 @@ imagePullSecrets: []
 
 sfapmui:
   replicaCount: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapmui
     tag: latest
@@ -36,6 +42,12 @@ sfapmui:
 
 sfapm:
   replicaCount: 3
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm
     tag: latest
@@ -50,12 +62,6 @@ sfapm:
   service:
     type: ClusterIP
     port: 8000
-  autoscaling:
-    enabled: true
-    minReplicas: 3
-    maxReplicas: 6
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
 
 sfapm_celery:
   resources: 
@@ -85,6 +91,12 @@ sfapm_celery:
 
 vizbuilder:
   replicaCount: 3
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfvizbuilder
     tag: latest
@@ -99,12 +111,7 @@ vizbuilder:
   service:
     type: ClusterIP
     port: 8000
-  autoscaling:
-    enabled: true
-    minReplicas: 3
-    maxReplicas: 6
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+
 
 vizbuilder_celery:
   resources: 
