@@ -3,7 +3,7 @@
   - **Add snappyflow helm chart repo**
 	
 	```
-	$ helm repo add snappyflow https://raw.githubusercontent.com/snappyflow/helm-charts/master
+	$ helm repo add snappyflow https://snappyflow.github.io/helm-charts/
 	"snappyflow" has been added to your repositories
 	```
 	
@@ -13,7 +13,7 @@
 	NAME      		URL                                                            
 	stable    		https://kubernetes-charts.storage.googleapis.com               
 	local     		http://127.0.0.1:8879/charts                                                                                     
-	snappyflow		https://raw.githubusercontent.com/snappyflow/helm-charts/master
+	snappyflow		https://snappyflow.github.io/helm-charts/
 	```
   - **Update Helm repo**	
 	```
