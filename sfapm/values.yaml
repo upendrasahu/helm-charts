@@ -19,9 +19,9 @@ sfapmui:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
   image:
-    repository: snappyflowml/sfapmui
-    tag: latest
-    pullPolicy: Always
+    repository: snappyflowml/sfapm-ui
+    tag: stable
+    pullPolicy: IfNotPresent
   resources: 
     limits:
       cpu: 500m
@@ -49,9 +49,9 @@ sfapm:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
   image:
-    repository: snappyflowml/sfapm
-    tag: latest
-    pullPolicy: Always
+    repository: snappyflowml/sfapm-server
+    tag: stable
+    pullPolicy: IfNotPresent
   resources: 
     limits:
       cpu: 2000m
@@ -98,9 +98,9 @@ vizbuilder:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
   image:
-    repository: snappyflowml/sfvizbuilder
-    tag: latest
-    pullPolicy: Always
+    repository: snappyflowml/sfapm-vizbuilder
+    tag: stable
+    pullPolicy: IfNotPresent
   resources: 
     limits:
       cpu: 2000m
