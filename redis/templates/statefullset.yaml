@@ -93,7 +93,7 @@ spec:
           name: {{ include "redis.fullname" . }}
       - name: sfagent
         configMap:
-          name: redis-deploy-config
+          name: redis-sfagent-config
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
