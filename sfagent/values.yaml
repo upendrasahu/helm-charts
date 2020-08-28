@@ -107,8 +107,13 @@ node_agent:
       #   memory: 8Mi
 
   tolerations:
-    - key: "node-role.kubernetes.io/master"
-      effect: NoSchedule
+    - effect: NoExecute
+      operator: Exists
+    - effect: NoSchedule
+      operator: Exists
+    - key: CriticalAddonsOnly
+      operator: Exists
+
 
   nodeSelector: {}
 
