@@ -33,7 +33,7 @@ spec:
           command:
           - /app/sfagent
           - -config-file
-          - /app/config.yaml
+          - /opt/sfagent/config.yaml
           - -enable-console-log
           env:
           - name: APP_NAME
