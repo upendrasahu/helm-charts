@@ -12,7 +12,6 @@
 	$ helm repo list
 	NAME      		URL                                                            
 	stable    		https://kubernetes-charts.storage.googleapis.com               
-	local     		http://127.0.0.1:8879/charts                                                                                     
 	snappyflow		https://snappyflow.github.io/helm-charts/
 	```
   - **Update Helm repo**	
