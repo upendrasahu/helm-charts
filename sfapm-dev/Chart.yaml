@@ -1,16 +1,15 @@
 apiVersion: v2
-name: sfapm-dev
-description: A Helm chart to deploy snappyflow on Kubernetes
-home: http://www.snappyflow.io
-type: application
-version: 2.1.1
 appVersion: 1.0.0
-
 dependencies:
 - name: redis
-  version: 0.1.0
   repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
-- name: postgresql
   version: 0.1.0
+- condition: postgresql.enabled
+  name: postgresql
   repository: https://raw.githubusercontent.com/snappyflow/helm-charts/master
-  condition: postgresql.enabled
+  version: 0.1.0
+description: A Helm chart to deploy snappyflow on Kubernetes
+home: http://www.snappyflow.io
+name: sfapm
+type: application
+version: 2.1.1-dev
