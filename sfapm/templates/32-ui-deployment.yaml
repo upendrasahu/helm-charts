@@ -32,6 +32,25 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+        - name: ui-sfagent
+          image: snappyflowml/sfagent:latest
+          imagePullPolicy: Always
+          command:
+          - /app/sfagent
+          - -config-file
+          - /opt/sfagent/config.yaml
+          - -enable-console-log
+          env:
+          - name: APP_NAME 
+            value: {{ .Values.global.sfappname }}
+          - name: PROJECT_NAME
+            value: {{ .Values.global.sfprojectname }}
+          volumeMounts:
+          - name: nginx-log
+            mountPath: /var/log/nginx
+          - name: sfagent
+            mountPath: /opt/sfagent/config.yaml
+            subPath: config.yaml
         - name: ui
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -112,4 +131,9 @@ spec:
         - name: tls
           secret:
             secretName: {{ include "sfapm.fullname" . }}-ui-tls
+        - name: sfagent
+          configMap:
+            name: ui-sfagent-configmap
+        - name: nginx-log
+          emptyDir: {}
       {{- end }}
