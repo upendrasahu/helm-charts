@@ -63,7 +63,7 @@
 	$ helm install snappyflow/sample-petclinic -f inputfile.yaml --name my-app --namespace my-namespace
 	```
 	
-  - **Check if app is installed**
+  - **Check if app chart is installed**
 	```
 	$ helm list -a
 	
