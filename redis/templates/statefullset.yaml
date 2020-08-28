@@ -27,6 +27,24 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+        - name: redis-agent
+          image: snappyflowml/sfagent:latest
+          imagePullPolicy: Always
+          command:
+          - /app/sfagent
+          - -config-file
+          - /app/config.yaml
+          - -enable-console-log
+          env:
+          - name: APP_NAME
+            value: {{ .Values.global.sfappname }}
+          - name: PROJECT_NAME
+            value: {{ .Values.global.sfprojectname }}
+          volumeMounts:
+          - name: sfagent
+            mountPath: /opt/sfagent/config.yaml
+            subPath: config.yaml
+
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -73,6 +91,9 @@ spec:
       - name: config
         configMap:
           name: {{ include "redis.fullname" . }}
+      - name: sfagent
+        configMap:
+          name: redis-deploy-config
       - name: data
       {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:

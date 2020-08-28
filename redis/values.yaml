@@ -63,3 +63,10 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
+
+global:
+  sfappname: apm-server
+  sfprojectname: apmdemo-sf-io
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
+  key: ""
