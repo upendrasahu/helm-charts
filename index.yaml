@@ -182,6 +182,26 @@ entries:
     urls:
     - https://github.com/snappyflow/helm-charts/releases/download/sfagent-3.1.4/sfagent-3.1.4.tgz
     version: 3.1.4
+  sfapm:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2020-08-30T16:42:28.20837058Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.2
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.1
+    description: A Helm chart to deploy snappyflow on Kubernetes
+    digest: 932abef7e9b771c2ea8c80d0dff5ed2a32a3fb4ecc851f91f77e6f0905c9c130
+    home: http://www.snappyflow.io
+    name: sfapm
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/sfapm-2.1.3/sfapm-2.1.3.tgz
+    version: 2.1.3
   sfnginx:
   - apiVersion: v1
     appVersion: "1.0"
