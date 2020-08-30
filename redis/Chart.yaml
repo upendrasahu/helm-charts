@@ -1,6 +1,0 @@
-apiVersion: v2
-name: redis
-description: A Helm chart for Redis server for use with sfapm
-type: application
-version: 0.2.1
-appVersion: 5.0
