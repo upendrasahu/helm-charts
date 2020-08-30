@@ -1,5 +1,25 @@
 apiVersion: v1
 entries:
+  elasticsearch:
+  - apiVersion: v1
+    created: "2020-08-30T16:32:43.817797162Z"
+    description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
+      and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
+      Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
+      logs
+    digest: be0ff94c3a9a5e9f694658fea2ba48fe85072554581b502feca6b2ba20927ab0
+    home: https://www.elastic.co/products/elasticsearch
+    icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
+    maintainers:
+    - email: matthew.titmus@gmail.com
+      name: Matt Titmus
+    name: elasticsearch
+    sources:
+    - https://www.elastic.co/products/elasticsearch
+    - https://github.com/pires/kubernetes-elasticsearch-cluster
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/elasticsearch-0.3.7/elasticsearch-0.3.7.tgz
+    version: 0.3.7
   sample-petclinic:
   - apiVersion: v1
     appVersion: "1"
