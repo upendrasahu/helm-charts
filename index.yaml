@@ -68,6 +68,23 @@ entries:
     urls:
     - https://snappyflow.github.io/helm-charts/fluentd-elasticsearch-2.0.8.tgz
     version: 2.0.8
+  ha-proxy:
+  - apiVersion: v1
+    appVersion: 2.1.0.BUILD-SNAPSHOT
+    created: "2020-08-30T16:12:06.625403242Z"
+    description: Helm chart for deploying basic Spring applications
+    digest: 472928696c6f28b9be3100e821179f7e87e340020bfeb213c9532ea9c033ff5d
+    home: https://spring.io
+    icon: https://spring.io/img/homepage/icon-spring-boot.svg
+    keywords:
+    - spring
+    - petclinic
+    name: ha-proxy
+    sources:
+    - https://github.com/spring-projects/spring-petclinic
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/ha-proxy-0.3.3/ha-proxy-0.3.3.tgz
+    version: 0.3.3
   kafka:
   - apiVersion: v1
     appVersion: 5.3.1
@@ -434,6 +451,25 @@ entries:
     urls:
     - https://snappyflow.github.io/helm-charts/sfapm-2.1.3-dev.tgz
     version: 2.1.3-dev
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2020-08-30T16:12:06.898616649Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.1
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.0
+    description: A Helm chart to deploy snappyflow on Kubernetes
+    digest: 6fb05754c068d68475128e81931120635602af46c0ec1200b8c7f5c12a9a923a
+    home: http://www.snappyflow.io
+    name: sfapm
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/sfapm-2.1.2/sfapm-2.1.2.tgz
+    version: 2.1.2
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2020-08-28T14:52:13.581360359Z"
