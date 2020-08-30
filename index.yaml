@@ -294,7 +294,7 @@ entries:
     name: postgresql
     type: application
     urls:
-    - https://snappyflow.github.io/helm-charts/postgresql-0.1.0.tgz
+    - https://github.com/snappyflow/helm-charts/releases/download/postgresql-0.1.0/postgresql-0.1.0.tgz
     version: 0.1.0
   redis:
   - apiVersion: v2
@@ -305,7 +305,7 @@ entries:
     name: redis
     type: application
     urls:
-    - https://snappyflow.github.io/helm-charts/redis-0.2.1.tgz
+    - https://github.com/snappyflow/helm-charts/releases/download/redis-0.2.1/redis-0.2.1.tgz
     version: 0.2.1
   - apiVersion: v2
     appVersion: "5"
