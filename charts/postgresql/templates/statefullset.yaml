@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "postgresql.fullname" . }}
+  labels:
+    {{- include "postgresql.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "postgresql.selectorLabels" . | nindent 6 }}
+  serviceName: {{ .Chart.Name }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "postgresql.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "postgresql.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql.fullname" . }}
+                  key: rootPassword
+            - name: PG_MULTI_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql.fullname" . }}
+                  key: multidbUserPassord
+            - name: POSTGRES_USER
+              value: {{ .Values.rootUser }}
+            - name: PG_MULTI_DB_USER
+              value: {{ .Values.multidbUser }}
+            - name: PG_MULTI_DB
+              value: {{ .Values.multidb }}
+            - name: PGDATA
+              value: "/data/pgdata"
+          ports:
+            - name: tcp
+              containerPort: 5432
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - sh 
+                - -c 
+                - "pg_isready -U ${POSTGRES_USER}"
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - sh 
+                - -c 
+                - "pg_isready -U ${POSTGRES_USER}"
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+          volumeMounts:
+          - name: data
+            mountPath: /data
+            subPath: pgdata
+          {{- if .Values.initconfig }}
+          - name: initconfig
+            mountPath: /docker-entrypoint-initdb.d
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "postgresql.fullname" . }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+      {{- if .Values.initconfig }}
+      - name: initconfig
+        configMap:
+          name: {{ include "postgresql.fullname" . }}-init
+      {{- end }}
+      

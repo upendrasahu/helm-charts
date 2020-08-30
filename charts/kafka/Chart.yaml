@@ -1,0 +1,16 @@
+apiVersion: v1
+appVersion: 5.3.1
+description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic, Topic Metrics, and logs
+home: https://kafka.apache.org/
+icon: https://kafka.apache.org/images/logo.png
+keywords:
+- kafka
+- zookeeper
+- kafka statefulset
+name: kafka
+sources:
+- https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
+- https://github.com/Yolean/kubernetes-kafka
+- https://github.com/confluentinc/cp-docker-images
+- https://github.com/apache/kafka
+version: 2.4.4

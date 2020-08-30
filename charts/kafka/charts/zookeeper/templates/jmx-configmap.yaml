@@ -1,0 +1,48 @@
+{{- if and .Values.prometheus.jmx.enabled .Values.jmx.configMap.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "zookeeper.fullname" . }}-metrics
+  labels:
+    app: {{ include "zookeeper.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+data:
+  jmx-kafka-prometheus.yml: |+
+{{- if .Values.jmx.configMap.overrideConfig }}
+{{ toYaml .Values.jmx.configMap.overrideConfig | indent 4 }}
+{{- else }}
+    jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.jmx.port }}/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    {{ if .Values.jmx.whitelistObjectNames }}
+    whitelistObjectNames: ["{{ join "\",\"" .Values.jmx.whitelistObjectNames }}"]
+    {{ end }}
+    rules:
+    - pattern: "org.apache.ZooKeeperService<name0=(.+)><>(\\w+)"
+      name: "zookeeper_$2"
+    - pattern: "org.apache.ZooKeeperService<name0=(.+), name1=(.+)><>(\\w+)"
+      name: "zookeeper_$3"
+      labels:
+        replicaId: "$2"
+    - pattern: "org.apache.ZooKeeperService<name0=(.+), name1=(.+), name2=(.+)><>(\\w+)"
+      name: "zookeeper_$4"
+      labels:
+        replicaId: "$2"
+        memberType: "$3"
+    - pattern: "org.apache.ZooKeeperService<name0=(.+), name1=(.+), name2=(.+), name3=(.+)><>(\\w+)"
+      name: "zookeeper_$4_$5"
+      labels:
+        replicaId: "$2"
+        memberType: "$3"
+    - pattern: java.lang<type=(.+), name=(.+)><(.+)>(\w+)
+      name: java_lang_$1_$4_$3_$2
+    - pattern: java.lang<type=(.+), name=(.+)><>(\w+)
+      name: java_lang_$1_$3_$2
+    - pattern : java.lang<type=(.*)>
+{{- end }}
+{{- end }}

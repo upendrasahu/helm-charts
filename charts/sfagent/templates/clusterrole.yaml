@@ -1,0 +1,17 @@
+{{- if .Values.rbac.create -}}
+apiVersion: {{ template "rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  labels:
+    app: {{ template "sf-apm-agents.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+  name: {{ template "sf-apm-agents.name" . }}
+rules:
+- nonResourceURLs: ["*"] # API call to kubelet and API server
+  verbs: ["get"]
+- apiGroups: ["*"] # "" indicates the core API group, "*" all api groups
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+{{- end -}}
+
