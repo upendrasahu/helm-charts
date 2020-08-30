@@ -1,6 +1,6 @@
 # [jmeter image](https://hub.docker.com/r/justb4/jmeter)
 
-# Spring Chart
+# Spring Chart Sample
 
 [Spring](http://spring.io/) is a modern Java framework for developing Cloud Native Applications.
 
