@@ -6,6 +6,7 @@ metadata:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
     role: vizbuilder
+    snappyflow/component: snappyflow-apm
 spec:
 {{- if not .Values.vizbuilder.autoscaling.enabled }}
   replicas: {{ .Values.vizbuilder.replicaCount }}
@@ -15,6 +16,7 @@ spec:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
       role: vizbuilder
+      snappyflow/component: snappyflow-apm
   template:
     metadata:
     {{- with .Values.podAnnotations }}

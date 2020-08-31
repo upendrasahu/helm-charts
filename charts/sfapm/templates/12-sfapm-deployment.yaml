@@ -6,6 +6,7 @@ metadata:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
     role: server
+    snappyflow/component: snappyflow-apm
 spec:
 {{- if not .Values.sfapm.autoscaling.enabled }}
   replicas: {{ .Values.sfapm.replicaCount }}
@@ -25,6 +26,7 @@ spec:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
         role: server
+        snappyflow/component: snappyflow-apm
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

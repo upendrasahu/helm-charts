@@ -6,6 +6,7 @@ metadata:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
     role: ui
+    snappyflow/component: nginx
 spec:
   replicas: {{ .Values.sfapmui.replicaCount }}
   selector:
@@ -23,6 +24,7 @@ spec:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
         role: ui
+        snappyflow/component: nginx
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
