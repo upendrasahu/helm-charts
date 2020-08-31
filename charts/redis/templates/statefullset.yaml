@@ -4,6 +4,7 @@ metadata:
   name: {{ include "redis.fullname" . }}
   labels:
     {{- include "redis.labels" . | nindent 4 }}
+    snappyflow/component: redis
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -18,6 +19,7 @@ spec:
     {{- end }}
       labels:
         {{- include "redis.selectorLabels" . | nindent 8 }}
+        snappyflow/component: redis
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
