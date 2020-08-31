@@ -133,7 +133,7 @@ spec:
             secretName: {{ include "sfapm.fullname" . }}-ui-tls
         - name: sfagent
           configMap:
-            name: ui-sfagent-configmap
+            name: {{ include "sfapm.fullname" . }}-ui-sfagent
         - name: nginx-log
           emptyDir: {}
       {{- end }}

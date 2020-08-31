@@ -1,7 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: 34-ui-sfagent-configmap
+  name: {{ include "sfapm.fullname" . }}-ui-sfagent
+  labels:
+    {{- include "sfapm.labels" . | nindent 4 }}
+    app: sfapm
+    role: ui
 data:
   config.yaml: |+
     ---
