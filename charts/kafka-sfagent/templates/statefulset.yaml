@@ -10,7 +10,6 @@ metadata:
     heritage: {{ .Release.Service }}
     {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
     {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
-    snappyflow/component: kafka
 spec:
   selector:
     matchLabels:
@@ -26,18 +25,12 @@ spec:
   replicas: {{ default 3 .Values.replicas }}
   template:
     metadata:
-{{- if .Values.prometheus.jmx.enabled }}
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: {{ .Values.prometheus.jmx.port | quote }}
-{{- end }}
       labels:
         app: {{ include "kafka.name" . }}
         release: {{ .Release.Name }}
         service: kafka
         {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
         {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
-        snappyflow/component: kafka
     spec:
 {{- if .Values.schedulerName }}
       schedulerName: "{{ .Values.schedulerName }}"
@@ -73,29 +66,22 @@ spec:
                     values:
                     - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
-      containers:
-      {{- if .Values.prometheus.jmx.enabled }}
-      - name: metrics
-        image: "{{ .Values.prometheus.jmx.image }}:{{ .Values.prometheus.jmx.imageTag }}"
+      initContainers:
+      - name: get-jolokia
+        image: alpine
         command:
-        - java
-        - -XX:+UnlockExperimentalVMOptions
-        - -XX:+UseCGroupMemoryLimitForHeap
-        - -XX:MaxRAMFraction=1
-        - -XshowSettings:vm
-        - -jar
-        - jmx_prometheus_httpserver.jar
-        - {{ .Values.prometheus.jmx.port | quote }}
-        - /etc/jmx-kafka/jmx-kafka-prometheus.yml
-        ports:
-        - containerPort: {{ .Values.prometheus.jmx.port }}
-        resources:
-{{ toYaml .Values.prometheus.jmx.resources | indent 10 }}
+          - sh
+          - -c
+          - -x
+          - apk add --no-cache curl && curl ${JOLOKIA_JAR_URL} -o /agent/jolokia.jar
+        env:
+          - name: JOLOKIA_JAR_URL
+            value: https://repo1.maven.org/maven2/org/jolokia/jolokia-jvm/1.6.2/jolokia-jvm-1.6.2-agent.jar
         volumeMounts:
-        - name: jmx-config
-          mountPath: /etc/jmx-kafka
-      {{- end }}
-      - name: {{ include "kafka.name" . }}-broker
+          - name: javaagentdir
+            mountPath: /agent
+      containers:
+      - name: kafka-broker
         image: "{{ .Values.image }}:{{ .Values.imageTag }}"
         imagePullPolicy: "{{ .Values.imagePullPolicy }}"
         livenessProbe:
@@ -119,20 +105,12 @@ spec:
           name: kafka
         - containerPort: 8778
           name: jolokia
-        {{- if .Values.prometheus.jmx.enabled }}
-        - containerPort: {{ .Values.jmx.port }}
-          name: jmx
-        {{- end }}
         {{- if .Values.additionalPorts }}
 {{ toYaml .Values.additionalPorts | indent 8 }}
         {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         env:
-        {{- if .Values.prometheus.jmx.enabled }}
-        - name: JMX_PORT
-          value: "{{ .Values.jmx.port }}"
-        {{- end }}
         - name: HOST_IP
           valueFrom:
             fieldRef:
@@ -149,6 +127,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: KAFKA_LOG4J_OPTS
+          value: -Dlog4j.configuration=file:///etc/customlog4j/connect-log4j.properties
         - name: KAFKA_HEAP_OPTS
           value: {{ .Values.heapOptions }}
         {{- if not (hasKey .Values.configurationOverrides "zookeeper.connect") }}
@@ -163,12 +143,8 @@ spec:
         - name: {{ printf "KAFKA_%s" $key | replace "." "_" | upper | quote }}
           value: {{ $value | quote }}
         {{- end }}
-        {{- if .Values.jmx.port }}
-        - name: KAFKA_JMX_PORT
-          value: "{{ .Values.jmx.port }}"
         - name: KAFKA_JMX_OPTS
-          value: "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false"
-        {{- end }}
+          value: "-javaagent:/agent/jolokia.jar=port=8778,host=127.0.0.1 -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false"
         # This is required because the Downward API does not yet support identification of
         # pod numbering in statefulsets. Thus, we are required to specify a command which
         # allows us to extract the pod ID for usage as the Kafka Broker ID.
@@ -183,24 +159,46 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: {{ .Values.persistence.mountPath | quote }}
+        - name: connect-log4j-properties
+          mountPath: /etc/customlog4j
         - name: varlog
           mountPath: /var/log/kafka
+        - name: javaagentdir
+          mountPath: /agent     
+      - name: sfagent
+        image:  "{{ .Values.sfagent.image }}:{{ .Values.sfagent.imageTag }}"
+        imagePullPolicy: {{ .Values.sfagent.imagePullPolicy | quote }}
+        command:
+        - /app/sfagent
+        - -enable-console-log
+        env:
+        - name: APP_NAME
+          value: {{ .Values.global.sfappname }}
+        - name: PROJECT_NAME
+          value: {{ .Values.global.sfprojectname }}
+        resources:
+{{ toYaml .Values.sfagent.resources | indent 12 }}
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log/kafka
+        - name: sfagent-config-kafka
+          mountPath: /opt/sfagent/config.yaml
+          subPath: config.yaml
       volumes:
+      - emptyDir: {}
+        name: javaagentdir
       {{- if not .Values.persistence.enabled }}
       - name: datadir
         emptyDir: {}
       {{- end }}
       - name: varlog
         emptyDir: {}
-      {{- if .Values.prometheus.jmx.enabled }}
-      - name: jmx-config
+      - name: sfagent-config-kafka
         configMap:
-          {{- if .Values.jmx.configMap.overrideName }}
-          name: {{ .Values.jmx.configMap.overrideName }}
-          {{- else }}
-          name: {{ include "kafka.fullname" . }}-metrics
-          {{- end }}
-      {{- end }}
+          name: {{ include "kafka.fullname" . }}-sfagent-kafka
+      - name: connect-log4j-properties
+        configMap:
+          name: {{ include "kafka.fullname" . }}-kafka-log
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "zookeeper.fullname" . }}-zookeeper-log
+  labels:
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+data:
+  connect-log4j.properties: |+
+    log4j.rootLogger=INFO, logFile
+    log4j.appender.logFile=org.apache.log4j.RollingFileAppender
+    log4j.appender.logFile.File=/var/log/zookeeper/server.log
+    log4j.appender.logFile.ImmediateFlush=true
+    log4j.appender.logFile.Threshold=debug
+    log4j.appender.logFile.Append=true
+    log4j.appender.logFile.MaxFileSize=5MB
+    log4j.appender.logFile.layout=org.apache.log4j.PatternLayout
+    log4j.appender.logFile.layout.conversionPattern=[%d] %p %m (%c)%n
+    log4j.appender.logFile.MaxBackupIndex=2
+    log4j.logger.org.apache.zookeeper=INFO
+    log4j.logger.org.I0Itec.zkclient=INFO
+    log4j.logger.org.reflections=INFO

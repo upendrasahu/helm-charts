@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "zookeeper.fullname" . }}-sfagent-zookeeper
+  name: {{ include "kafka.fullname" . }}-sfagent-kafka
   labels:
     {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
     {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
@@ -11,24 +11,39 @@ data:
     key: "{{ .Values.global.key }}"
     logging:
       plugins:
-      - name: zookeeper-general
+      - name: kafka-general
         enabled: true
         config:
           log_level:
             - error
             - info
             - debug
+            - warn
             - notice
-          log_path: /var/log/kafka/server.log, /var/log/kafka/controller.log, /var/log/kafka/state-change.log 
+          log_path: /var/log/kafka/server.log,/var/log/kafka/state-change.log,/var/log/kafka/kafka-request.log,/var/log/kafka/controller.log,/var/log/kafka/kafka-authorizer.log
     metrics:
       plugins:
-      - name: zookeeperjmx
-        enabled: {{ .Values.sfagent.metric_collection }}
+      - name: kafkatopic
+        enabled: true
         interval: 300
         config:
           documentsTypes:
-            - jmxStats
-            - zookeeperStats
+            - kafkaStats
+            - partitionStats
+            - topicStats
+            - consumerStats
+          jolokiaPort: 8778
+          RMIPort: 8778
+          jolokiaContext: jolokia
+          jolokiaProtocol: http
+          jolokiaProxy: false
+          port: 9092
+          process: kafka.Kafka
+      - name: kafkajmx
+        enabled: true
+        interval: 300
+        config:
+          process: kafka.Kafka
           jolokiaPort: 8778
           RMIPort: 8778
           jolokiaContext: jolokia
