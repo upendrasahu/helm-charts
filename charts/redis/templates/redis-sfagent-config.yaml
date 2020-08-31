@@ -1,7 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: redis-sfagent-config
+  name: {{ include "redis.fullname" . }}-sfagent
+  labels:
+    {{- include "redis.labels" . | nindent 4 }}
+
 data:
   config.yaml: |-
     key: "{{ .Values.global.key }}"
