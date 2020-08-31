@@ -16,7 +16,6 @@ spec:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
       role: vizbuilder
-      snappyflow/component: snappyflow-apm
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -27,6 +26,7 @@ spec:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
         role: vizbuilder
+        snappyflow/component: snappyflow-apm
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
