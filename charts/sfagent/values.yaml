@@ -11,14 +11,14 @@ config:
   # REQUIRED field with non empty value
   cluster_name: kubernetes
   # project name label key, value of the label will be added in documents as _tag_projectName
-  projectname_label: test-snappyflow/projectname
+  # projectname_label: snappyflow/projectname
   #
   # application name label key, value of the label will be added in documents as _tag_appName
-  appname_label: test-snappyflow/appname
+  # appname_label: snappyflow/appname
   #
   # SnappyFlow APM Elasticsearch Target key copied from APM cloudprofile
   # REQUIRED field with non empty value.
-  key: "zh/jdU/IdQj3pdhpp98ahHVIAaVLPXkWRVdd0aG8PQWfZ84UZPS+UDv48/KXZ80hLnISGgHXZbJvpVnpa2mVrKd3tRAZTHV397fvs7yLk2eejHLzRe7lTuKK0klBJWjwKlFDEakA3gMTGJHTC9EPAg7yglPRwCx+wjzqkii1KfBDBQjFvVhYiH6ZQK3CxxVkiFbVVd6afQ/gIzZSSaz+jrS9v+hOCS+wTsHP4JfjMAbVowsgoQm2iHqo+6BT1fk+cD+1EYIy2t8l68gsRTaMxfizgebKJxKz2oVrWOLB9fk="
+  key: ""
   #
   # SnappyFlow Key for cloud heartbeat and metrics, 
   # If not provided then key used
@@ -89,7 +89,7 @@ node_agent:
 
   fluentbit:
     enabled: true
-    drop_cluster_logs: true
+    drop_cluster_logs: false
     image:
       fluent_bit:
         repository: snappyflowml/kube-fluent
