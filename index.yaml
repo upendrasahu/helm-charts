@@ -133,6 +133,28 @@ entries:
   kafka:
   - apiVersion: v1
     appVersion: 5.3.1
+    created: "2020-08-31T15:53:55.842495335Z"
+    description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
+      monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
+      Topic Metrics, and logs
+    digest: d9768c18aa390b8606036f8b442994710e4319cfe002dd2f7cb28ad165fff62f
+    home: https://kafka.apache.org/
+    icon: https://kafka.apache.org/images/logo.png
+    keywords:
+    - kafka
+    - zookeeper
+    - kafka statefulset
+    name: kafka
+    sources:
+    - https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
+    - https://github.com/Yolean/kubernetes-kafka
+    - https://github.com/confluentinc/cp-docker-images
+    - https://github.com/apache/kafka
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/kafka-2.4.8/kafka-2.4.8.tgz
+    version: 2.4.8
+  - apiVersion: v1
+    appVersion: 5.3.1
     created: "2020-08-30T16:35:11.598015881Z"
     description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
       monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
