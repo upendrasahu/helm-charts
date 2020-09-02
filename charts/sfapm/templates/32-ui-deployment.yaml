@@ -79,24 +79,24 @@ spec:
                 name: {{ include "sfapm.fullname" . }}-ui
           ports:
           {{- if .Values.sfapmui.tls.enabled }}
-            - name: http
+            - name: https
               containerPort: 443
               protocol: TCP
-          {{- else }}
+          {{- end }}
             - name: http
               containerPort: 80
               protocol: TCP
-          {{- end }}
           livenessProbe:
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
             httpGet:
               path: /status
-              port: http
               {{- if .Values.sfapmui.tls.enabled }}
+              port: https
               scheme: HTTPS
               {{- else }}
+              port: http
               scheme: HTTP
               {{- end }}
           readinessProbe:
@@ -105,10 +105,11 @@ spec:
             timeoutSeconds: 5
             httpGet:
               path: /status
-              port: http
               {{- if .Values.sfapmui.tls.enabled }}
+              port: https
               scheme: HTTPS
               {{- else }}
+              port: http
               scheme: HTTP
               {{- end }}
           resources:

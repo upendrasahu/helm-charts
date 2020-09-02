@@ -9,15 +9,17 @@ metadata:
 spec:
   type: {{ .Values.sfapmui.service.type }}
   ports:
+    {{- if .Values.sfapmui.tls.enabled }}
+    - targetPort: https
+      protocol: TCP
+      name: https
+      nodePort: {{ .Values.sfapmui.service.nodePort }}
+      port: 443
+    {{- end }}
     - targetPort: http
       protocol: TCP
       name: http
-      nodePort: {{ .Values.sfapmui.service.nodePort }}
-      {{- if .Values.sfapmui.tls.enabled }}
-      port: 443
-      {{- else }}
       port: 80
-      {{- end }}
   selector:
     {{- include "sfapm.selectorLabels" . | nindent 4 }}
     app: sfapm
