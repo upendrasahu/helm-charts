@@ -5,6 +5,8 @@ metadata:
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     role: vizbuilder
 spec:
   type: {{ .Values.vizbuilder.service.type }}

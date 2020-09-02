@@ -7,6 +7,8 @@ metadata:
     app: sfapm
     role: server
     snappyflow/component: snappyflow-apm
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
 {{- if not .Values.sfapm.autoscaling.enabled }}
   replicas: {{ .Values.sfapm.replicaCount }}
@@ -27,6 +29,8 @@ spec:
         app: sfapm
         role: server
         snappyflow/component: snappyflow-apm
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

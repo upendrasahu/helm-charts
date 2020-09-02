@@ -7,6 +7,8 @@ metadata:
     app: sfapm
     role: ui
     snappyflow/component: nginx
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   replicas: {{ .Values.sfapmui.replicaCount }}
   selector:
@@ -25,6 +27,8 @@ spec:
         app: sfapm
         role: ui
         snappyflow/component: nginx
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

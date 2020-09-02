@@ -6,6 +6,8 @@ metadata:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
     role: ui
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   type: {{ .Values.sfapmui.service.type }}
   ports:
