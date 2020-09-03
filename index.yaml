@@ -233,6 +233,16 @@ entries:
   redis:
   - apiVersion: v2
     appVersion: "5"
+    created: "2020-09-03T08:30:58.120167353Z"
+    description: A Helm chart for Redis server for use with sfapm
+    digest: 990d374acee96a01de0355a02947f8ece511b405358d1b57fa6d6c6c488bef3e
+    name: redis
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/redis-0.2.7/redis-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v2
+    appVersion: "5"
     created: "2020-09-02T17:22:54.259980588Z"
     description: A Helm chart for Redis server for use with sfapm
     digest: a974b9490a5881908612ab4e4df10d5ea5a7b7caabaedd92251e2960d1b8ecd0
