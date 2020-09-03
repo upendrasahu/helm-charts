@@ -33,7 +33,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      {{- if .Values.global.key }}
+        {{- if .Values.global.key }}
         - name: redis-agent
           image: snappyflowml/sfagent:latest
           imagePullPolicy: Always
