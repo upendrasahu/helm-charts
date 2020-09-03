@@ -38,6 +38,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+      {{- if .Values.global.key }}
         - name: ui-sfagent
           image: snappyflowml/sfagent:latest
           imagePullPolicy: Always
@@ -57,6 +58,7 @@ spec:
           - name: sfagent
             mountPath: /opt/sfagent/config.yaml
             subPath: config.yaml
+      {{- end }}
         - name: ui
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}

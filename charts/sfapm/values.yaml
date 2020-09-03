@@ -10,6 +10,19 @@ nameOverride: ""
 fullnameOverride: ""
 imagePullSecrets: []
 
+sidecarLogger:
+  enabled: true
+  image:
+    repository: busybox
+    tag: latest
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
 sfapmui:
   replicaCount: 1
   autoscaling:
@@ -31,7 +44,7 @@ sfapmui:
       memory: 128Mi
   service:
     type: NodePort # this is the entrypoint change to Loadbalancer
-    nodePort: 30080 
+    nodePort: 30080
   tls: 
     enabled: true
     # change these please provide base64 encode certificate and its keys

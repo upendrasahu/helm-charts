@@ -108,6 +108,19 @@ spec:
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
+            - name: snappyflowlog
+              mountPath: /var/log/snappyflow/
+        {{- if .Values.sidecarLogger.enabled }}
+        - name: application-logger
+          image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecarLogger.imagePullPolicy | quote }}
+          args: [/bin/sh, -c, 'tail -n+1 -F /var/log/snappyflow/snappyflow.log']
+          resources:
+            {{- toYaml .Values.sidecarLogger.resources | nindent 12 }}
+          volumeMounts:
+          - name: snappyflowlog
+            mountPath: /var/log/snappyflow/
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -122,4 +135,6 @@ spec:
       {{- end }}
       volumes:
         - name: data
+          emptyDir: {}
+        - name: snappyflowlog
           emptyDir: {}
