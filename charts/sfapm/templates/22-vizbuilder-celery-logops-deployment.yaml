@@ -137,4 +137,4 @@ spec:
         - name: data
           emptyDir: {}
         - name: vizbuilderlog
-          mountPath: /var/log/snappyflow/vizbuilder
+          emptyDir: {}
