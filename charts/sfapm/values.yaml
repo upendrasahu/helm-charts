@@ -63,7 +63,7 @@ sfapm:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-server
-    tag: 2.1.11
+    tag: 2.1.14
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -112,7 +112,7 @@ vizbuilder:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-vizbuilder
-    tag: 2.1.6
+    tag: 2.1.7
     pullPolicy: IfNotPresent
   resources: 
     limits:
