@@ -77,4 +77,4 @@ data:
     log4j.additivity.state.change.logger=false
     # Change to DEBUG to enable audit log for the authorizer
     log4j.logger.kafka.authorizer.logger=DEBUG, authorizerAppender
-    log4j.additivity.kafka.authorizer.logger=falseroot@kafkademo-kafka-0:/var/log/kafka# vi /etc/kafka/log4j.properties
+    log4j.additivity.kafka.authorizer.logger=false
