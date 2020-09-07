@@ -175,6 +175,29 @@ entries:
     urls:
     - https://github.com/snappyflow/helm-charts/releases/download/kafka-2.4.5/kafka-2.4.5.tgz
     version: 2.4.5
+  kafka-sfagent:
+  - apiVersion: v1
+    appVersion: 5.3.1
+    created: "2020-09-07T06:42:22.180015442Z"
+    description: This topology includes 2 Kafka nodes and 2 Zookeepr nodes. Includes
+      monitoring of Pod metrics, Storage metrics, JVM metrics, Producer/Consumer Traffic,
+      Topic Metrics, and logs
+    digest: e6c75b3d4a305448a950573c1856d956976a6533f7f2933e39e2a7876c439a7a
+    home: https://kafka.apache.org/
+    icon: https://kafka.apache.org/images/logo.png
+    keywords:
+    - kafka
+    - zookeeper
+    - kafka statefulset
+    name: kafka-sfagent
+    sources:
+    - https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
+    - https://github.com/Yolean/kubernetes-kafka
+    - https://github.com/confluentinc/cp-docker-images
+    - https://github.com/apache/kafka
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/kafka-sfagent-1.0.1/kafka-sfagent-1.0.1.tgz
+    version: 1.0.1
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
