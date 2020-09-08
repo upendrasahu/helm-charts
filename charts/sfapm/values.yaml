@@ -112,7 +112,7 @@ vizbuilder:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-vizbuilder
-    tag: 2.1.12
+    tag: 2.1.13
     pullPolicy: IfNotPresent
   resources: 
     limits:
