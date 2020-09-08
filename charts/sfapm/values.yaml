@@ -92,7 +92,7 @@ sfapm_celery:
     replicaCount: 2
     command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2"
   notify:
-    replicaCount: 1
+    replicaCount: 2
     command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2"
   periodic:
     replicaCount: 4
