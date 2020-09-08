@@ -88,11 +88,23 @@ spec:
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data 
+        - name: python-agent
+          image: rajeshbimana/sftrace-python:1.0
+          imagePullPolicy: Always
+          command: ['cp', '-v', '/usr/agent/sftrace', '/agent']
+          volumeMounts:
+          - mountPath: /agent
+            name: python-agent
+
       containers:
         - name: vizbuilder
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
+          command:
+            - sh
+            - -c
+            - /agent/sftrace --sfservice=python --sfapp=django --sfcmd="gunicorn vizbuilder.wsgi:application"
           imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
           env:
           {{- if .Values.postgresql.enabled }}
@@ -113,6 +125,15 @@ spec:
             - name: LOG_LEVEL
               value: info
           {{- end }}
+          {{- if .Values.global.key }}
+            - name: SFTRACE_PROFILE_KEY
+              value: {{ .Values.global.key }}
+          {{- end }}
+          - name: SFTRACE_PROJECT_NAME
+            value: {{ .Values.global.sfprojectname }}
+          - name: SFTRACE_APP_NAME
+            value: {{ .Values.global.sfappname }}
+
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder                                  
@@ -141,6 +162,8 @@ spec:
               name: data
             - name: vizbuilderlog
               mountPath: /var/log/snappyflow/vizbuilder
+            - mountPath: /agent
+              name: python-agent
         {{- if .Values.sidecarLogger.enabled }}
         - name: application-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
@@ -169,3 +192,7 @@ spec:
           emptyDir: {}
         - name: vizbuilderlog
           emptyDir: {}
+        - name: python-agent
+          emptyDir: {}
+
+
