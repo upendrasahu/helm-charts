@@ -101,10 +101,6 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
-          command:
-            - sh
-            - -c
-            - /agent/sftrace --sfservice=python --sfapp=django --sfcmd="gunicorn vizbuilder.wsgi:application"
           imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
           env:
           {{- if .Values.postgresql.enabled }}
@@ -162,8 +158,16 @@ spec:
               name: data
             - name: vizbuilderlog
               mountPath: /var/log/snappyflow/vizbuilder
-            - mountPath: /agent
-              name: python-agent
+        - name: python
+          image: "{{ .Values.pythonapp.image.repository }}:{{ .Values.pythonapp.image.tag }}"
+          imagePullPolicy: {{ .Values.pythonapp.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - /agent/sftrace --sfservice=python --sfapp=django --sfcmd="gunicorn vizbuilder.wsgi:application"
+          volumeMounts:
+          - mountPath: /agent
+            name: python-agent
         {{- if .Values.sidecarLogger.enabled }}
         - name: application-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
