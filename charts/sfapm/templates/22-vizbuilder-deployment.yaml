@@ -89,8 +89,8 @@ spec:
             - mountPath: /data/snappyflow
               name: data 
         - name: python-agent
-          image: rajeshbimana/sftrace-python:1.0
-          imagePullPolicy: Always
+          image: "{{ .Values.pythonagent.image.repository }}:{{ .Values.pythonagent.image.tag }}"
+          imagePullPolicy: {{ .Values.pythonagent.image.pullPolicy }}
           command: ['cp', '-v', '/usr/agent/sftrace', '/agent']
           volumeMounts:
           - mountPath: /agent
@@ -129,10 +129,10 @@ spec:
             - name: SFTRACE_PROFILE_KEY
               value: {{ .Values.global.key }}
           {{- end }}
-          - name: SFTRACE_PROJECT_NAME
-            value: {{ .Values.global.sfprojectname }}
-          - name: SFTRACE_APP_NAME
-            value: {{ .Values.global.sfappname }}
+            - name: SFTRACE_PROJECT_NAME
+              value: {{ .Values.global.sfprojectname }}
+            - name: SFTRACE_APP_NAME
+              value: {{ .Values.global.sfappname }}
 
           envFrom:
             - configMapRef:
