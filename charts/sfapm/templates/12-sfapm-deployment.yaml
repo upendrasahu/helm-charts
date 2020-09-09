@@ -88,13 +88,6 @@ spec:
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
-        - name: python-agent
-          image: "{{ .Values.pythonagent.image.repository }}:{{ .Values.pythonagent.image.tag }}"
-          imagePullPolicy: {{ .Values.pythonagent.image.pullPolicy }}
-          command: ['cp', '-v', '/usr/agent/sftrace', '/agent']
-          volumeMounts:
-            - mountPath: /agent
-              name: python-agent
 
       containers:
         - name: sfapm
@@ -121,15 +114,6 @@ spec:
             - name: LOG_LEVEL
               value: info
           {{- end }}
-          {{- if .Values.global.key }}
-            - name: SFTRACE_PROFILE_KEY
-              value: {{ .Values.global.key }}
-          {{- end }}
-            - name: SFTRACE_PROJECT_NAME
-              value: {{ .Values.global.sfprojectname }}
-            - name: SFTRACE_APP_NAME
-              value: {{ .Values.global.sfappname }}
-          
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm                   
@@ -158,17 +142,6 @@ spec:
               name: data
             - name: snappyflowlog
               mountPath: /var/log/snappyflow/
-        - name: python
-          image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
-          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
-          command:
-            - sh
-            - -c
-            - /agent/sftrace --sfservice=python --sfapp=django --sfcmd="gunicorn snappyflow.wsgi:application"
-          volumeMounts:
-          - mountPath: /agent
-            name: python-agent
-
         {{- if .Values.sidecarLogger.enabled }}
         - name: application-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
@@ -196,6 +169,4 @@ spec:
         - name: data
           emptyDir: {}
         - name: snappyflowlog
-          emptyDir: {}
-        - name: python-agent
           emptyDir: {}

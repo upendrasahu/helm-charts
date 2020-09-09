@@ -54,7 +54,7 @@ spec:
             value: {{ .Values.global.sfprojectname }}
           volumeMounts:
           - name: nginx-log
-            mountPath: /var/log/nginx
+            mountPath: /var/log/nginx/
           - name: sfagent
             mountPath: /opt/sfagent/config.yaml
             subPath: config.yaml
@@ -123,6 +123,8 @@ spec:
           volumeMounts:
             - name: tls
               mountPath: /etc/ssl/nginx
+            - name: nginx-log
+              mountPath: /var/log/nginx
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

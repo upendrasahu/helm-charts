@@ -24,8 +24,8 @@ data:
       - name: nginx-access
         enabled: true
         config:
-          log_path: "/var/log/nginx/access1.log"
+          log_path: "/var/log/nginx/access.log"
       - name: nginx-error
         enabled: true
         config:
-          log_path: "/var/log/nginx/error1.log"
+          log_path: "/var/log/nginx/error.log"
