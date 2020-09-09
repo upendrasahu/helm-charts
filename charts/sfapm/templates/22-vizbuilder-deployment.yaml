@@ -159,8 +159,8 @@ spec:
             - name: vizbuilderlog
               mountPath: /var/log/snappyflow/vizbuilder
         - name: python
-          image: "{{ .Values.pythonapp.image.repository }}:{{ .Values.pythonapp.image.tag }}"
-          imagePullPolicy: {{ .Values.pythonapp.image.pullPolicy }}
+          image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
+          imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
           command:
             - sh
             - -c

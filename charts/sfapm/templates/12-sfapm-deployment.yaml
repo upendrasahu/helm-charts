@@ -159,8 +159,8 @@ spec:
             - name: snappyflowlog
               mountPath: /var/log/snappyflow/
         - name: python
-          image: "{{ .Values.pythonapp.image.repository }}:{{ .Values.pythonapp.image.tag }}"
-          imagePullPolicy: {{ .Values.pythonapp.image.pullPolicy }}
+          image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
+          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           command:
             - sh
             - -c
