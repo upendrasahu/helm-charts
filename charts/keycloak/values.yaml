@@ -41,7 +41,7 @@ service:
   port: 8080
 
 postgres: 
-  db_host: "ec2-35-164-196-182.us-west-2.compute.amazonaws.com"
+  db_host: ""
   db_port: "5432"
   db_name: "keycloak1"
   db_username: "snappyflow"
