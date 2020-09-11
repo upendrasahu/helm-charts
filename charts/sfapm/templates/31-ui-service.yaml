@@ -10,6 +10,7 @@ metadata:
     {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   type: {{ .Values.sfapmui.service.type }}
+  externalTrafficPolicy: Local
   ports:
     {{- if .Values.sfapmui.tls.enabled }}
     - targetPort: https
