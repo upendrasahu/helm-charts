@@ -174,17 +174,11 @@ tolerations: []
 affinity: {}
 
 
-pythonagent:
+python-agent:
   image:
-    repository: rajeshbimana/sftrace-python
+    repository: snappyflowml/sftrace-python
     pullPolicy: IfNotPresent
     tag: "1.0"
-
-pythonapp:
-  image:
-    repository: rajeshbimana/python-app
-    pullPolicy: IfNotPresent
-    tag: "2.0"
 
 redis:
   image:
