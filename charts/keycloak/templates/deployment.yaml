@@ -36,15 +36,14 @@ spec:
           ports:
             - name: http
               containerPort: 8080
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /auth/
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /auth/
-              port: http
+         # livenessProbe:
+         #   httpGet:
+         #     path: /auth/
+         #     port: http
+         # readinessProbe:
+         #   httpGet:
+         #     path: /auth/
+         #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:          
@@ -59,11 +58,11 @@ spec:
                 key:  db_password
                 name: {{ .Release.Name }}-auth
           - name: DB_ADDR
-            value: {{ .Values.postgres.db_host }}
+            value: {{ .Values.postgres.db_host | quote }}
           - name: DB_PORT
-            value: {{ .Values.postgres.db_port }}
+            value: {{ .Values.postgres.db_port | quote }}
           - name: DB_DATABASE
-            value: {{ .Values.postgres.db_name }}
+            value: {{ .Values.postgres.db_name | quote }}
           - name: PROXY_ADDRESS_FORWARDING
             value: "true"
           - name: DB_VENDOR
