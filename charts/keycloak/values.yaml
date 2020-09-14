@@ -41,7 +41,7 @@ service:
   type: NodePort
   port: 8080
 
-postgres: 
+postgresql: 
   # external database
   # create database keycloak
   # database host ex: db_host: IP
