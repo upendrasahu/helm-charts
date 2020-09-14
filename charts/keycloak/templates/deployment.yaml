@@ -36,6 +36,18 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+            - name: https
+              containerPort: 8443
+          livenessProbe:
+            httpGet:
+              path: /auth/realms/master
+              port: http
+            initialDelaySeconds: 180
+          readinessProbe:
+            httpGet:
+              path: /auth/realms/master
+              port: http
+            initialDelaySeconds: 30
          # livenessProbe:
          #   httpGet:
          #     path: /auth/
@@ -46,7 +58,13 @@ spec:
          #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: certs
+            mountPath: /etc/x509/https
+            readOnly: true
           env:          
+          - name: X509_CA_BUNDLE
+            value: /etc/x509/https/tls.crt /etc/x509/https/tls.key
           - name: DB_USER
             valueFrom:
               secretKeyRef:
@@ -77,6 +95,10 @@ spec:
               secretKeyRef:
                 key:  keycloak_password
                 name: {{ .Release.Name }}-auth
+      volumes:
+        - name: certs
+          secret:
+            secretName: {{ .Release.Name }}-tls
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
