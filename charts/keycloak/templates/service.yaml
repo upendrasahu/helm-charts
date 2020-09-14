@@ -7,11 +7,15 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: 8080
-      name: http
+    {{- if .Values.keycloak.tls.enabled }} 
     - port: 8443
       targetPort: 8443
       name: https
+    {{- else }} 
+    - port: {{ .Values.service.port }}
+      targetPort: 8080
+      name: http
+    {{- end }} 
+    
   selector:
     {{- include "keycloak.selectorLabels" . | nindent 4 }}

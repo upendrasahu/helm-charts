@@ -45,12 +45,35 @@ postgres:
   # external database
   # create database keycloak
   # database host ex: db_host: IP
-  db_host:  
-  db_port: 5432
-  # database name ex: db_name: keycloak
-  db_name: keys
-  db_username: snappyflow
-  db_password: maplelabs
+  enabled: true
+
+  # if enabled false, chart will connect to external database
+  # create  data base with names keycloak
+  # create a user and grant access to database snappyflow and vizbuilder
+  # provide external section if enabled is false
+
+  # external:
+  #   db_host:  
+  #   db_port: 5432
+     # database name ex: db_name: keycloak
+  #   db_name: keycloak
+  #   db_username: snappyflow
+  #   db_password: maplelabs
+
+  image:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    tag: "9.6"
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 8Gi
+  # when local postgresql is enabled below values are used to configure database
+  rootPassword: postgres
+  rootUser: postgres
+  multidb: keycloak
+  multidbUser: snappyflow
+  multidbUserPassord: maplelabs
 
 keycloak:
   keycloak_username: admin@snappyflow.io

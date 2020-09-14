@@ -27,6 +27,25 @@ spec:
       serviceAccountName: {{ include "keycloak.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: db-ready
+          image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+          command:
+            - sh 
+            - -c 
+            - "until pg_isready -d postgres://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}; do sleep 3; done"
+          {{- if .Values.postgresql.enabled }}
+          env:
+            - name: db_password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-config
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -78,18 +97,27 @@ spec:
             valueFrom:
               secretKeyRef:
                 key:  db_username
-                name: {{ .Release.Name }}-auth
+                name: {{ .Release.Name }}-config
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 key:  db_password
-                name: {{ .Release.Name }}-auth
+                name: {{ .Release.Name }}-config
           - name: DB_ADDR
-            value: {{ .Values.postgres.db_host | quote }}
+            valueFrom:
+              secretKeyRef:
+                key:  db_host
+                name: {{ .Release.Name }}-config
           - name: DB_PORT
-            value: {{ .Values.postgres.db_port | quote }}
+            valueFrom:
+              secretKeyRef:
+                key:  db_port
+                name: {{ .Release.Name }}-config
           - name: DB_DATABASE
-            value: {{ .Values.postgres.db_name | quote }}
+            valueFrom:
+              secretKeyRef:
+                key:  db_name
+                name: {{ .Release.Name }}-config
           - name: PROXY_ADDRESS_FORWARDING
             value: "true"
           - name: DB_VENDOR
@@ -98,12 +126,12 @@ spec:
             valueFrom:
               secretKeyRef:
                 key:  keycloak_username
-                name: {{ .Release.Name }}-auth
+                name: {{ .Release.Name }}-config
           - name: KEYCLOAK_PASSWORD
             valueFrom:
               secretKeyRef:
                 key:  keycloak_password
-                name: {{ .Release.Name }}-auth
+                name: {{ .Release.Name }}-config
       {{- if .Values.keycloak.tls.enabled }}  
       volumes:
         - name: certs
