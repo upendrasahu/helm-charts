@@ -41,13 +41,15 @@ spec:
           livenessProbe:
             httpGet:
               path: /auth/realms/master
-              port: http
-            initialDelaySeconds: 180
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 120
           readinessProbe:
             httpGet:
               path: /auth/realms/master
-              port: http
-            initialDelaySeconds: 180
+              port: 8443
+              scheme: HTTPS
+            initialDelaySeconds: 120
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
