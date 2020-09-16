@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  {{- if .Values.postgresql.enabled }}
+  DB_ADDR: {{ .Release.Name }}-postgresql
+  DB_PORT: "5432"
+  DB_PASSWORD: "{{ .Values.postgresql.multidbUserPassord }}"
+  DB_USER: "{{ .Values.postgresql.multidbUser }}"
+  DB_DATABASE: "{{ .Values.postgresql.multidb }}"
+  {{- else }}
+  DB_ADDR: "{{ .Values.postgresql.external.db_host }}"
+  DB_PORT: "{{ .Values.postgresql.external.db_port }}"
+  DB_PASSWORD: "{{ .Values.postgresql.external.db_password }}"
+  DB_USER: "{{ .Values.postgresql.external.db_username }}"
+  DB_DATABASE: "{{ .Values.postgresql.external.db_name  }}"
+  {{- end }}
+  KEYCLOAK_PASSWORD: "{{ .Values.keycloak.keycloak_password }}"
+  KEYCLOAK_USER: "{{ .Values.keycloak.keycloak_username }}"
