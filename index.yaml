@@ -198,6 +198,22 @@ entries:
     urls:
     - https://github.com/snappyflow/helm-charts/releases/download/kafka-sfagent-1.0.1/kafka-sfagent-1.0.1.tgz
     version: 1.0.1
+  keycloak:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2020-09-16T08:58:12.98133243Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart for Kubernetes
+    digest: 7a4376da6859c072133ac0909718006c52edc595275dea241d39694ad65e9d86
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/keycloak-1.0.0/keycloak-1.0.0.tgz
+    version: 1.0.0
   petclinic:
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
