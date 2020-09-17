@@ -84,6 +84,10 @@ node_agent:
         default: 300
       kafka-jmx:
         default: 300
+      kafka-rest:
+        default: 300
+      kafka-connect:
+        default: 300
       zookeeper-zmx:
         default: 300
 
