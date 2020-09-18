@@ -8,39 +8,39 @@
       <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="PETCLINC_HOST" elementType="Argument">
-            <stringProp name="Argument.name">PETCLINC_HOST</stringProp>
-            <stringProp name="Argument.value">localhost</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="PETCLINIC_PORT" elementType="Argument">
-            <stringProp name="Argument.name">PETCLINIC_PORT</stringProp>
-            <stringProp name="Argument.value">80</stringProp>
+          <elementProp name="ip" elementType="Argument">
+            <stringProp name="Argument.name">ip</stringProp>
+            <stringProp name="Argument.value">${__P(PETCLINC_HOST)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="thread" elementType="Argument">
             <stringProp name="Argument.name">thread</stringProp>
-            <stringProp name="Argument.value">20</stringProp>
+            <stringProp name="Argument.value">${__P(threads,5)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="duration" elementType="Argument">
-            <stringProp name="Argument.name">duration</stringProp>
-            <stringProp name="Argument.value">30</stringProp>
+          <elementProp name="rampuptime" elementType="Argument">
+            <stringProp name="Argument.name">rampuptime</stringProp>
+            <stringProp name="Argument.value">${__P(rampuptime,30)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="MYSQL_SERVER" elementType="Argument">
+          <elementProp name="loopsperthread" elementType="Argument">
+            <stringProp name="Argument.name">loopsperthread</stringProp>
+            <stringProp name="Argument.value">${__P(loopsperthread,60)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="mysql_server" elementType="Argument">
             <stringProp name="Argument.name">MYSQL_SERVER</stringProp>
-            <stringProp name="Argument.value">localhost:3306</stringProp>
+            <stringProp name="Argument.value">${__P(MYSQL_SERVER)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="MYSQL_USER" elementType="Argument">
-            <stringProp name="Argument.name">MYSQL_USER</stringProp>
-            <stringProp name="Argument.value">root</stringProp>
+          <elementProp name="mysql_user" elementType="Argument">
+            <stringProp name="Argument.name">mysql_user</stringProp>
+            <stringProp name="Argument.value">${__P(MYSQL_USER)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="MYSQL_PASSWORD" elementType="Argument">
-            <stringProp name="Argument.name">MYSQL_PASSWORD</stringProp>
-            <stringProp name="Argument.value">mysql</stringProp>
+          <elementProp name="mysql_pass" elementType="Argument">
+            <stringProp name="Argument.name">mysql_pass</stringProp>
+            <stringProp name="Argument.value">${__P(MYSQL_PASSWORD)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -51,11 +51,11 @@
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
-          <boolProp name="LoopController.continue_forever">true</boolProp>
-          <stringProp name="LoopController.loops">-1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">${loopsperthread}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${thread}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${duration}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampuptime}</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -65,8 +65,8 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(PETCLINC_HOST)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__P(PETCLINIC_PORT)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/</stringProp>
@@ -120,8 +120,8 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(PETCLINC_HOST)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__P(PETCLINIC_PORT)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/owners/${userIdUpd}/edit</stringProp>
@@ -157,8 +157,8 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(PETCLINC_HOST)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__P(PETCLINIC_PORT)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/owners?lastName=</stringProp>
@@ -212,8 +212,8 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(PETCLINC_HOST)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__P(PETCLINIC_PORT)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/owners/new</stringProp>
@@ -249,8 +249,8 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__P(PETCLINC_HOST)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__P(PETCLINIC_PORT)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${ip}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/owners/${userIdGet}</stringProp>
@@ -327,10 +327,10 @@
           <boolProp name="keepAlive">true</boolProp>
           <stringProp name="connectionAge">5000</stringProp>
           <stringProp name="checkQuery"></stringProp>
-          <stringProp name="dbUrl">jdbc:mysql://${__P(MYSQL_SERVER)}/petclinic</stringProp>
+          <stringProp name="dbUrl">jdbc:mysql://${mysql_server}/petclinic</stringProp>
           <stringProp name="driver">com.mysql.cj.jdbc.Driver</stringProp>
-          <stringProp name="username">${__P(MYSQL_USER)}</stringProp>
-          <stringProp name="password">${__P(MYSQL_PASSWORD)}</stringProp>
+          <stringProp name="username">${mysql_user}</stringProp>
+          <stringProp name="password">${mysql_pass}</stringProp>
         </JDBCDataSource>
         <hashTree/>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
