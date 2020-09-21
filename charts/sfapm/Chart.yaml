@@ -3,7 +3,7 @@ name: sfapm
 description: A Helm chart to deploy snappyflow on Kubernetes
 home: http://www.snappyflow.io
 type: application
-version: 2.1.37
+version: 2.1.38
 appVersion: 1.0.0
 
 dependencies:
