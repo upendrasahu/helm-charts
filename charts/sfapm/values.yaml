@@ -201,13 +201,13 @@ keycloak:
   # false for django internal db for user management
   enabled: true
   serverIP: "" # eg: https://IP:port/auth/
-  user: admin@snappyflow.io # Change to admin user emailid
+  user: admin@snappyflow.io # admin user
   password: admin # admin user password
   realm: master
   clientid: admin-cli
   clientkey: "" # keycloak admin client key
   publickey: "" # keycloak public key
-  supportemail: "" # support emailid where upgrade request email sent
+  supportemail: "" # support emailid where upgrade request sent
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster
