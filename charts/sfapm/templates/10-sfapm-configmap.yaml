@@ -23,3 +23,12 @@ data:
     REDIS_PORT: "6379"
     VIZBUILDER_HOST: {{ include "sfapm.fullname" . }}-vizbuilder
     VIZBUILDER_PORT: "{{ .Values.vizbuilder.service.port }}"
+    KEYCLOAK_MODE: "{{ .Values.keycloak.enabled }}"
+    KEYCLOAK_SERVER: "{{ .Values.keycloak.serverIP }}"
+    KEYCLOAK_USER: "{{ .Values.keycloak.user }}"
+    KEYCLOAK_PASSWORD: "{{ .Values.keycloak.password }}"
+    KEYCLOAK_REALM: "{{ .Values.keycloak.realm }}"
+    KEYCLOAK_CLIENTID: "{{ .Values.keycloak.clientid }}"
+    KEYCLOAK_CLIENTKEY: "{{ .Values.keycloak.clientkey }}"
+    KEYCLOAK_PUBLICKEY: "{{ .Values.keycloak.publickey }}"
+    SUPPORT_EMAIL: "{{ .Values.keycloak.supportemail }}"
