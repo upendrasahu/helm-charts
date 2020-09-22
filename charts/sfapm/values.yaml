@@ -189,6 +189,19 @@ redis:
     storageClass: ""
     size: 4Gi
 
+keycloak:
+  # enabled true for keycloak server
+  # false for django internal db for user management
+  enabled: false
+  serverIP: "" # eg: https://IP:port/auth/
+  user: admin@snappyflow.io # admin username
+  password: admin # admin user password
+  realm: master
+  clientid: admin-cli
+  clientkey: "" # keycloak admin client key
+  publickey: "" # keycloak public key
+  supportemail: "" # support emailid where upgrade request sent
+
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster
   enabled: true
