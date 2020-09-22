@@ -199,9 +199,9 @@ redis:
 keycloak:
   # enabled true for keycloak server
   # false for django internal db for user management
-  enabled: true
+  enabled: false
   serverIP: "" # eg: https://IP:port/auth/
-  user: admin@snappyflow.io # admin user
+  user: admin@snappyflow.io # admin username
   password: admin # admin user password
   realm: master
   clientid: admin-cli
