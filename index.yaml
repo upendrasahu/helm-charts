@@ -201,6 +201,21 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2020-09-24T08:55:51.199225536Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart for Kubernetes
+    digest: dbecac804ebd4a7e4ae41bae7aba4197a58288fa137740f6328121517ec043f2
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/keycloak-1.1.0/keycloak-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2020-09-16T08:58:12.98133243Z"
     dependencies:
     - condition: postgresql.enabled
@@ -425,6 +440,25 @@ entries:
     - https://github.com/snappyflow/helm-charts/releases/download/sfagent-3.1.4/sfagent-3.1.4.tgz
     version: 3.1.4
   sfapm:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2020-09-24T08:55:51.313541804Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.8
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart to deploy snappyflow on Kubernetes
+    digest: ac81f3eb8152f2b4baae7c631a26080425260a7df682f8e7c1292c6d0fc7e7ed
+    home: http://www.snappyflow.io
+    name: sfapm
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/sfapm-2.1.40/sfapm-2.1.40.tgz
+    version: 2.1.40
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2020-09-21T16:30:43.353902747Z"
