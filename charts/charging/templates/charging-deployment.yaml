@@ -96,14 +96,22 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            httpGet:
+              path: /status
+              port: http
+              scheme: HTTPS
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /status
+              port: http
+              scheme: HTTPS
           {{- if and .Values.tls_cert .Values.tls_key}}
           volumeMounts:
             - name: certs

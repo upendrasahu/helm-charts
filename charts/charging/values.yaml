@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: snappyflowml/charging
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   tag: latest
 
 # controls period for which hourly data is retained
