@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}-apm-celery-periodic
+  name: {{ include "sfapm.fullname" . }}-apm
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
-    role: celery
-    queue: periodic
+    role: server
     snappyflow/component: snappyflow-apm
     {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
     {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
-  replicas: {{ .Values.sfapm_celery.periodic.replicaCount }}
+{{- if not .Values.sfapm.autoscaling.enabled }}
+  replicas: {{ .Values.sfapm.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
-      role: celery
-      queue: periodic
+      role: server
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -27,8 +27,7 @@ spec:
       labels:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
-        role: celery
-        queue: periodic
+        role: server
         snappyflow/component: snappyflow-apm
         {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
         {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
@@ -41,6 +40,13 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        - name: pythonagent
+          image: "{{ .Values.pythonagent.image.repository }}:{{ .Values.pythonagent.image.tag }}"
+          imagePullPolicy: {{ .Values.pythonagent.image.pullPolicy }}
+          command: ['cp', '-v', '/usr/agent/sftrace', '/agent']
+          volumeMounts:
+          - mountPath: /agent
+            name: python-agent
         - name: db-ready
           image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
@@ -69,19 +75,46 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-apm
+        - name: migration
+          image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
+          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
+          command: ["bash"]
+          # args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
+          args: ["-c", "python manage.py migrate"]
+          env:
+          {{- if .Values.postgresql.enabled }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-apm 
+          volumeMounts:
+            - mountPath: /data/snappyflow
+              name: data
+
       containers:
-        - name: celery
+        - name: sfapm
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
-          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
-          command: ["bash", "-c"]
-          args: [{{ .Values.sfapm_celery.periodic.command }}]
-          env:
-          {{- range $key, $value := .Values.sfapm_celery.env }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
+          {{- if .Values.global.enable_sftrace }}
+          command:
+            - sh
+            - -c
+            - /agent/sftrace --sfcmd="gunicorn snappyflow.wsgi:application"
           {{- end }}
+          imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
+          env:
+            - name: SFTRACE_PROFILE_KEY
+              value: "{{ .Values.global.key }}"
+            - name: SFTRACE_PROJECT_NAME
+              value: "{{ .Values.global.sfprojectname }}"
+            - name: SFTRACE_APP_NAME
+              value: "{{ .Values.global.sfappname }}"
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
@@ -102,12 +135,45 @@ spec:
           {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "sfapm.fullname" . }}-apm
+                name: {{ include "sfapm.fullname" . }}-apm                   
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /snappyflow/status
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            httpGet:
+              path: /snappyflow/status
+              port: http
           resources:
-            {{- toYaml .Values.sfapm_celery.resources | nindent 12 }}
+            {{- toYaml .Values.sfapm.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
+            - name: snappyflowlog
+              mountPath: /var/log/snappyflow/
+            - mountPath: /agent
+              name: python-agent
+        {{- if .Values.sidecarLogger.enabled }}
+        - name: application-logger
+          image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecarLogger.imagePullPolicy | quote }}
+          args: [/bin/sh, -c, 'tail -n+1 -F /var/log/snappyflow/snappyflow.log']
+          resources:
+            {{- toYaml .Values.sidecarLogger.resources | nindent 12 }}
+          volumeMounts:
+          - name: snappyflowlog
+            mountPath: /var/log/snappyflow/
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -122,4 +188,8 @@ spec:
       {{- end }}
       volumes:
         - name: data
+          emptyDir: {}
+        - name: snappyflowlog
+          emptyDir: {}
+        - name: python-agent
           emptyDir: {}

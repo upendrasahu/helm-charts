@@ -40,6 +40,16 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        - name: pythonagent
+          image: busybox
+          command:
+            - sh
+            - -c
+            - -x
+            - wget -O /sfagent/sftrace-agent.tar.gz https://github.com/snappyflow/apm-agent/releases/download/latest/sftrace-agent.tar.gz && cd /sfagent && tar -xvzf sftrace-agent.tar.gz && rm sftrace-agent.tar.gz
+          volumeMounts:
+          - mountPath: /sfagent
+            name: python-agent
         - name: db-ready
           image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
@@ -94,8 +104,20 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
+          {{- if .Values.global.enable_sftrace }}
+          command:
+            - sh
+            - -c
+            - /sfagent/sftrace/sftrace --sfcmd="gunicorn snappyflow.wsgi:application"
+          {{- end }}
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           env:
+            - name: SFTRACE_PROFILE_KEY
+              value: "{{ .Values.global.key }}"
+            - name: SFTRACE_PROJECT_NAME
+              value: "{{ .Values.global.sfprojectname }}"
+            - name: SFTRACE_APP_NAME
+              value: "{{ .Values.global.sfappname }}"
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
@@ -142,6 +164,8 @@ spec:
               name: data
             - name: snappyflowlog
               mountPath: /var/log/snappyflow/
+            - mountPath: /sfagent
+              name: python-agent
         {{- if .Values.sidecarLogger.enabled }}
         - name: application-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
@@ -169,4 +193,6 @@ spec:
         - name: data
           emptyDir: {}
         - name: snappyflowlog
+          emptyDir: {}
+        - name: python-agent
           emptyDir: {}

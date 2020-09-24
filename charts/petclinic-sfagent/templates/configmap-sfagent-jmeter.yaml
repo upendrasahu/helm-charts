@@ -11,6 +11,8 @@ data:
   config.yaml: |+
     ---
     key: "{{ .Values.global.key }}"
+    tags:
+      tier: loadgen
     logging:
       plugins:
       - name: jmeter

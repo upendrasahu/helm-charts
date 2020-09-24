@@ -13,3 +13,4 @@ metadata:
     snappyflow/component: mysql
 data:
 {{ (.Files.Glob "scripts/*").AsConfig | indent 2 }}
+

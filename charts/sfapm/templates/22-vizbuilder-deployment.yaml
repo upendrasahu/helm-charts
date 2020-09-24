@@ -40,6 +40,14 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        - name: pythonagent
+          image: "{{ .Values.pythonagent.image.repository }}:{{ .Values.pythonagent.image.tag }}"
+          imagePullPolicy: {{ .Values.pythonagent.image.pullPolicy }}
+          command: ['cp', '-v', '/usr/agent/sftrace', '/agent']
+          volumeMounts:
+          - mountPath: /agent
+            name: python-agent
+            
         - name: db-ready
           image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
@@ -95,7 +103,19 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
           imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
+          {{- if .Values.global.enable_sftrace }}
+          command:
+            - sh
+            - -c
+            - /agent/sftrace --sfcmd="gunicorn vizbuilder.wsgi:application"
+          {{- end }}
           env:
+            - name: SFTRACE_PROFILE_KEY
+              value: "{{ .Values.global.key }}"
+            - name: SFTRACE_PROJECT_NAME
+              value: "{{ .Values.global.sfprojectname }}"
+            - name: SFTRACE_APP_NAME
+              value: "{{ .Values.global.sfappname }}"
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
@@ -143,6 +163,8 @@ spec:
               name: data
             - name: vizbuilderlog
               mountPath: /var/log/snappyflow/vizbuilder
+            - mountPath: /agent
+              name: python-agent
         {{- if .Values.sidecarLogger.enabled }}
         - name: application-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
@@ -170,6 +192,8 @@ spec:
         - name: data
           emptyDir: {}
         - name: vizbuilderlog
+          emptyDir: {}
+        - name: python-agent
           emptyDir: {}
 
 
