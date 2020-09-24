@@ -1,0 +1,12 @@
+{{- if and .Values.tls_cert .Values.tls_key }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "charging.fullname" . }}-certs
+  labels:
+    {{- include "charging.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+  server.crt: {{ .Values.tls_cert }}
+  server.key: {{ .Values.tls_key }}
+{{- end }}

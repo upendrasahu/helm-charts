@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "charging.fullname" . }}
+  labels:
+    {{- include "charging.labels" . | nindent 4 }}
+    service: charging
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "charging.selectorLabels" . | nindent 6 }}
+      service: charging
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "charging.selectorLabels" . | nindent 8 }}
+        service: charging
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "charging.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: db-ready
+          image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+          command:
+            - sh 
+            - -c 
+            - "until pg_isready -d postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}; do sleep 3; done"
+          {{- if .Values.postgresql.enabled }}
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "charging.fullname" . }}-config
+        - name: redis-ready
+          image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+          command:
+            - sh 
+            - -c 
+            - "until redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} ping ; do sleep 3; done"
+          envFrom:
+            - configMapRef:
+                name: {{ include "charging.fullname" . }}-config
+        - name: migration
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["bash"]
+          args: ["-c", "python manage.py migrate"]
+          env:
+          {{- if .Values.postgresql.enabled }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "charging.fullname" . }}-config
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- if .Values.postgresql.enabled }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "charging.fullname" . }}-config
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          {{- if and .Values.tls_cert .Values.tls_key}}
+          volumeMounts:
+            - name: certs
+              mountPath: /app/certs
+              readOnly: true
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.tls_key .Values.tls_cert}}
+      volumes:
+        - name: certs
+          secret:
+            secretName: {{ include "charging.fullname" . }}-certs
+      {{- end }}

@@ -1,0 +1,148 @@
+# Default values for charging.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: snappyflowml/charging
+  pullPolicy: Always
+  tag: latest
+
+# controls period for which hourly data is retained
+# setting value to 0 disables clean up
+hourly_data_retain_days: 0
+
+# change these please provide base64 encode certificate and its keys
+# use command base64 -w 0 <filename>
+tls_key:
+tls_cert:
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  limits:
+    cpu: 500m
+    memory: 250Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  # targetMemoryUtilizationPercentage: 70
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+celery:
+  env:
+    C_FORCE_ROOT: true
+    LOG_LEVEL: INFO
+  beat:
+    command: "celery beat -A charging -l $LOG_LEVEL"
+  default:
+    replicaCount: 1
+    command: "celery worker -n default@%n -A charging -l $LOG_LEVEL -Q default -c4"
+  resources: 
+    limits:
+      cpu: 500m
+      memory: 250Mi
+    requests:
+      cpu: 250m
+      memory: 128Mi
+
+redis:
+  image:
+    repository: redis
+    pullPolicy: IfNotPresent
+    tag: "5.0"
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 4Gi
+
+postgresql:
+  # enabled true deploys postgresql as statefull set on the same cluster
+  enabled: true
+
+  # if enabled false, chart will connect to external database
+  # create base with names apmbilling
+  # create a user and grant access to database apmbilling
+  # provide external section is required if postgresql.enabled is false
+
+  # external:
+  #   dbHost: "test-db-postgresql"
+  #   dbPort: ""
+  #   dbUser: "test"
+  #   dbPassword: "test123"
+
+  image:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    tag: "9.6"
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 8Gi
+  # when local postgresql is enabled below values are used to configure database
+  rootPassword: postgres
+  rootUser: postgres
+  multidb: apmbilling
+  multidbUser: snappyflow
+  multidbUserPassord: maplelabs
+
+
+global:
+  sfappname: apm-billing
+  sfprojectname: apmdemo-sf-io
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
+  key: ""
