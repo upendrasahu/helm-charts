@@ -189,6 +189,7 @@ redis:
     storageClass: ""
     size: 4Gi
 
+# User Management and Identity management system
 keycloak:
   # enabled true for keycloak server
   # false for django internal db for user management
@@ -201,6 +202,17 @@ keycloak:
   clientkey: "" # keycloak admin client key
   publickey: "" # keycloak public key
   supportemail: "" # support emailid where upgrade request sent
+
+# Usage management system
+usage_system:
+  # Usage system host IP/Domain
+  enabled: false
+  host: ""
+  # Port number for usage system server
+  port: 443
+  # tls true for HTTPS
+  tls: False
+
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster
@@ -233,8 +245,8 @@ postgresql:
   multidbUserPassord: maplelabs
 
 global:
-  sfappname: apm-server
-  sfprojectname: apmdemo-sf-io
+  sfappname: apm-server-saas
+  sfprojectname: apm-server
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
   enable_sftrace: false
