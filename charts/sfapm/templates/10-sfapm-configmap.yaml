@@ -36,3 +36,8 @@ data:
     {{- else }}
     KEYCLOAK_MODE: ""
     {{- end }}
+    {{- if .Values.usage_system.enabled }}
+    USAGE_SERVICE_HOST: "{{ .Values.usage_system.host }}"
+    USAGE_SERVICE_PORT: "{{ .Values.usage_system.port }}"
+    USAGE_SERVICE_TLS: "{{ .Values.usage_system.tls }}"
+    {{- else }}
