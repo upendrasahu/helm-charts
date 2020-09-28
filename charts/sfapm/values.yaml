@@ -188,6 +188,11 @@ redis:
     enabled: true
     storageClass: ""
     size: 4Gi
+  config:
+    redis.conf: |-
+      appendonly yes
+      maxmemory 300mb
+      maxmemory-policy allkeys-lru
 
 # User Management and Identity management system
 keycloak:
