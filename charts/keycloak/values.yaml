@@ -16,7 +16,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 keycloak:
-  keycloak_username: admin@snappyflow.io
+  keycloak_username: admin@snappyflow.io # Use admin emailid
   keycloak_password: admin
   tls:
     enabled: true
