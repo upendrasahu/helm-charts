@@ -90,16 +90,16 @@ sfapm_celery:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
     replicaCount: 2
-    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2"
+    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2 -O fair"
   notify:
     replicaCount: 2
-    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2"
+    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2 -O fair"
   periodic:
     replicaCount: 4
-    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2"
+    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 -O fair"
   provision:
     replicaCount: 1
-    command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1"
+    command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 -O fair"
 
 
 vizbuilder:
@@ -140,10 +140,10 @@ vizbuilder_celery:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:
     replicaCount: 2
-    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c2"
+    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c2 -O fair"
   logops:
     replicaCount: 1
-    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c1"
+    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c1 -O fair"
 
 serviceAccount:
   # Specifies whether a service account should be created
