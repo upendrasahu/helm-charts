@@ -200,13 +200,14 @@ keycloak:
   # false for django internal db for user management
   enabled: false
   serverIP: "" # eg: https://IP:port/auth/
-  user: admin@snappyflow.io # admin username
+  user: admin@snappyflow.io # admin user email ID
   password: admin # admin user password
   realm: master
   clientid: admin-cli
   clientkey: "" # keycloak admin client key
   publickey: "" # keycloak public key
   supportemail: "" # support emailid where upgrade request sent
+  websiteurl: "" # websiteURL
 
 # Usage management system
 usage_system:
