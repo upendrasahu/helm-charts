@@ -33,6 +33,7 @@ data:
     KEYCLOAK_CLIENTKEY: "{{ .Values.keycloak.clientkey }}"
     KEYCLOAK_PUBLICKEY: "{{ .Values.keycloak.publickey }}"
     SUPPORT_EMAIL: "{{ .Values.keycloak.supportemail }}"
+    WEBSITE_URL: "{{ .Values.keycloak.websiteurl }}"
     {{- else }}
     KEYCLOAK_MODE: ""
     {{- end }}
