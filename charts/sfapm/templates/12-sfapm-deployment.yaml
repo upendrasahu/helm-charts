@@ -118,6 +118,8 @@ spec:
               value: "{{ .Values.global.sfprojectname }}"
             - name: SFTRACE_APP_NAME
               value: "{{ .Values.global.sfappname }}"
+            - name: ENABLE_SFTRACE
+              value: "{{ .Values.global.enable_sftrace }}"
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
