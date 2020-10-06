@@ -82,6 +82,8 @@ spec:
             - name: {{ $key }}
               value: "{{ $value }}"
           {{- end }}
+            -  name: ELASTIC_APM_SERVICE_NAME
+               value: "sfapm-celery-beat"
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
