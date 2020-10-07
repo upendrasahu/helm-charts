@@ -41,6 +41,16 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        - name: pythonagent
+          image: busybox
+          command:
+          - sh
+          - -c
+          - -x
+          - wget -O /sfagent/sftrace-agent.tar.gz https://github.com/snappyflow/apm-agent/releases/download/latest/sftrace-agent.tar.gz && cd /sfagent && tar -xvzf sftrace-agent.tar.gz && rm sftrace-agent.tar.gz
+          volumeMounts:
+          - mountPath: /sfagent
+            name: sftrace-agent
         - name: db-ready
           image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
@@ -75,13 +85,25 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.sfapm.image.repository }}:{{ .Values.sfapm.image.tag }}"
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
-          command: ["bash", "-c"]
-          args: [{{ .Values.sfapm_celery.provision.command }}]
+          command:
+          - sh
+          - -c
+          - /sfagent/sftrace/sftrace --sfcmd="{{ .Values.sfapm_celery.provision.command }}"
           env:
           {{- range $key, $value := .Values.sfapm_celery.env }}
             - name: {{ $key }}
               value: "{{ $value }}"
           {{- end }}
+            - name: SFTRACE_PROFILE_KEY
+              value: "{{ .Values.global.key }}"
+            - name: SFTRACE_PROJECT_NAME
+              value: "{{ .Values.global.sfprojectname }}"
+            - name: SFTRACE_APP_NAME
+              value: "{{ .Values.global.sfappname }}"
+            - name: ENABLE_SFTRACE
+              value: "{{ .Values.global.enable_sftrace }}"
+            - name: ELASTIC_APM_SERVICE_NAME
+              value: "sfapm-celery-provision"
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
@@ -108,6 +130,8 @@ spec:
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
+            - mountPath: /sfagent
+              name: sftrace-agent
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -123,3 +147,6 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
+        - name: sftrace-agent
+          emptyDir: {}
+
