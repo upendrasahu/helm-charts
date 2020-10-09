@@ -19,28 +19,28 @@ tls_key:
 tls_cert:
  
  #Keycloak settings
-keycloak_server: "http://ec2-35-164-196-182.us-west-2.compute.amazonaws.com:9090/auth/"
-keycloak_user: "admin"
-keycloak_password: "admin"
-keycloak_realm: "master"
-keycloak_clientid: "admin-cli"
-keycloak_clientkey: "750214b1-d365-4dc6-af79-47c49a4696fd"
+keycloak_server: ""
+keycloak_user: ""
+keycloak_password: ""
+keycloak_realm: ""
+keycloak_clientid: ""
+keycloak_clientkey: ""
 
 #Email settings
-email_host: 'smtp.gmail.com'
-email_host_password: 'Maplelabs123456$'
-email_host_user: 'mail.snappyflow@gmail.com'
+email_host: ""
+email_host_password: ""
+email_host_user: ""
 email_port: 587
-email_backend: 'django.core.mail.backends.smtp.EmailBackend'
+email_backend: ""
 email_timeout: 10
 email_use_tls: true
 
 #Chargebee settings
-gatewayid: "gw_AzqPFNS1VHZ3E3V"
-chargeBeeName: "snappyflow-test"
-chargeBeeKey: "test_sHbt6KtXOYcZMQm4bUfgIsAHIB7odtDJ"
-stripeKey: "sk_test_sB2FINIXBnijVFB63GYQH4Mt00IxmV5fj0"
-salesTeamMail: "sunil.soolibhavi@maplelabs.com"
+gatewayid: ""
+chargeBeeName: ""
+chargeBeeKey: ""
+stripeKey: ""
+salesTeamMail: ""
  
 
 
