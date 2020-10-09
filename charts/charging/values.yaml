@@ -17,6 +17,33 @@ hourly_data_retain_days: 0
 # use command base64 -w 0 <filename>
 tls_key:
 tls_cert:
+ 
+ #Keycloak settings
+keycloak_server: "http://ec2-35-164-196-182.us-west-2.compute.amazonaws.com:9090/auth/"
+keycloak_user: "admin"
+keycloak_password: "admin"
+keycloak_realm: "master"
+keycloak_clientid: "admin-cli"
+keycloak_clientkey: "750214b1-d365-4dc6-af79-47c49a4696fd"
+
+#Email settings
+email_host: 'smtp.gmail.com'
+email_host_password: 'Maplelabs123456$'
+email_host_user: 'mail.snappyflow@gmail.com'
+email_port: 587
+email_backend: 'django.core.mail.backends.smtp.EmailBackend'
+email_timeout: 10
+email_use_tls: true
+
+#Chargebee settings
+gatewayid: "gw_AzqPFNS1VHZ3E3V"
+chargeBeeName: "snappyflow-test"
+chargeBeeKey: "test_sHbt6KtXOYcZMQm4bUfgIsAHIB7odtDJ"
+stripeKey: "sk_test_sB2FINIXBnijVFB63GYQH4Mt00IxmV5fj0"
+salesTeamMail: "sunil.soolibhavi@maplelabs.com"
+ 
+
+
 
 imagePullSecrets: []
 nameOverride: ""
@@ -90,7 +117,7 @@ celery:
     command: "celery beat -A charging -l $LOG_LEVEL"
   default:
     replicaCount: 1
-    command: "celery worker -n default@%n -A charging -l $LOG_LEVEL -Q default -c4"
+    command: "celery worker -n default@%n -A charging -l $LOG_LEVEL -c4"
   resources: 
     limits:
       cpu: 500m
