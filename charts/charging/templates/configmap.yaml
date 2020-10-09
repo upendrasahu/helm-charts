@@ -21,25 +21,25 @@ data:
     REDIS_PORT: "6379"
     HOURLY_DATA_RETAIN_DAYS: {{ .Values.hourly_data_retain_days | quote }}
 
-    KEYCLOAK_SERVER: "http://ec2-35-164-196-182.us-west-2.compute.amazonaws.com:9090/auth/"
-    KEYCLOAK_USER: "admin"
-    KEYCLOAK_PASSWORD: "admin"
-    KEYCLOAK_REALM: "master"
-    KEYCLOAK_CLIENTID: "admin-cli"
-    KEYCLOAK_CLIENTKEY: "750214b1-d365-4dc6-af79-47c49a4696fd"
-    KEYCLOAK_PUBLICKEY: os.path.join(BASE_DIR, *["charging", "keycloak_key.pem"])
+    KEYCLOAK_SERVER: ""
+    KEYCLOAK_USER: ""
+    KEYCLOAK_PASSWORD: ""
+    KEYCLOAK_REALM: ""
+    KEYCLOAK_CLIENTID: ""
+    KEYCLOAK_CLIENTKEY: ""
     
-    EMAIL_HOST: 'smtp.gmail.com'
-    EMAIL_HOST_PASSWORD: 'Maplelabs123456$'
-    EMAIL_HOST_USER: 'mail.snappyflow@gmail.com'
-    EMAIL_PORT: "587"
-    EMAIL_BACKEND: 'django.core.mail.backends.smtp.EmailBackend'
+    
+    EMAIL_HOST: ""
+    EMAIL_HOST_PASSWORD: ""
+    EMAIL_HOST_USER: ""
+    EMAIL_PORT: ""
+    EMAIL_BACKEND: ""
     EMAIL_TIMEOUT: "10"
     EMAIL_USE_TLS: True
 
-    GATEWAYID: "gw_AzqPFNS1VHZ3E3V"
-    CHARGEBEE_NAME: "snappyflow-test"
-    CHARGEBEE_KEY: "test_sHbt6KtXOYcZMQm4bUfgIsAHIB7odtDJ"
-    STRIPE_KEY: "sk_test_sB2FINIXBnijVFB63GYQH4Mt00IxmV5fj0"
-    SALES_TEAM_MAIL: "sunil.soolibhavi@maplelabs.com"
+    GATEWAYID: ""
+    CHARGEBEE_NAME: ""
+    CHARGEBEE_KEY: ""
+    STRIPE_KEY: ""
+    SALES_TEAM_MAIL: ""
  
