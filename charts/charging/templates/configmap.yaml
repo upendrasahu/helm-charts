@@ -20,3 +20,26 @@ data:
     REDIS_HOST: {{ .Release.Name  }}-redis
     REDIS_PORT: "6379"
     HOURLY_DATA_RETAIN_DAYS: {{ .Values.hourly_data_retain_days | quote }}
+
+    KEYCLOAK_SERVER: {{ .Values.keycloak_server | quote }}
+    KEYCLOAK_USER: {{ .Values.keycloak_user | quote }}
+    KEYCLOAK_PASSWORD: {{ .Values.keycloak_password | quote }}"
+    KEYCLOAK_REALM: {{ .Values.keycloak_realm | quote }}
+    KEYCLOAK_CLIENTID: {{ .Values.keycloak_clientid | quote }}
+    KEYCLOAK_CLIENTKEY: {{ .Values.keycloak_clientkey | quote }}
+    
+    
+    EMAIL_HOST: {{ .Values.email_host | quote }}
+    EMAIL_HOST_PASSWORD: {{ .Values.email_host_password | quote }}
+    EMAIL_HOST_USER: {{ .Values.email_host_user | quote }}
+    EMAIL_PORT: {{ .Values.email_port | quote }}
+    EMAIL_BACKEND: {{ .Values.email_backend | quote }}
+    EMAIL_TIMEOUT: "10"
+    EMAIL_USE_TLS: True
+
+    GATEWAYID: {{ .Values.gatewayid | quote }}
+    CHARGEBEE_NAME: {{ .Values.chargebee_name | quote }}
+    CHARGEBEE_KEY: {{ .Values.chargebee_key | quote }}
+    STRIPE_KEY: {{ .Values.stripe_key | quote }}
+    SALES_TEAM_MAIL: {{ .Values.sales_team_mail | quote }}
+ 

@@ -17,6 +17,33 @@ hourly_data_retain_days: 0
 # use command base64 -w 0 <filename>
 tls_key:
 tls_cert:
+ 
+ #Keycloak settings
+keycloak_server: ""
+keycloak_user: ""
+keycloak_password: ""
+keycloak_realm: ""
+keycloak_clientid: ""
+keycloak_clientkey: ""
+
+#Email settings
+email_host: ""
+email_host_password: ""
+email_host_user: ""
+email_port: 587
+email_backend: ""
+email_timeout: 10
+email_use_tls: true
+
+#Chargebee settings
+gatewayid: ""
+chargeBeeName: ""
+chargeBeeKey: ""
+stripeKey: ""
+salesTeamMail: ""
+ 
+
+
 
 imagePullSecrets: []
 nameOverride: ""
@@ -90,7 +117,7 @@ celery:
     command: "celery beat -A charging -l $LOG_LEVEL"
   default:
     replicaCount: 1
-    command: "celery worker -n default@%n -A charging -l $LOG_LEVEL -Q default -c4"
+    command: "celery worker -n default@%n -A charging -l $LOG_LEVEL -c4"
   resources: 
     limits:
       cpu: 500m
