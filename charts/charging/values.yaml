@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: snappyflowml/charging
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: latest
 
 # controls period for which hourly data is retained
@@ -41,9 +41,6 @@ chargeBeeName: ""
 chargeBeeKey: ""
 stripeKey: ""
 salesTeamMail: ""
- 
-
-
 
 imagePullSecrets: []
 nameOverride: ""
