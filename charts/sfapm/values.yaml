@@ -255,6 +255,6 @@ global:
   sfprojectname: apm-server
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
-  enable_sftrace: "False"
+  enable_sftrace: false
   key: ""
 

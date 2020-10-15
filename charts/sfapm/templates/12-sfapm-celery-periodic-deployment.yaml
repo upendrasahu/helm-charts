@@ -101,7 +101,7 @@ spec:
             - name: SFTRACE_APP_NAME
               value: "{{ .Values.global.sfappname }}"
             - name: ENABLE_SFTRACE
-              value: "{{ .Values.global.enable_sftrace }}"
+              value: {{ .Values.global.enable_sftrace }}
             - name: ELASTIC_APM_SERVICE_NAME
               value: "sfapm-celery-periodic"
           {{- if .Values.postgresql.enabled }}
