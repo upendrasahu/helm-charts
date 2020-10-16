@@ -18,7 +18,7 @@ hourly_data_retain_days: 0
 tls_key:
 tls_cert:
  
- #Keycloak settings
+#Keycloak settings
 keycloak_server: ""
 keycloak_user: ""
 keycloak_password: ""
@@ -26,7 +26,6 @@ keycloak_realm: ""
 keycloak_clientid: ""
 keycloak_clientkey: ""
 keycloak_publickey: ""
-
 
 #Email settings
 email_host: ""
@@ -112,11 +111,12 @@ celery:
   env:
     C_FORCE_ROOT: true
     LOG_LEVEL: INFO
+    CELERY_OPTS: "-O fair --without-gossip --heartbeat-interval 10"
   beat:
     command: "celery beat -A charging -l $LOG_LEVEL"
   default:
     replicaCount: 1
-    command: "celery worker -n default@%n -A charging -l $LOG_LEVEL -c4"
+    command: "celery worker -n charging@%n -A charging -l $LOG_LEVEL -c4 $CELERY_OPTS"
   resources: 
     limits:
       cpu: 500m
@@ -134,6 +134,19 @@ redis:
     enabled: true
     storageClass: ""
     size: 4Gi
+  config:
+    redis.conf: |-
+      tcp-keepalive 60
+      appendonly yes
+      maxmemory 100mb
+      maxmemory-policy allkeys-lru
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster

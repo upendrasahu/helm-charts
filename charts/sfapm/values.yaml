@@ -23,6 +23,7 @@ sidecarLogger:
     limits:
       cpu: 250m
       memory: 256Mi
+
 sfapmui:
   replicaCount: 1
   autoscaling:
@@ -76,6 +77,7 @@ sfapm:
     type: ClusterIP
     port: 8000
 
+
 sfapm_celery:
   resources: 
     limits:
@@ -86,20 +88,21 @@ sfapm_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
+    CELERY_OPTS: "-O fair --without-gossip --heartbeat-interval 10"
   beat:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
     replicaCount: 2
-    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2 -O fair"
+    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2 $CELERY_OPTS"
   notify:
     replicaCount: 2
-    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2 -O fair"
+    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2 $CELERY_OPTS"
   periodic:
     replicaCount: 4
-    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 -O fair"
+    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 $CELERY_OPTS"
   provision:
     replicaCount: 1
-    command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 -O fair"
+    command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 $CELERY_OPTS"
 
 
 vizbuilder:
@@ -136,14 +139,15 @@ vizbuilder_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
+    CELERY_OPTS: "-O fair --without-gossip --heartbeat-interval 10"
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:
     replicaCount: 2
-    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c2 -O fair"
+    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c2 $CELERY_OPTS"
   logops:
     replicaCount: 1
-    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c1 -O fair"
+    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c2 $CELERY_OPTS"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -188,8 +192,16 @@ redis:
     enabled: true
     storageClass: ""
     size: 4Gi
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   config:
     redis.conf: |-
+      tcp-keepalive 60
       appendonly yes
       maxmemory 300mb
       maxmemory-policy allkeys-lru
