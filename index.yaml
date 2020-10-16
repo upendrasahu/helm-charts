@@ -3,6 +3,24 @@ entries:
   charging:
   - apiVersion: v2
     appVersion: v1
+    created: "2020-10-16T09:37:00.155475149Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.8
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart for sfapm charging and usage tracking system
+    digest: 551aa01b47b958b5ff442dc5c110020f739de2d6be17126947edf06b5b5e0f3b
+    name: charging
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/charging-0.3.3/charging-0.3.3.tgz
+    version: 0.3.3
+  - apiVersion: v2
+    appVersion: v1
     created: "2020-10-16T07:47:29.507218088Z"
     dependencies:
     - name: redis
@@ -546,6 +564,25 @@ entries:
     - https://github.com/snappyflow/helm-charts/releases/download/sfagent-3.1.4/sfagent-3.1.4.tgz
     version: 3.1.4
   sfapm:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2020-10-16T09:37:00.263430409Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.8
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart to deploy snappyflow on Kubernetes
+    digest: 5f4e1a66c8a5fbd4d84c0bd6bcb264d4f0d1436d2353f3720a571b4283f69067
+    home: http://www.snappyflow.io
+    name: sfapm
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/sfapm-3.0.51/sfapm-3.0.51.tgz
+    version: 3.0.51
   - apiVersion: v2
     appVersion: 1.0.0
     created: "2020-10-15T09:47:25.717500533Z"
