@@ -23,10 +23,11 @@ data:
 
     KEYCLOAK_SERVER: {{ .Values.keycloak_server | quote }}
     KEYCLOAK_USER: {{ .Values.keycloak_user | quote }}
-    KEYCLOAK_PASSWORD: {{ .Values.keycloak_password | quote }}"
+    KEYCLOAK_PASSWORD: {{ .Values.keycloak_password | quote }}
     KEYCLOAK_REALM: {{ .Values.keycloak_realm | quote }}
     KEYCLOAK_CLIENTID: {{ .Values.keycloak_clientid | quote }}
     KEYCLOAK_CLIENTKEY: {{ .Values.keycloak_clientkey | quote }}
+    KEYCLOAK_PUBLICKEY: {{ .Values.keycloak_publickey | quote }}
     
     
     EMAIL_HOST: {{ .Values.email_host | quote }}

@@ -25,6 +25,8 @@ keycloak_password: ""
 keycloak_realm: ""
 keycloak_clientid: ""
 keycloak_clientkey: ""
+keycloak_publickey: ""
+
 
 #Email settings
 email_host: ""
@@ -37,10 +39,10 @@ email_use_tls: true
 
 #Chargebee settings
 gatewayid: ""
-chargeBeeName: ""
-chargeBeeKey: ""
-stripeKey: ""
-salesTeamMail: ""
+chargebee_name: ""
+chargebee_key: ""
+stripe_key: ""
+sales_team_mail: ""
 
 imagePullSecrets: []
 nameOverride: ""
