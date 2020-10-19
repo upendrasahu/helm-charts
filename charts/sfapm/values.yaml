@@ -98,7 +98,7 @@ sfapm_celery:
     replicaCount: 2
     command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c1 $CELERY_OPTS"
   periodic:
-    replicaCount: 4
+    replicaCount: 8
     command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c1 $CELERY_OPTS"
   provision:
     replicaCount: 1
@@ -143,7 +143,7 @@ vizbuilder_celery:
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:
-    replicaCount: 2
+    replicaCount: 4
     command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c1 $CELERY_OPTS"
   logops:
     replicaCount: 2
