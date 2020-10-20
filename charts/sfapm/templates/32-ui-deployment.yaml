@@ -64,7 +64,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.sfapmui.image.repository }}:{{ .Values.sfapmui.image.tag }}"
           imagePullPolicy: {{ .Values.sfapmui.image.pullPolicy }}
-          env:          
+          env:
           {{- range .Values.sfapmui.env }}
             - name: {{ .name }}
               value: {{ .value }}
@@ -121,10 +121,14 @@ spec:
           resources:
             {{- toYaml .Values.sfapmui.resources | nindent 12 }}
           volumeMounts:
+            {{- if .Values.sfapmui.tls.enabled }}
             - name: tls
               mountPath: /etc/ssl/nginx
+            {{- end }}
+            {{- if .Values.global.key }}
             - name: nginx-log
               mountPath: /var/log/nginx
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -137,14 +141,16 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.sfapmui.tls.enabled }}
       volumes:
+        {{- if .Values.sfapmui.tls.enabled }}
         - name: tls
           secret:
             secretName: {{ include "sfapm.fullname" . }}-ui-tls
+        {{- end }}
+        {{- if .Values.global.key }}
         - name: sfagent
           configMap:
             name: {{ include "sfapm.fullname" . }}-ui-sfagent
         - name: nginx-log
           emptyDir: {}
-      {{- end }}
+        {{- end }}

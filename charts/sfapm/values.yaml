@@ -46,6 +46,7 @@ sfapmui:
   service:
     type: NodePort # this is the entrypoint change to Loadbalancer
     nodePort: 30080
+  env: {}
   tls: 
     enabled: true
     # change these please provide base64 encode certificate and its keys
@@ -88,7 +89,7 @@ sfapm_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --without-gossip --heartbeat-interval 10"
+    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20"
   beat:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
@@ -139,7 +140,7 @@ vizbuilder_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --without-gossip --heartbeat-interval 10"
+    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20"
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:

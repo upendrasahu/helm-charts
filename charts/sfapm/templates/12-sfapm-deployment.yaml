@@ -40,6 +40,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        {{- if .Values.global.enable_sftrace }}
         - name: pythonagent
           image: busybox
           command:
@@ -50,6 +51,7 @@ spec:
           volumeMounts:
           - mountPath: /sfagent
             name: python-agent
+        {{- end }}
         - name: db-ready
           image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
@@ -112,6 +114,7 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.sfapm.image.pullPolicy }}
           env:
+          {{- if .Values.global.enable_sftrace }}
             - name: SFTRACE_PROFILE_KEY
               value: "{{ .Values.global.key }}"
             - name: SFTRACE_PROJECT_NAME
@@ -120,6 +123,7 @@ spec:
               value: "{{ .Values.global.sfappname }}"
             - name: ENABLE_SFTRACE
               value: "{{ .Values.global.enable_sftrace }}"
+          {{- end }}
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
               valueFrom:
@@ -166,12 +170,14 @@ spec:
               name: data
             - name: snappyflowlog
               mountPath: /var/log/snappyflow/
+            {{- if .Values.global.enable_sftrace }}
             - mountPath: /sfagent
               name: python-agent
+            {{- end }}
         {{- if .Values.sidecarLogger.enabled }}
         - name: application-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
-          imagePullPolicy: {{ .Values.sidecarLogger.imagePullPolicy | quote }}
+          imagePullPolicy: {{ .Values.sidecarLogger.image.pullPolicy | quote }}
           args: [/bin/sh, -c, 'tail -n+1 -F /var/log/snappyflow/snappyflow.log']
           resources:
             {{- toYaml .Values.sidecarLogger.resources | nindent 12 }}
@@ -196,5 +202,7 @@ spec:
           emptyDir: {}
         - name: snappyflowlog
           emptyDir: {}
+        {{- if .Values.global.enable_sftrace }}
         - name: python-agent
           emptyDir: {}
+        {{- end }}
