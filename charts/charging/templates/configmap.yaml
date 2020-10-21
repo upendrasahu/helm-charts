@@ -36,7 +36,7 @@ data:
     EMAIL_PORT: {{ .Values.email_port | quote }}
     EMAIL_BACKEND: {{ .Values.email_backend | quote }}
     EMAIL_TIMEOUT: "10"
-    EMAIL_USE_TLS: True
+    EMAIL_USE_TLS: "true"
 
     GATEWAYID: {{ .Values.gatewayid | quote }}
     CHARGEBEE_NAME: {{ .Values.chargebee_name | quote }}
