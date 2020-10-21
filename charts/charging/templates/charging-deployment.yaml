@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "charging.labels" . | nindent 4 }}
     service: charging
+    snappyflow/component: charging
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -13,6 +16,9 @@ spec:
     matchLabels:
       {{- include "charging.selectorLabels" . | nindent 6 }}
       service: charging
+      snappyflow/component: charging
+      {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}

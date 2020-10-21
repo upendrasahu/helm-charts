@@ -147,6 +147,8 @@ redis:
     requests:
       cpu: 100m
       memory: 128Mi
+  podAnnotations:
+    prometheus.io/scrape: "false"
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster

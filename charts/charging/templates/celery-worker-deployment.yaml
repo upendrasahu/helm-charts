@@ -6,6 +6,9 @@ metadata:
     {{- include "charging.labels" . | nindent 4 }}
     role: celery
     queue: default
+    snappyflow/component: charging
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   replicas: {{ .Values.celery.default.replicaCount }}
   selector:
@@ -13,6 +16,9 @@ spec:
       {{- include "charging.selectorLabels" . | nindent 6 }}
       role: celery
       queue: default
+      snappyflow/component: charging
+      {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+      {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
   template:
     metadata:
     {{- with .Values.podAnnotations }}
