@@ -3,6 +3,24 @@ entries:
   charging:
   - apiVersion: v2
     appVersion: v1
+    created: "2020-10-22T12:11:00.344389597Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.8
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart for sfapm charging and usage tracking system
+    digest: d2d4440063da7b1ac795e46a259b1f5cf8d69752d9c68aab963a74e05ccc5c50
+    name: charging
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/charging-0.3.5/charging-0.3.5.tgz
+    version: 0.3.5
+  - apiVersion: v2
+    appVersion: v1
     created: "2020-10-21T11:56:39.02681393Z"
     dependencies:
     - name: redis
@@ -372,6 +390,22 @@ entries:
     - https://github.com/snappyflow/helm-charts/releases/download/keycloak-1.0.0/keycloak-1.0.0.tgz
     version: 1.0.0
   petclinic:
+  - apiVersion: v1
+    appVersion: 2.1.0.BUILD-SNAPSHOT
+    created: "2020-10-22T12:11:00.441539939Z"
+    description: Helm chart for deploying basic Spring applications
+    digest: 7c78eac7c600fa020a88d3b3ffaea663954f9ced4076af356a80503471fdf6c2
+    home: https://spring.io
+    icon: https://spring.io/img/homepage/icon-spring-boot.svg
+    keywords:
+    - spring
+    - petclinic
+    name: petclinic
+    sources:
+    - https://github.com/spring-projects/spring-petclinic
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/petclinic-0.3.7/petclinic-0.3.7.tgz
+    version: 0.3.7
   - apiVersion: v1
     appVersion: 2.1.0.BUILD-SNAPSHOT
     created: "2020-08-30T16:35:11.686379714Z"
