@@ -124,6 +124,12 @@ celery:
     requests:
       cpu: 250m
       memory: 128Mi
+  persistence:
+    enabled: true
+    ## if enabled storage class name and size in GiB
+    storageClass: ""
+    size: 4Gi
+    accessMode: ReadWriteOnce
 
 redis:
   image:

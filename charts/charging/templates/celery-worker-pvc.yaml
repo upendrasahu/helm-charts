@@ -1,0 +1,26 @@
+{{- if .Values.celery.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "charging.fullname" . }}-celery-worker
+  labels:
+    {{- include "charging.labels" . | nindent 4 }}
+    role: celery
+    queue: default
+    snappyflow/component: charging
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+spec:
+  accessModes:
+    - {{ .Values.celery.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.celery.persistence.size | quote }}
+{{- if .Values.celery.persistence.storageClass }}
+{{- if (eq "-" .Values.celery.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.celery.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}
