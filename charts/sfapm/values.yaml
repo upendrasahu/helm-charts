@@ -23,7 +23,6 @@ sidecarLogger:
     limits:
       cpu: 250m
       memory: 256Mi
-
 sfapmui:
   replicaCount: 1
   autoscaling:
@@ -46,7 +45,6 @@ sfapmui:
   service:
     type: NodePort # this is the entrypoint change to Loadbalancer
     nodePort: 30080
-  env: {}
   tls: 
     enabled: true
     # change these please provide base64 encode certificate and its keys
@@ -78,7 +76,6 @@ sfapm:
     type: ClusterIP
     port: 8000
 
-
 sfapm_celery:
   resources: 
     limits:
@@ -89,21 +86,20 @@ sfapm_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
     replicaCount: 2
-    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2 $CELERY_OPTS"
+    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2"
   notify:
     replicaCount: 2
-    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2 $CELERY_OPTS"
+    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2"
   periodic:
     replicaCount: 4
-    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 $CELERY_OPTS"
+    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2"
   provision:
     replicaCount: 1
-    command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 $CELERY_OPTS"
+    command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1"
 
 
 vizbuilder:
@@ -140,15 +136,14 @@ vizbuilder_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:
     replicaCount: 2
-    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c10 $CELERY_OPTS"
+    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c2"
   logops:
     replicaCount: 1
-    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c10 $CELERY_OPTS"
+    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c1"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -159,8 +154,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations:
-  prometheus.io/scrape: "false"
+podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -194,21 +188,11 @@ redis:
     enabled: true
     storageClass: ""
     size: 4Gi
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 500Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
   config:
     redis.conf: |-
-      tcp-keepalive 60
       appendonly yes
       maxmemory 300mb
       maxmemory-policy allkeys-lru
-  podAnnotations:
-    prometheus.io/scrape: "false"
 
 # User Management and Identity management system
 keycloak:
@@ -216,14 +200,13 @@ keycloak:
   # false for django internal db for user management
   enabled: false
   serverIP: "" # eg: https://IP:port/auth/
-  user: admin@snappyflow.io # admin user email ID
+  user: admin@snappyflow.io # admin username
   password: admin # admin user password
   realm: master
   clientid: admin-cli
   clientkey: "" # keycloak admin client key
   publickey: "" # keycloak public key
   supportemail: "" # support emailid where upgrade request sent
-  websiteurl: "" # websiteURL
 
 # Usage management system
 usage_system:
