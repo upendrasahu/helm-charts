@@ -34,7 +34,7 @@ sfapmui:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-ui
-    tag: 3.0.17
+    tag: 3.0.41
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -65,7 +65,7 @@ sfapm:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-server
-    tag: 3.0.31
+    tag: 3.0.45
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -78,7 +78,6 @@ sfapm:
     type: ClusterIP
     port: 8000
 
-
 sfapm_celery:
   resources: 
     limits:
@@ -89,18 +88,18 @@ sfapm_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20"
+    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
     replicaCount: 2
-    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c1 $CELERY_OPTS"
+    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2 $CELERY_OPTS"
   notify:
     replicaCount: 2
-    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c1 $CELERY_OPTS"
+    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2 $CELERY_OPTS"
   periodic:
     replicaCount: 4
-    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c1 $CELERY_OPTS"
+    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 $CELERY_OPTS"
   provision:
     replicaCount: 1
     command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 $CELERY_OPTS"
@@ -116,7 +115,7 @@ vizbuilder:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-vizbuilder
-    tag: 3.0.4
+    tag: 3.0.16
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -140,15 +139,15 @@ vizbuilder_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20"
+    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:
-    replicaCount: 4
-    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c1 $CELERY_OPTS"
+    replicaCount: 2
+    command: "celery worker -n alert@%n -A vizbuilder -l $LOG_LEVEL -Q alert -c10 $CELERY_OPTS"
   logops:
     replicaCount: 1
-    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c1 $CELERY_OPTS"
+    command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c10 $CELERY_OPTS"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -204,6 +203,7 @@ redis:
   config:
     redis.conf: |-
       tcp-keepalive 60
+      timeout 300
       appendonly yes
       maxmemory 300mb
       maxmemory-policy allkeys-lru
@@ -224,6 +224,7 @@ keycloak:
   publickey: "" # keycloak public key
   supportemail: "" # support emailid where upgrade request sent
   websiteurl: "" # websiteURL
+  defaultprofile: "" # demo-profile
 
 # Usage management system
 usage_system:

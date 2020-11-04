@@ -157,6 +157,19 @@ spec:
             - mountPath: /sfagent
               name: sftrace-agent
             {{- end }}
+            - name: cleanuplog
+              mountPath: /var/log/snappyflow/
+        {{- if .Values.sidecarLogger.enabled }}
+        - name: es-cleanup-logger
+          image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
+          imagePullPolicy: {{ .Values.sidecarLogger.imagePullPolicy | quote }}
+          args: [/bin/sh, -c, 'tail -n+1 -F /var/log/snappyflow/es_cleanup.log']
+          resources:
+            {{- toYaml .Values.sidecarLogger.resources | nindent 12 }}
+          volumeMounts:
+          - name: cleanuplog
+            mountPath: /var/log/snappyflow/
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -176,3 +189,5 @@ spec:
         - name: sftrace-agent
           emptyDir: {}
         {{- end }}
+        - name: cleanuplog
+          emptyDir: {}

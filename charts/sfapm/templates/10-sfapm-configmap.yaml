@@ -34,6 +34,7 @@ data:
     KEYCLOAK_PUBLICKEY: "{{ .Values.keycloak.publickey }}"
     SUPPORT_EMAIL: "{{ .Values.keycloak.supportemail }}"
     WEBSITE_URL: "{{ .Values.keycloak.websiteurl }}"
+    DEFAULT_PROFILE: "{{ .Values.keycloak.defaultprofile }}"
     {{- else }}
     KEYCLOAK_MODE: ""
     {{- end }}
