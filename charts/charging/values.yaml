@@ -36,6 +36,10 @@ email_backend: ""
 email_timeout: 10
 email_use_tls: true
 
+# aws s3 settings
+access_key: ""
+secret_key: ""
+bucket_name: ""
 #Chargebee settings
 gatewayid: ""
 chargebee_name: ""
