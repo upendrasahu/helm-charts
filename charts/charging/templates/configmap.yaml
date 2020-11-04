@@ -43,4 +43,7 @@ data:
     CHARGEBEE_KEY: {{ .Values.chargebee_key | quote }}
     STRIPE_KEY: {{ .Values.stripe_key | quote }}
     SALES_TEAM_MAIL: {{ .Values.sales_team_mail | quote }}
- 
+
+    ACCESS_KEY : {{ .Values.access_key | quote }}
+    SECRET_KEY : {{ .Values.secret_key | quote }}
+    BUCKET_NAME : {{ .Values.bucket_name | quote }}
