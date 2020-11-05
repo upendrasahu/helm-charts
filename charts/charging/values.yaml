@@ -128,6 +128,12 @@ celery:
     requests:
       cpu: 250m
       memory: 128Mi
+  persistence:
+    enabled: true
+    ## if enabled storage class name and size in GiB
+    storageClass: ""
+    size: 4Gi
+    accessMode: ReadWriteOnce
 
 redis:
   image:
@@ -141,6 +147,7 @@ redis:
   config:
     redis.conf: |-
       tcp-keepalive 60
+      timeout 300
       appendonly yes
       maxmemory 100mb
       maxmemory-policy allkeys-lru
@@ -151,6 +158,8 @@ redis:
     requests:
       cpu: 100m
       memory: 128Mi
+  podAnnotations:
+    prometheus.io/scrape: "false"
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster
