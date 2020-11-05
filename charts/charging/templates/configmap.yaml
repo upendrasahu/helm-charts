@@ -44,6 +44,6 @@ data:
     STRIPE_KEY: {{ .Values.stripe_key | quote }}
     SALES_TEAM_MAIL: {{ .Values.sales_team_mail | quote }}
 
-    ACCESS_KEY : {{ .Values.access_key | quote }}
-    SECRET_KEY : {{ .Values.secret_key | quote }}
-    BUCKET_NAME : {{ .Values.bucket_name | quote }}
+    S3_ACCESS_KEY : {{ .Values.s3_access_key | quote }}
+    S3_SECRET_KEY : {{ .Values.s3_secret_key | quote }}
+    S3_BUCKET_NAME : {{ .Values.s3_bucket_name | quote }}
