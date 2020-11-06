@@ -224,7 +224,7 @@ keycloak:
   publickey: "" # keycloak public key
   supportemail: "" # support emailid where upgrade request sent
   websiteurl: "" # websiteURL
-  defaultprofile: "" # demo-profile
+  defaultprofile: "demo-profile" # default profile for demo apps
 
 # Usage management system
 usage_system:
