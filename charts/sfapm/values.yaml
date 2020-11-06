@@ -148,6 +148,9 @@ vizbuilder_celery:
   logops:
     replicaCount: 1
     command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c10 $CELERY_OPTS"
+  signature:
+    replicaCount: 1
+    command: "celery worker -n signature@%n -A vizbuilder -l $LOG_LEVEL -Q signature -c10 $CELERY_OPTS"
 
 serviceAccount:
   # Specifies whether a service account should be created
