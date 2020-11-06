@@ -4,6 +4,10 @@ apmConfig:
   apm-server.yml: |
     apm-server:
       host: "0.0.0.0:8200"
+      jaeger:
+        http:
+          enabled: true
+          host: 0.0.0.0:14268
     output.kafkarest:
       enabled: true
       hosts: ["localhost:31936"]
