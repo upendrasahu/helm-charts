@@ -597,6 +597,17 @@ entries:
     urls:
     - https://github.com/snappyflow/helm-charts/releases/download/petclinic-v3-0.4.4/petclinic-v3-0.4.4.tgz
     version: 0.4.4
+  pgbouncer:
+  - apiVersion: v2
+    appVersion: 1.14.0
+    created: "2020-11-09T14:16:06.234285191Z"
+    description: A Helm chart for PgBouncer, Lightweight connection pooler for PostgreSQL
+    digest: 66d2179273d0968ef4337b5b10d86e6da7c3fa81f6753ee61fcf87ef5605cb1c
+    name: pgbouncer
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/pgbouncer-0.1.1/pgbouncer-0.1.1.tgz
+    version: 0.1.1
   postgresql:
   - apiVersion: v2
     appVersion: "9.6"
