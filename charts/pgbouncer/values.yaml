@@ -70,23 +70,23 @@ affinity: {}
 #   dbname: dbname     # OPTIONAL
 #   user: user         # OPTIONAL
 #   password: password # OPTIONAL 
-databases:
-  snappyflow:
-    host: pg-postgresql
-    port: 5432 
-    dbname: snappyflow
-    user: test
-    password: test123
-  vizbuilder:
-    host: pg-postgresql
-    port: 5432
-    dbname: vizbuilder
-    user: test
-    password: test123
+databases: {}
+  # snappyflow:
+  #   host: pg-postgresql
+  #   port: 5432 
+  #   dbname: snappyflow
+  #   user: test
+  #   password: test123
+  # vizbuilder:
+  #   host: pg-postgresql
+  #   port: 5432
+  #   dbname: vizbuilder
+  #   user: test
+  #   password: test123
 
 # username: password
-users:
-  app: password
+users: {}
+  # app: password
 
 connConfig:
   # When server connection is released back to pool:
@@ -100,9 +100,9 @@ connConfig:
   reservePoolSize: 10
 
 extraConfig:
-  log_connections: 1
-  log_disconnections: 1
+  log_connections: 0
+  log_disconnections: 0
   log_pooler_errors:  1
-  log_stats: 1
+  log_stats: 0
   stats_period: 60
   verbose: 0
