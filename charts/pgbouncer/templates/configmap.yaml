@@ -1,0 +1,33 @@
+{{ define "pgbouncer.ini.1.0.0" }}
+[databases]
+{{- range $k, $v := .Values.databases }}
+{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.dbname }}dbname={{ $v.dbname }}{{end}} {{ if $v.user }}user={{ $v.user }}{{end}} {{ if $v.password }}password={{ $v.password }}{{end}}
+{{- end }}
+[pgbouncer]
+listen_addr = 0.0.0.0
+listen_port = 5432
+auth_type = plain
+auth_file = /etc/pgbouncer/userlist.txt
+{{- $users := (join "," (keys .Values.users | sortAlpha)) }}
+admin_users = {{ $users }}
+stats_users = {{ $users }},stats
+pool_mode = {{ .Values.connConfig.poolMode }}
+max_client_conn = {{ .Values.connConfig.maxClientConn }}
+default_pool_size = {{ .Values.connConfig.defaultPoolSize }}
+min_pool_size = {{ .Values.connConfig.minPoolSize }}
+reserve_pool_size = {{ .Values.connConfig.reservePoolSize }}
+# extra config
+{{- range $k, $v := .Values.extraConfig }}
+{{ $k }} = {{ $v }}
+{{- end }}
+{{- end }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "pgbouncer.fullname" . }}-config
+  labels:
+    {{- include "pgbouncer.labels" . | nindent 4 }}
+data:
+  pgbouncer.ini: |-
+{{ include "pgbouncer.ini.1.0.0" . | indent 4 }}
