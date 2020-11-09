@@ -1748,6 +1748,22 @@ entries:
     version: 8.0.0-SNAPSHOT
   - apiVersion: v1
     appVersion: 8.0.0-SNAPSHOT
+    created: "2020-11-09T14:07:22.700913444Z"
+    description: Official Elastic helm chart for Elastic APM Server
+    digest: a484f975e5bd0627c34b1134d6310c387c1d4f821ff6a323008424ed15736701
+    home: https://github.com/elastic/helm-charts
+    icon: https://helm.elastic.co/icons/apm.png
+    maintainers:
+    - email: helm-charts@elastic.co
+      name: Elastic
+    name: trace-server
+    sources:
+    - https://github.com/elastic/apm
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/trace-server-1.0.2/trace-server-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v1
+    appVersion: 8.0.0-SNAPSHOT
     created: "2020-11-06T12:49:19.923071056Z"
     description: Official Elastic helm chart for Elastic APM Server
     digest: 368585105ded6f335f0b65b73ceb3d81bb0bb95d14715e215f4cbade7416ce07
