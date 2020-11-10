@@ -239,6 +239,8 @@ usage_system:
   # tls true for HTTPS
   tls: False
 
+# set this to true/True if using pg bouncer
+disable_server_side_cursors: false
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster
