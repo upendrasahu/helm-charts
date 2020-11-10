@@ -88,6 +88,10 @@ databases: {}
 users: {}
   # app: password
 
+# pgbouncer config
+# refer: https://www.pgbouncer.org/config.html#log-settings
+# add more settings to extraConfig section
+
 connConfig:
   # When server connection is released back to pool:
   #   session      - after client disconnects (default)
