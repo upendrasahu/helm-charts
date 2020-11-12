@@ -100,6 +100,9 @@ sfapm_celery:
   periodic:
     replicaCount: 4
     command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 $CELERY_OPTS"
+  sftrace:
+    replicaCount: 2
+    command: "celery worker -n sftrace@%n -A snappyflow -l $LOG_LEVEL -Q sftrace -c2 $CELERY_OPTS"
   provision:
     replicaCount: 1
     command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 $CELERY_OPTS"
