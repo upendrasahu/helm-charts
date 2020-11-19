@@ -42,11 +42,14 @@ spec:
       initContainers:
         {{- if .Values.global.enable_sftrace }}
         - name: pythonagent
-          image: "{{ .Values.pythonagent.image.repository }}:{{ .Values.pythonagent.image.tag }}"
-          imagePullPolicy: {{ .Values.pythonagent.image.pullPolicy }}
-          command: ['cp', '-v', '/usr/agent/sftrace', '/agent']
+          image: busybox
+          command:
+            - sh
+            - -c
+            - -x
+            - wget -O /sfagent/sftrace-agent.tar.gz https://github.com/snappyflow/apm-agent/releases/download/latest/sftrace-agent.tar.gz && cd /sfagent && tar -xvzf sftrace-agent.tar.gz && rm sftrace-agent.tar.gz
           volumeMounts:
-          - mountPath: /agent
+          - mountPath: /sfagent
             name: python-agent
         {{- end }}
         - name: db-ready
@@ -107,7 +110,7 @@ spec:
           command:
             - sh
             - -c
-            - /agent/sftrace --sfcmd="gunicorn vizbuilder.wsgi:application"
+            - /sfagent/sftrace/sftrace --sfcmd="gunicorn vizbuilder.wsgi:application"
           {{- end }}
           env:
           {{- if .Values.global.enable_sftrace }}
@@ -167,7 +170,7 @@ spec:
             - name: vizbuilderlog
               mountPath: /var/log/snappyflow/vizbuilder
             {{- if .Values.global.enable_sftrace }}
-            - mountPath: /agent
+            - mountPath: /sfagent
               name: python-agent
             {{- end }}
         {{- if .Values.sidecarLogger.enabled }}
