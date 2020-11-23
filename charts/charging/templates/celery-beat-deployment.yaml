@@ -88,6 +88,18 @@ spec:
                 name: {{ include "charging.fullname" . }}-config
           resources:
             {{- toYaml .Values.celery.resources | nindent 12 }}
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+            exec:
+              command: ["bash", "-c", "-x", "-e", "test -a celerybeat.pid && test -d /proc/`cat celerybeat.pid`/"]
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            exec:
+              command: ["bash", "-c", "-x", "-e", "test -a celerybeat.pid && test -d /proc/`cat celerybeat.pid`/"]
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
