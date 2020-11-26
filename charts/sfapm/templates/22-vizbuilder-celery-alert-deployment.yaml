@@ -12,6 +12,7 @@ metadata:
     {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   replicas: {{ .Values.vizbuilder_celery.alert.replicaCount }}
+  minReadySeconds: 10
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
@@ -138,14 +139,7 @@ spec:
             {{- toYaml .Values.vizbuilder_celery.resources | nindent 12 }}
           livenessProbe:
             initialDelaySeconds: 60
-            periodSeconds: 60
-            timeoutSeconds: 10
-            exec:
-              command: ["bash", "-c", "-x", "-e", 
-              "celery -b redis://$REDIS_HOST:$REDIS_PORT/2 -d alert@$HOSTNAME inspect ping"]
-          readinessProbe:
-            initialDelaySeconds: 60
-            periodSeconds: 60
+            periodSeconds: 180
             timeoutSeconds: 10
             exec:
               command: ["bash", "-c", "-x", "-e", 
