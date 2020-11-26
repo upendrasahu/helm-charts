@@ -151,7 +151,7 @@ spec:
               protocol: TCP
           livenessProbe:
             initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 30
             timeoutSeconds: 5
             httpGet:
               path: /snappyflow/status

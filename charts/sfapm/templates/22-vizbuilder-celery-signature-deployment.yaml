@@ -144,7 +144,7 @@ spec:
               command: ["bash", "-c", "-x", "-e", "celery -b redis://$REDIS_HOST:$REDIS_PORT/2 -d signature@$HOSTNAME inspect ping"]
           readinessProbe:
             initialDelaySeconds: 30
-            periodSeconds: 30
+            periodSeconds: 60
             timeoutSeconds: 10
             exec:
               command: ["bash", "-c", "-x", "-e", "celery -b redis://$REDIS_HOST:$REDIS_PORT/2 -d signature@$HOSTNAME inspect ping"]

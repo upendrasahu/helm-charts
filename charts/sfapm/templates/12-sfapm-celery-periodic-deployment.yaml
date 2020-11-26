@@ -137,15 +137,15 @@ spec:
           resources:
             {{- toYaml .Values.sfapm_celery.resources | nindent 12 }}
           livenessProbe:
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 60
             timeoutSeconds: 10
             exec:
               command: ["bash", "-c", "-x", "-e", 
               "celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -d periodic@$HOSTNAME inspect ping"]
           readinessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 30
+            initialDelaySeconds: 60
+            periodSeconds: 60
             timeoutSeconds: 10
             exec:
               command: ["bash", "-c", "-x", "-e", 
@@ -162,7 +162,7 @@ spec:
         {{- if .Values.sidecarLogger.enabled }}
         - name: es-cleanup-logger
           image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
-          imagePullPolicy: {{ .Values.sidecarLogger.imagePullPolicy | quote }}
+          imagePullPolicy: {{ .Values.sidecarLogger.image.pullPolicy | quote }}
           args: [/bin/sh, -c, 'tail -n+1 -F /var/log/snappyflow/es_cleanup.log']
           resources:
             {{- toYaml .Values.sidecarLogger.resources | nindent 12 }}

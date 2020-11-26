@@ -124,8 +124,8 @@ celery:
     command: "celery worker -n charging@%n -A charging -l $LOG_LEVEL -c4 $CELERY_OPTS"
   resources: 
     limits:
-      cpu: 500m
-      memory: 250Mi
+      cpu: 1000m
+      memory: 500Mi
     requests:
       cpu: 250m
       memory: 128Mi
@@ -147,8 +147,6 @@ redis:
     size: 4Gi
   config:
     redis.conf: |-
-      tcp-keepalive 60
-      timeout 300
       appendonly yes
       maxmemory 100mb
       maxmemory-policy allkeys-lru

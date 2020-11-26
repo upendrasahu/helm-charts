@@ -137,15 +137,15 @@ spec:
           resources:
             {{- toYaml .Values.sfapm_celery.resources | nindent 12 }}
           livenessProbe:
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 60
             timeoutSeconds: 10
             exec:
               command: ["bash", "-c", "-x", "-e", 
               "celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -d default@$HOSTNAME inspect ping"]
           readinessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 30
+            initialDelaySeconds: 60
+            periodSeconds: 60
             timeoutSeconds: 10
             exec:
               command: ["bash", "-c", "-x", "-e", 
