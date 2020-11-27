@@ -35,6 +35,7 @@ email_port: 587
 email_backend: ""
 email_timeout: 10
 email_use_tls: true
+support_email: "stage-snappyflow-support@snappyflow.io"
 
 # aws  settings
 aws_access_key: ""
