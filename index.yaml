@@ -864,6 +864,25 @@ entries:
   sfapm:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2020-12-02T08:25:31.644081928Z"
+    dependencies:
+    - name: redis
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.2.8
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart to deploy snappyflow on Kubernetes
+    digest: be9e6cbfcb54d163974e063c78e35dc4fe52402628cc246282df005aa3310a92
+    home: http://www.snappyflow.io
+    name: sfapm
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/sfapm-3.0.72/sfapm-3.0.72.tgz
+    version: 3.0.72
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2020-11-26T11:52:40.532225133Z"
     dependencies:
     - name: redis
