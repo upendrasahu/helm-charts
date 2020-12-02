@@ -100,7 +100,6 @@ spec:
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
-
       containers:
         - name: sfapm
           securityContext:
@@ -168,6 +167,8 @@ spec:
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
+            - name: pluginmapping
+              mountPath: /app/snappyflow/plugin_info
             - name: snappyflowlog
               mountPath: /var/log/snappyflow/
             {{- if .Values.global.enable_sftrace }}
@@ -185,6 +186,28 @@ spec:
           - name: snappyflowlog
             mountPath: /var/log/snappyflow/
         {{- end }}
+        {{- if .Values.mappingUpdator.enabled }}
+        - name: plugin-mapping-updator
+          image: "{{ .Values.mappingUpdator.image.repository }}:{{ .Values.mappingUpdator.image.tag }}"
+          command: ["/bin/sh","-c"]
+          args: ["cp -r /app/plugin_info/* /mappings/ && /app/plugin-mapping-updator --git_branch release --update_remote_git=false --local_root_mapping_dir /mappings/"]
+          resources:
+            {{- toYaml .Values.mappingUpdator.resources | nindent 12 }}
+          env:
+          {{- if .Values.postgresql.enabled }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: multidbUserPassord
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "sfapm.fullname" . }}-apm
+          volumeMounts:
+          - name: pluginmapping
+            mountPath: /mappings/
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -201,6 +224,8 @@ spec:
         - name: data
           emptyDir: {}
         - name: snappyflowlog
+          emptyDir: {}
+        - name: pluginmapping
           emptyDir: {}
         {{- if .Values.global.enable_sftrace }}
         - name: python-agent

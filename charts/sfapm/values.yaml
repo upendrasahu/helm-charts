@@ -24,6 +24,20 @@ sidecarLogger:
       cpu: 250m
       memory: 256Mi
 
+mappingUpdator:
+  enabled: true
+  image:
+    repository: snappyflowml/plugin-mapping-updator
+    tag: latest
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 125m
+      memory: 125Mi
+
 sfapmui:
   replicaCount: 1
   autoscaling:
