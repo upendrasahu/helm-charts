@@ -508,6 +508,21 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2020-12-04T06:43:01.854603835Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://snappyflow.github.io/helm-charts/
+      version: 0.1.2
+    description: A Helm chart for Kubernetes
+    digest: de93b4a68b2c1c99bf0fc04575b15f4fe06f38c5a7e6244a09fc2964c72f7d30
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/keycloak-1.3.0/keycloak-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2020-09-28T08:30:36.656988567Z"
     dependencies:
     - condition: postgresql.enabled
