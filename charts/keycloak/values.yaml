@@ -119,3 +119,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+global:
+  sfappname: apm-server
+  sfprojectname: apmdemo-sf-io
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
+  key: ""
