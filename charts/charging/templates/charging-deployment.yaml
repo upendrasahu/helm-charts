@@ -112,7 +112,9 @@ spec:
             httpGet:
               path: /status
               port: http
+            {{- if and .Values.tls_cert .Values.tls_key}}
               scheme: HTTPS
+            {{- end }}
           readinessProbe:
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -120,7 +122,9 @@ spec:
             httpGet:
               path: /status
               port: http
+            {{- if and .Values.tls_cert .Values.tls_key}}
               scheme: HTTPS
+            {{- end }}
           {{- if and .Values.tls_cert .Values.tls_key}}
           volumeMounts:
             - name: certs
