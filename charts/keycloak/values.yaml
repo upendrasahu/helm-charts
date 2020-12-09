@@ -82,6 +82,8 @@ postgresql:
   multidbUser: snappyflow
   multidbUserPassord: maplelabs
 
+clusterDomain: cluster.local
+
 ingress:
   enabled: false
   annotations: {}
@@ -104,8 +106,8 @@ resources:
     cpu: 2000m
     memory: 1000Mi
   requests:
-    cpu: 250m
-    memory: 250Mi
+    cpu: 500m
+    memory: 500Mi
 
 autoscaling:
   enabled: true
@@ -119,3 +121,17 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+startupScripts:
+  # WildFly CLI script for configuring the node-identifier
+  keycloak.cli: |
+    {{- .Files.Get "scripts/keycloak.cli" }}
+
+
+
+global:
+  sfappname: apm-server
+  sfprojectname: apmdemo-sf-io
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
+  key: ""

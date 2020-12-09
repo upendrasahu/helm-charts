@@ -117,7 +117,7 @@ celery:
   env:
     C_FORCE_ROOT: true
     LOG_LEVEL: INFO
-    CELERY_OPTS: "-O fair --without-gossip --heartbeat-interval 10"
+    CELERY_OPTS: "-O fair"
   beat:
     command: "celery beat -A charging -l $LOG_LEVEL"
   default:

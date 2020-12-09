@@ -24,6 +24,20 @@ sidecarLogger:
       cpu: 250m
       memory: 256Mi
 
+mappingUpdator:
+  enabled: true
+  image:
+    repository: snappyflowml/plugin-mapping-updator
+    tag: 0.1.1
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 125m
+      memory: 125Mi
+
 sfapmui:
   replicaCount: 1
   autoscaling:
@@ -88,7 +102,7 @@ sfapm_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
+    CELERY_OPTS: "-O fair --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
@@ -142,7 +156,7 @@ vizbuilder_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
+    CELERY_OPTS: "-O fair --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:

@@ -51,6 +51,13 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Create the service DNS name.
+*/}}
+{{- define "keycloak.serviceDnsName" -}}
+{{ include "keycloak.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "keycloak.serviceAccountName" -}}
