@@ -151,14 +151,14 @@ spec:
           livenessProbe:
             initialDelaySeconds: 30
             periodSeconds: 30
-            timeoutSeconds: 5
+            timeoutSeconds: 10
             httpGet:
               path: /snappyflow/status
               port: http
           readinessProbe:
             initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 10
             httpGet:
               path: /snappyflow/status
               port: http

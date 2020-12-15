@@ -140,7 +140,7 @@ spec:
           livenessProbe:
             initialDelaySeconds: 60
             periodSeconds: 180
-            timeoutSeconds: 10
+            timeoutSeconds: 60
             exec:
               command: ["bash", "-c", "-x", "-e", 
               "celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -d notify@$HOSTNAME inspect ping"]
