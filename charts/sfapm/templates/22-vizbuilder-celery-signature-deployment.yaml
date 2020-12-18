@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "sfapm.fullname" . }}-vizbuilder
+  name: {{ include "sfapm.fullname" . }}-vizbuilder-celery-signature
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
-    app: sfapm
-    role: vizbuilder
+    app: vizbuilder
+    role: celery
+    queue: signature
     snappyflow/component: snappyflow-apm
     {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
     {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
-{{- if not .Values.vizbuilder.autoscaling.enabled }}
-  replicas: {{ .Values.vizbuilder.replicaCount }}
-{{- end }}
+  replicas: {{ .Values.vizbuilder_celery.signature.replicaCount }}
+  minReadySeconds: 10
   selector:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
-      app: sfapm
-      role: vizbuilder
+      app: vizbuilder
+      role: celery
+      queue: signature
   template:
     metadata:
     {{- with .Values.podAnnotations }}
@@ -26,8 +27,9 @@ spec:
     {{- end }}
       labels:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
-        app: sfapm
-        role: vizbuilder
+        app: vizbuilder
+        role: celery
+        queue: signature
         snappyflow/component: snappyflow-apm
         {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
         {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
@@ -44,20 +46,20 @@ spec:
         - name: pythonagent
           image: busybox
           command:
-            - sh
-            - -c
-            - -x
-            - wget -O /sfagent/sftrace-agent.tar.gz https://github.com/snappyflow/apm-agent/releases/download/latest/sftrace-agent.tar.gz && cd /sfagent && tar -xvzf sftrace-agent.tar.gz && rm sftrace-agent.tar.gz
+          - sh
+          - -c
+          - -x
+          - wget -O /sfagent/sftrace-agent.tar.gz https://github.com/snappyflow/apm-agent/releases/download/latest/sftrace-agent.tar.gz && cd /sfagent && tar -xvzf sftrace-agent.tar.gz && rm sftrace-agent.tar.gz
           volumeMounts:
           - mountPath: /sfagent
-            name: python-agent
+            name: sftrace-agent
         {{- end }}
         - name: db-ready
           image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
           command:
-            - sh 
-            - -c 
+            - sh
+            - -c
             - "until pg_isready -d postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}; do sleep 3; done"
           {{- if .Values.postgresql.enabled }}
           env:
@@ -74,34 +76,14 @@ spec:
           image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
           imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
           command:
-            - sh 
-            - -c 
+            - sh
+            - -c
             - "until redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} ping ; do sleep 3; done"
           envFrom:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder
-        - name: migration
-          image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
-          imagePullPolicy: {{ .Values.vizbuilder.image.pullPolicy }}
-          command: ["bash"]
-          # args: ["-c", "python manage.py makemigrations && python manage.py migrate"]
-          args: ["-c", "python manage.py migrate"]
-          env:
-          {{- if .Values.postgresql.enabled }}
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-postgresql
-                  key: multidbUserPassord
-          {{- end }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "sfapm.fullname" . }}-vizbuilder
-          volumeMounts:
-            - mountPath: /data/snappyflow
-              name: data 
       containers:
-        - name: vizbuilder
+        - name: celery
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.vizbuilder.image.repository }}:{{ .Values.vizbuilder.image.tag }}"
@@ -110,9 +92,16 @@ spec:
           command:
             - sh
             - -c
-            - /sfagent/sftrace/sftrace --sfcmd="gunicorn vizbuilder.wsgi:application"
+            - /sfagent/sftrace/sftrace --sfcmd="{{ .Values.vizbuilder_celery.signature.command }}"
+          {{- else }}
+          command: ["bash", "-c"]
+          args: [{{ .Values.vizbuilder_celery.signature.command }}]
           {{- end }}
           env:
+          {{- range $key, $value := .Values.vizbuilder_celery.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+          {{- end }}
           {{- if .Values.global.enable_sftrace }}
             - name: SFTRACE_PROFILE_KEY
               value: "{{ .Values.global.key }}"
@@ -122,6 +111,8 @@ spec:
               value: "{{ .Values.global.sfappname }}"
             - name: ENABLE_SFTRACE
               value: "{{ .Values.global.enable_sftrace }}"
+            - name: ELASTIC_APM_SERVICE_NAME
+              value: "vizbuilder-celery-signature"
           {{- end }}
           {{- if .Values.postgresql.enabled }}
             - name: DB_PASSWORD
@@ -143,47 +134,22 @@ spec:
           {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "sfapm.fullname" . }}-vizbuilder                                  
-          ports:
-            - name: http
-              containerPort: 8000
-              protocol: TCP
+                name: {{ include "sfapm.fullname" . }}-vizbuilder
+          resources:
+            {{- toYaml .Values.vizbuilder_celery.resources | nindent 12 }}
           livenessProbe:
             initialDelaySeconds: 30
-            periodSeconds: 60
-            timeoutSeconds: 30
-            httpGet:
-              path: /vizbuilder/status
-              port: http
-          readinessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 60
-            timeoutSeconds: 30
-            httpGet:
-              path: /vizbuilder/status
-              port: http
-          resources:
-            {{- toYaml .Values.vizbuilder.resources | nindent 12 }}
+            periodSeconds: 180
+            timeoutSeconds: 10
+            exec:
+              command: ["bash", "-c", "-x", "-e", "celery -b redis://$REDIS_HOST:$REDIS_PORT/2 -d signature@$HOSTNAME inspect ping"]
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
-            - name: vizbuilderlog
-              mountPath: /var/log/snappyflow/vizbuilder
             {{- if .Values.global.enable_sftrace }}
             - mountPath: /sfagent
-              name: python-agent
+              name: sftrace-agent
             {{- end }}
-        {{- if .Values.sidecarLogger.enabled }}
-        - name: application-logger
-          image:  "{{ .Values.sidecarLogger.image.repository }}:{{ .Values.sidecarLogger.image.tag }}"
-          imagePullPolicy: {{ .Values.sidecarLogger.image.pullPolicy | quote }}
-          args: [/bin/sh, -c, 'tail -n+1 -F -q /var/log/snappyflow/vizbuilder/alert.log  /var/log/snappyflow/vizbuilder/log_operations.log  /var/log/snappyflow/vizbuilder/query_builder.log  /var/log/snappyflow/vizbuilder/vizbuilder.log /var/log/snappyflow/vizbuilder/signature.log']
-          resources:
-            {{- toYaml .Values.sidecarLogger.resources | nindent 12 }}
-          volumeMounts:
-          - name: vizbuilderlog
-            mountPath: /var/log/snappyflow/vizbuilder
-        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -199,11 +165,7 @@ spec:
       volumes:
         - name: data
           emptyDir: {}
-        - name: vizbuilderlog
-          emptyDir: {}
         {{- if .Values.global.enable_sftrace }}
-        - name: python-agent
+        - name: sftrace-agent
           emptyDir: {}
         {{- end }}
-
-

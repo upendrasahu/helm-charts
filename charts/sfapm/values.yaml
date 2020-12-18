@@ -24,6 +24,20 @@ sidecarLogger:
       cpu: 250m
       memory: 256Mi
 
+mappingUpdator:
+  enabled: true
+  image:
+    repository: snappyflowml/plugin-mapping-updator
+    tag: 0.1.1
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 125m
+      memory: 125Mi
+
 sfapmui:
   replicaCount: 1
   autoscaling:
@@ -34,7 +48,7 @@ sfapmui:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-ui
-    tag: 3.0.41
+    tag: 3.1.1
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -65,7 +79,7 @@ sfapm:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-server
-    tag: 3.0.45
+    tag: 3.1.1
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -88,18 +102,21 @@ sfapm_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
+    CELERY_OPTS: "-O fair --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A snappyflow -l $LOG_LEVEL"
   default:
     replicaCount: 2
-    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c2 $CELERY_OPTS"
+    command: "celery worker -n default@%n -A snappyflow -l $LOG_LEVEL -Q default -c10 $CELERY_OPTS"
   notify:
     replicaCount: 2
-    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c2 $CELERY_OPTS"
+    command: "celery worker -n notify@%n -A snappyflow -l $LOG_LEVEL -Q notify -c10 $CELERY_OPTS"
   periodic:
-    replicaCount: 4
-    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c2 $CELERY_OPTS"
+    replicaCount: 2
+    command: "celery worker -n periodic@%n -A snappyflow -l $LOG_LEVEL -Q periodic -c10 $CELERY_OPTS"
+  sftrace:
+    replicaCount: 1
+    command: "celery worker -n sftrace@%n -A snappyflow -l $LOG_LEVEL -Q sftrace -c10 $CELERY_OPTS"
   provision:
     replicaCount: 1
     command: "celery worker -n provision@%n -A snappyflow -l $LOG_LEVEL -Q provision -c1 $CELERY_OPTS"
@@ -115,7 +132,7 @@ vizbuilder:
     # targetMemoryUtilizationPercentage: 80
   image:
     repository: snappyflowml/sfapm-vizbuilder
-    tag: 3.0.16
+    tag: 3.1.1
     pullPolicy: IfNotPresent
   resources: 
     limits:
@@ -139,7 +156,7 @@ vizbuilder_celery:
       memory: 250Mi
   env:
     C_FORCE_ROOT: true
-    CELERY_OPTS: "-O fair --heartbeat-interval 10 --max-tasks-per-child 20 -P gevent"
+    CELERY_OPTS: "-O fair --max-tasks-per-child 20 -P gevent"
   beat:
     command: "celery beat -A vizbuilder -l $LOG_LEVEL"
   alert:
@@ -148,6 +165,32 @@ vizbuilder_celery:
   logops:
     replicaCount: 1
     command: "celery worker -n logops@%n -A vizbuilder -l $LOG_LEVEL -Q logops -c10 $CELERY_OPTS"
+  signature:
+    replicaCount: 1
+    command: "celery worker -n signature@%n -A vizbuilder -l $LOG_LEVEL -Q signature -c10 $CELERY_OPTS"
+
+
+sftrace:
+  replicaCount: 1
+  image:
+    repository: snappyflowml/sftrace-server
+    tag: 1
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "100Mi"
+    limits:
+      cpu: "2000m"
+      memory: "2Gi"
+  service:
+    type: NodePort
+    port: 8200
+    jaegerport: 14268
+  output:
+    host: localhost
+    port: 32145
+    token: " "
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -157,6 +200,10 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+  # The names of the image pull secrets to be attached to this service account 
+  imagePullSecrets: []
+  # disable mounting sa token inside pods
+  automountServiceAccountToken: false
 
 podAnnotations:
   prometheus.io/scrape: "false"
@@ -178,12 +225,6 @@ tolerations: []
 
 affinity: {}
 
-pythonagent:
-  image:
-    repository: snappyflowml/sftrace-python
-    pullPolicy: IfNotPresent
-    tag: "1.0"
-
 redis:
   image:
     repository: redis
@@ -202,8 +243,6 @@ redis:
       memory: 128Mi
   config:
     redis.conf: |-
-      tcp-keepalive 60
-      timeout 300
       appendonly yes
       maxmemory 300mb
       maxmemory-policy allkeys-lru
@@ -224,7 +263,7 @@ keycloak:
   publickey: "" # keycloak public key
   supportemail: "" # support emailid where upgrade request sent
   websiteurl: "" # websiteURL
-  defaultprofile: "" # demo-profile
+  defaultprofile: "demo-profile" # default profile for demo apps
 
 # Usage management system
 usage_system:
@@ -236,6 +275,8 @@ usage_system:
   # tls true for HTTPS
   tls: False
 
+# set this to true/True if using pg bouncer
+disable_server_side_cursors: false
 
 postgresql:
   # enabled true deploys postgresql as statefull set on the same cluster

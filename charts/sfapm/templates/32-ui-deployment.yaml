@@ -58,6 +58,8 @@ spec:
           - name: sfagent
             mountPath: /opt/sfagent/config.yaml
             subPath: config.yaml
+          resources:
+            {{- toYaml .Values.sfapmui.resources | nindent 12 }}
       {{- end }}
         - name: ui
           securityContext:

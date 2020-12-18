@@ -1,13 +1,17 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "keycloak.fullname" . }}
   labels:
     {{- include "keycloak.labels" . | nindent 4 }}
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
 #{{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-{{- end }}
+  serviceName: {{ include "keycloak.fullname" . }}-headless
+#{{- end }}
+  serviceName: {{ include "keycloak.fullname" . }}-headless
   selector:
     matchLabels:
       {{- include "keycloak.selectorLabels" . | nindent 6 }}
@@ -19,6 +23,8 @@ spec:
     {{- end }}
       labels:
         {{- include "keycloak.selectorLabels" . | nindent 8 }}
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -56,6 +62,8 @@ spec:
           ports:
             - name: https
               containerPort: 8443
+            - name: http
+              containerPort: 8080
           livenessProbe:
             httpGet:
               path: /auth/realms/master
@@ -72,8 +80,14 @@ spec:
           - name: certs
             mountPath: /etc/x509/https
             readOnly: true
+          {{- range $key, $value := .Values.startupScripts }}
+          - name: startup
+            mountPath: "/opt/jboss/startup-scripts/{{ $key }}"
+            subPath: "{{ $key }}"
+            readOnly: true
+          {{- end }}
           {{- else }}
-            ports:
+          ports:
             - name: http
               containerPort: 8080
           livenessProbe:
@@ -85,6 +99,13 @@ spec:
             httpGet:
               path: /auth/realms/master
               port: http
+          volumeMounts:
+          {{- range $key, $value := .Values.startupScripts }}
+          - name: startup
+            mountPath: "/opt/jboss/startup-scripts/{{ $key }}"
+            subPath: "{{ $key }}"
+            readOnly: true
+          {{- end }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -97,14 +118,33 @@ spec:
             value: "true"
           - name: DB_VENDOR
             value: "postgres"
+          - name: JGROUPS_DISCOVERY_PROTOCOL
+            value: dns.DNS_PING
+          - name: JGROUPS_DISCOVERY_PROPERTIES
+            value: 'dns_query={{ include "keycloak.serviceDnsName" . }}'
+          - name: CACHE_OWNERS_COUNT
+            value: "2"
+          - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
+            value: "2"
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-config
-      {{- if .Values.keycloak.tls.enabled }}  
       volumes:
+      {{- if .Values.keycloak.tls.enabled }}
         - name: certs
           secret:
             secretName: {{ .Release.Name }}-tls
+      {{- end }}
+      {{- with .Values.startupScripts }}
+        - name: startup
+          configMap:
+            name: {{ include "keycloak.fullname" $ }}-startup
+            defaultMode: 0555
+            items:
+              {{- range $key, $value := . }}
+              - key: {{ $key }}
+                path: {{ $key }}
+              {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

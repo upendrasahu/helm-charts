@@ -94,6 +94,18 @@ spec:
                 name: {{ include "charging.fullname" . }}-config
           resources:
             {{- toYaml .Values.celery.resources | nindent 12 }}
+          livenessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 10
+            exec:
+              command: ["bash", "-c", "-x", "-e", "celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -d charging@$HOSTNAME inspect ping"]
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            exec:
+              command: ["bash", "-c", "-x", "-e", "celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -d charging@$HOSTNAME inspect ping"]
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
