@@ -138,12 +138,11 @@ spec:
           resources:
             {{- toYaml .Values.sfapm_celery.resources | nindent 12 }}
           livenessProbe:
-            initialDelaySeconds: 60
+            initialDelaySeconds: 300
             periodSeconds: 180
-            timeoutSeconds: 60
+            timeoutSeconds: 10
             exec:
-              command: ["bash", "-c", "-x", "-e", 
-              "celery -b redis://$REDIS_HOST:$REDIS_PORT/0 -d provision@$HOSTNAME inspect ping"]
+              command: ["python", "check.py"]
           volumeMounts:
             - mountPath: /data/snappyflow
               name: data
