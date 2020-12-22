@@ -53,9 +53,9 @@ sfapmui:
   resources: 
     limits:
       cpu: 500m
-      memory: 500Mi
+      memory: 250Mi
     requests:
-      cpu: 100m
+      cpu: 250m
       memory: 128Mi
   service:
     type: NodePort # this is the entrypoint change to Loadbalancer
