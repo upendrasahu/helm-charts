@@ -144,8 +144,9 @@ node_agent:
   nodeSelector: {}
 
 forwardmetric:
+    # forward metric
     name: sfagentmetric
-    enabled: true
+    enabled: false
     image:
       repository: snappyflowml/sfkube-forward-metric
       tag: latest
@@ -158,7 +159,7 @@ forwardmetric:
         cpu: 250m
         memory: 256Mi
       limits:
-        cpu: 400m
+        cpu: 500m
         memory: 500Mi
     autoscaling:
       enabled: true

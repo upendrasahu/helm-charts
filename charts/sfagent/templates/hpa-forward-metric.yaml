@@ -12,7 +12,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "sf-apm-forward.name" . }}
+    name: {{ template "sf-apm-agents.fullname" . }}-forwarder
   minReplicas: {{ .Values.forwardmetric.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.forwardmetric.autoscaling.maxReplicas }}
   metrics:
