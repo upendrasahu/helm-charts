@@ -1,0 +1,43 @@
+{{- if .Values.forwardmetric.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "sf-apm-agents.fullname" . }}-forwarder
+  labels:
+    app: {{ template "sf-apm-forward.name" . }}
+    release: {{ .Release.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "sf-apm-forward.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "sf-apm-forward.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: forwardmetric
+        image: "{{ .Values.forwardmetric.image.repository }}:{{ .Values.forwardmetric.image.tag }}"
+        imagePullPolicy: {{ .Values.forwardmetric.image.pullPolicy }}
+        command: ["/bin/sh","-c"]
+        args: ["/app/metric-forward -debug"]
+        resources:
+{{ toYaml .Values.forwardmetric.resources | indent 12 }}
+        volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "sf-apm-agents.fullname" . }}
+      serviceAccountName: {{ if .Values.rbac.create }}{{ template "sf-apm-agents.name" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
+{{- if .Values.cluster_agent.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.cluster_agent.nodeSelector | indent 8 }}
+{{- end }}
+{{- end }}

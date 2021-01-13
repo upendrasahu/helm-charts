@@ -143,6 +143,29 @@ node_agent:
 
   nodeSelector: {}
 
+forwardmetric:
+    name: sfagentmetric
+    enabled: true
+    image:
+      repository: snappyflowml/sfkube-forward-metric
+      tag: latest
+      pullPolicy: Always
+    service:
+      type: ClusterIP
+      port: 8000
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 400m
+        memory: 500Mi
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+      targetCPUUtilizationPercentage: 80
+
 # cluster level plugin Pod
 #   Container with cloud heartbeat + cluster document
 #   Container for kube events

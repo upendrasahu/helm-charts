@@ -2,6 +2,11 @@
 {{/*
 Expand the name of the chart.
 */}}
+{{- define "sf-apm-forward.name" -}}
+{{- $name := default .Chart.Name .Values.forwardmetric.name -}}
+{{- printf "%s-%s" $name .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{- define "sf-apm-agents.name" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- printf "%s-%s" $name .Release.Name | trunc 63 | trimSuffix "-" -}}

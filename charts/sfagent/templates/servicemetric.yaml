@@ -1,0 +1,21 @@
+{{- if .Values.forwardmetric.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "sf-apm-forward.name" . }}
+  labels:
+    app: {{ template "sf-apm-forward.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    role: forwardmetric
+spec:
+  type: {{ .Values.forwardmetric.service.type }}
+  ports:
+    - port: {{ .Values.forwardmetric.service.port }}
+      targetPort: {{ .Values.forwardmetric.service.port }}
+      name: http
+    
+  selector:
+    app: {{ template "sf-apm-forward.name" . }}
+    release: {{ .Release.Name }}
+{{- end }}
