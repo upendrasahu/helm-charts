@@ -28,7 +28,7 @@ spec:
         image: "{{ .Values.node_agent.prometheus_poller.image.repository }}:{{ .Values.node_agent.prometheus_poller.image.tag }}"
         imagePullPolicy: {{ .Values.node_agent.prometheus_poller.image.pullPolicy }}
         command: ["/bin/sh","-c"]
-        args: ["/app/kube-prom -nodename $NODE_NAME -debug"]
+        args: ["/app/kube-prom -nodename $NODE_NAME -system -debug"]
         resources:
 {{ toYaml .Values.node_agent.prometheus_poller.resources | indent 12 }}
         env:
@@ -110,7 +110,7 @@ spec:
         command: ["/bin/sh","-c"]
         args: ["/app/fluent-config-gen -nodename $NODE_NAME -debug"]
         resources:
-{{ toYaml .Values.resources | indent 10 }}
+{{ toYaml .Values.node_agent.fluentbit.resources | indent 10 }}
         volumeMounts:
           - name: varlog
             mountPath: /var/log

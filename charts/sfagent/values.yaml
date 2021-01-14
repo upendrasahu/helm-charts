@@ -91,6 +91,7 @@ node_agent:
     configmap:
       log_dir: /tmp
       interval: 30
+      system_interval: 60
     plugin_interval:
       elasticsearch:
         cluster: 300
