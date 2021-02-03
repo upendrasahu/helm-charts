@@ -110,7 +110,7 @@ spec:
                 fieldPath: status.podIP
         {{- end }}
         command: ["/bin/sh","-c"]
-        args: ["/app/fluent-config-gen -nodename $NODE_NAME -debug"]
+        args: ["mkdir -p /var/log/sfagent/ && /app/fluent-config-gen -nodename $NODE_NAME -debug"]
         resources:
 {{ toYaml .Values.node_agent.fluentbit.resources | indent 10 }}
         volumeMounts:
