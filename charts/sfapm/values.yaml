@@ -265,6 +265,11 @@ keycloak:
   websiteurl: "" # websiteURL
   defaultprofile: "demo-profile" # default profile for demo apps
 
+# Google client configuration
+google_client_id: ""
+google_client_secret: ""
+google_callback_url: "/portal/gauth"
+
 # Usage management system
 usage_system:
   # Usage system host IP/Domain
@@ -317,4 +322,5 @@ global:
   nginx_ua_parsing: true
   enable_sftrace: false
   key: ""
+
 
