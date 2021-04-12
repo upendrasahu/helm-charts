@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "sfapm.labels" . | nindent 4 }}
     app: sfapm
+    affinityapp: sf-apm-pod
     role: server
     snappyflow/component: snappyflow-apm
     {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
@@ -17,6 +18,7 @@ spec:
     matchLabels:
       {{- include "sfapm.selectorLabels" . | nindent 6 }}
       app: sfapm
+      affinityapp: sf-apm-pod
       role: server
   template:
     metadata:
@@ -27,6 +29,7 @@ spec:
       labels:
         {{- include "sfapm.selectorLabels" . | nindent 8 }}
         app: sfapm
+        affinityapp: sf-apm-pod
         role: server
         snappyflow/component: snappyflow-apm
         {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
@@ -223,7 +226,7 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.sfapmaffinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
