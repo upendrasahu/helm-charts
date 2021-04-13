@@ -12,7 +12,7 @@ data:
     key: "{{ .Values.global.key }}"
     metrics:
       plugins:
-      - name: nginx
+      - name: kube-sfagent-nginx
         enabled: true
         interval: 300
         config:
