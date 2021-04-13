@@ -232,10 +232,10 @@ sfapmaffinity:
       podAffinityTerm:
         labelSelector:
           matchExpressions:
-            - key: "affinityapp"
+            - key: "role"
               operator: In
               values:
-              - sf-apm-pod
+              - server
         topologyKey: "kubernetes.io/hostname"
 
 redis:
