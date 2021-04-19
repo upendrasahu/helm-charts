@@ -1,0 +1,83 @@
+# Default values for sf.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+
+  postgresql:
+    host: ""
+    postgresqlDatabase: new_archival
+    postgresqlUsername: archive
+    postgresqlPassword: archive123
+    servicePort: 5432
+
+  secrets:
+    gcs:
+      enable: false
+      secret: XX
+      key: XX.json
+    aws:
+      enable: true
+      AWS_DEFAULT_REGION: us-west-2
+      AWS_ACCESS_KEY_ID: XXXX
+      AWS_SECRET_ACCESS_KEY: XXXX
+
+  kafkaBrokers: ""
+
+  snappyflowDatapath:
+    enabled: true
+    releaseName: sf-datapath
+
+  hive:
+    userName: ubuntu
+    host: 127.0.0.1
+    port: 10000
+    auth: NONE
+
+  snappyflowProjectLabel: snappyflow/projectname
+  snappyflowAppLabel: snappyflow/appname
+
+  snappyflowProjectName: ""
+  snappyflowAppName: ""
+
+  imagePullSecrets:
+  - name: xxxx
+
+monitor:
+  image:
+    repository: snappyflowml/monitor
+    tag: 0.0.6
+    pullPolicy: IfNotPresent
+  containerResources:
+    limits:
+      cpu: 100m
+      memory: 200Mi
+    requests:
+      cpu: 50m
+      memory: 100Mi
+
+jobserver:
+  image:
+    repository: snappyflowml/job-server
+    tag: 0.0.4
+    pullPolicy: IfNotPresent
+  serverPort: 5002
+  service:
+    servicePort: 5002
+  sparkProperties:
+    logDirectory: sparkhs/spark-hs
+  containerResources:
+    limits:
+      cpu: 100m
+      memory: 200Mi
+    requests:
+      cpu: 50m
+      memory: 100Mi
+
+nameOverride: ""
+fullnameOverride: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

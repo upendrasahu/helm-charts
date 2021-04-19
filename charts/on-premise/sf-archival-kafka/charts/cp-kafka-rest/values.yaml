@@ -1,0 +1,119 @@
+# Default values for cp-kafka-rest.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Snappyflow labels
+global:
+  snappyflowProjectName: "Kafka"
+  snappyflowAppName: "ConsumersAndProducers"
+
+  imagePullSecrets:
+  - name: xxxx
+
+replicaCount: 1
+
+image: snappyflowml/kafka-rest-with-auth
+imageTag: 0.0.1
+imagePullPolicy: IfNotPresent
+
+servicePort: 8082
+httpsServicePort: 8081
+
+## Kafka rest JVM Heap Option
+heapOptions: "-Xms32M -Xmx600M -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:G1HeapRegionSize=1M -XX:MaxMetaspaceSize=256M -XX:MinMetaspaceFreeRatio=10 -XX:MaxMetaspaceFreeRatio=30 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=30"
+
+https:
+  # If enabled update listeneres to enable server to listen on https
+  # Also update the httpsSericePort to point to the https port
+  # For example if httpsServicePort is set to 8081 then to enable server
+  # to listen on this port one of the listeners should be "https://0.0.0.0/8081"
+  enabled: false
+  clientAuthRequired: false
+  keystoreFile: rest.https.keystore.jks
+  keystorePassword: test1234
+  keyPassword: test1234
+  truststoreFile: rest.https.truststore.jks
+  truststorePassword: test1234
+
+## Custom pod annotations
+podAnnotations: {}
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+nodeSelector: {}
+
+## Taints to tolerate on node assignment:
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: {}
+
+## Kafka REST configuration options
+## ref: https://docs.confluent.io/current/kafka-rest/docs/config.html
+configurationOverrides:
+  # "consumer.request.timeout.ms": 5000
+  "listeners": "https://0.0.0.0:8081,http://0.0.0.0:8082"
+  "kafka.rest.resource.extension.class": "com.maplelabs.kafka.rest.auth.CustomAuthSecurityRestExtension"
+  "max.request.size": "10485760"
+
+livenessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 300
+  periodSeconds: 60
+  successThreshold: 1
+  timeoutSeconds: 30
+  port: 8082
+  path: /
+  scheme: HTTP
+  authHeader: ""
+
+## Monitoring
+## Kafka REST JMX Settings
+## ref: https://docs.confluent.io/current/kafka-rest/docs/monitoring.html
+jmx:
+  port: 5555
+
+## Prometheus Exporter Configuration
+## ref: https://prometheus.io/docs/instrumenting/exporters/
+prometheus:
+  ## JMX Exporter Configuration
+  ## ref: https://github.com/prometheus/jmx_exporter
+  jmx:
+    enabled: true
+    image: solsson/kafka-prometheus-jmx-exporter@sha256
+    imageTag: 6f82e2b0464f50da8104acd7363fb9b995001ddff77d248379f8788e78946143
+    imagePullPolicy: IfNotPresent
+    port: 5556
+
+## External Access
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+external:
+  enabled: true
+
+  type: NodePort
+  nodePort: 32002
+  httpsNodePort: 32003
+
+  # type: LoadBalancer
+  # loadBalancerSourceRanges: ""
+
+  externalTrafficPolicy: Cluster
+
+## If the Kafka Chart is disabled a URL and port are required to connect
+## e.g. gnoble-panther-cp-schema-registry:8081
+cp-schema-registry:
+  url: ""
+
+containerResources:
+  restserver:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  jmx:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi

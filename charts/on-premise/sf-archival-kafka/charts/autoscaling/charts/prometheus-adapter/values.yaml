@@ -1,0 +1,130 @@
+# Default values for k8s-prometheus-adapter..
+affinity: {}
+
+image:
+  repository: directxman12/k8s-prometheus-adapter-amd64
+  tag: v0.7.0
+  pullPolicy: IfNotPresent
+
+logLevel: 20
+
+metricsRelistInterval: 1m
+
+listenPort: 6443
+
+nodeSelector: {}
+
+priorityClassName: ""
+
+# Url to access prometheus
+prometheus:
+  url: http://pmon-prometheus-server
+  port: 80 
+  path: ""
+
+replicas: 1
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+resources: {}
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+rules:
+  default: false
+  custom:
+  - seriesQuery: '{__name__="memory_usage_MiB"}'
+    resources:
+      overrides:
+        kubernetes_namespace:
+          resource: namespace
+        kubernetes_pod_name:
+          resource: pod
+    name:
+      matches: ""
+      as: "es_connect_memory_usage_MiB"
+    metricsQuery: 'ceil(avg_over_time(<<.Series>>{kubernetes_pod_name=~".*es-kafka-connect.*"}[2m]))'
+  - seriesQuery: '{__name__="memory_usage_MiB"}'
+    resources:
+      overrides:
+        kubernetes_namespace:
+          resource: namespace
+        kubernetes_pod_name:
+          resource: pod
+    name:
+      matches: ""
+      as: "arch_connect_memory_usage_MiB"
+    metricsQuery: 'ceil(avg_over_time(<<.Series>>{kubernetes_pod_name=~".*s3-kafka-connect.*"}[2m]))'
+  - seriesQuery: '{__name__="memory_usage_MiB"}'
+    resources:
+      overrides:
+        kubernetes_namespace:
+          resource: namespace
+        kubernetes_pod_name:
+          resource: pod
+    name:
+      matches: ""
+      as: "kafka_rest_memory_usage_MiB"
+    metricsQuery: 'ceil(avg_over_time(<<.Series>>{kubernetes_pod_name=~".*kafka-rest.*"}[2m]))'
+          
+service:
+  annotations: {}
+  port: 443
+  type: ClusterIP
+
+tls:
+  enable: false
+  ca: |-
+    # Public CA file that signed the APIService
+  key: |-
+    # Private key of the APIService
+  certificate: |-
+    # Public key of the APIService
+
+# Any extra volumes
+extraVolumes: []
+  # - name: example-name
+  #   hostPath:
+  #     path: /path/on/host
+  #     type: DirectoryOrCreate
+  # - name: ssl-certs
+  #   hostPath:
+  #     path: /etc/ssl/certs/ca-bundle.crt
+  #     type: File
+
+# Any extra volume mounts
+extraVolumeMounts: []
+  #   - name: example-name
+  #     mountPath: /path/in/container
+  #   - name: ssl-certs
+  #     mountPath: /etc/ssl/certs/ca-certificates.crt
+  #     readOnly: true
+
+tolerations: []
+
+# Labels added to the pod
+podLabels: {}
+
+# Annotations added to the pod
+podAnnotations: {}
+
+hostNetwork:
+  # Specifies if prometheus-adapter should be started in hostNetwork mode.
+  #
+  # You would require this enabled if you use alternate overlay networking for pods and
+  # API server unable to communicate with metrics-server. As an example, this is required
+  # if you use Weave network on EKS
+  enabled: false

@@ -1,0 +1,96 @@
+# Default values for Ingest Controller.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: snappyflowml/query-controller
+  tag: 0.0.5
+  pullPolicy: IfNotPresent
+
+executionControler:
+  repository: snappyflowml/query-execution-controller
+  tag: 0.0.3
+  pullPolicy: IfNotPresent
+
+cleanup:
+  repository: snappyflowml/query-cleanup
+  tag: 0.0.3
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+cleanIntervalInHour: 1
+monitorInterval: 5
+prestoUser: ubuntu
+prestoCatalog: hive
+prestoSchema: default
+serverPort: ":5004"
+
+service:
+  servicePort: 5004
+
+external:
+  enabled: false
+  type: NodePort
+  externalTrafficPolicy: Cluster
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+ingest-controller:
+  service:
+    servicePort: 5000
+
+dataset-controller:
+  service:
+    servicePort: 5001
+
+spark-manager:
+  jobserver:
+    service:
+      servicePort: 5002
+
+log-archival:
+  service:
+    servicePort: 5003
+
+kafka:
+  schemaRegistry:
+    host: 10.10.10.10
+    port: 8081
+
+containerResources:
+  querycontroller:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 150Mi
+  queryexecutioncontroller:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 150Mi
+  querycleanup:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 150Mi
