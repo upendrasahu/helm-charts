@@ -71,6 +71,8 @@ sfapmui:
 
 sfapm:
   replicaCount: 3
+  ingress:
+    enabled: false
   autoscaling:
     enabled: true
     minReplicas: 3
