@@ -1,0 +1,112 @@
+global:
+  sfappname: kafka
+  sfprojectname: scale-test
+  sfappname_key: snappyflow/appname
+  sfprojectname_key: snappyflow/projectname
+
+prometheus:
+
+  ## Prometheus Kafka Exporter: exposes complimentary metrics to JMX Exporter
+  kafka:
+    enabled: true
+
+    ## The image to use for the metrics collector
+    image: danielqsj/kafka-exporter
+
+    ## The image tag to use for the metrics collector
+    imageTag: v1.0.1
+
+    ## Interval at which Prometheus scrapes metrics, note: only used by Prometheus Operator
+    interval: 10s
+
+    ## Port kafka-exporter exposes for Prometheus to scrape metrics
+    port: 9308
+
+    ## Resource limits
+    resources:
+      limits:
+        cpu: 200m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+## ------------------------------------------------------
+## Zookeeper
+## ------------------------------------------------------
+cp-zookeeper:
+  enabled: true
+  servers: 3
+  image: confluentinc/cp-zookeeper
+  imageTag: 6.0.1
+  ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+  ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  imagePullSecrets:
+  #  - name: "regcred"
+  heapOptions: "-Xms1G -Xmx1G"
+  persistence:
+    enabled: true
+    ## The size of the PersistentVolume to allocate to each Zookeeper Pod in the StatefulSet. For
+    ## production servers this number should likely be much larger.
+    ##
+    ## Size for Data dir, where ZooKeeper will store the in-memory database snapshots.
+    dataDirSize: 10Gi
+    # dataDirStorageClass: ""
+    ## Size for data log dir, which is a dedicated log device to be used, and helps avoid competition between logging and snaphots.
+    dataLogDirSize: 10Gi
+    # dataLogDirStorageClass: ""
+    
+  # TODO: find correct security context for user in this zk-image  
+  securityContext: 
+    runAsUser: 0
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi 
+  ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+  ## and remove the curly braces after 'resources:'
+  #  limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #  requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## ------------------------------------------------------
+## Kafka
+## ------------------------------------------------------
+cp-kafka:
+  enabled: true
+  brokers: 3
+  image: confluentinc/cp-enterprise-kafka
+  imageTag: 6.0.1
+  ## Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace.
+  ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  imagePullSecrets:
+  #  - name: "regcred"
+  heapOptions: "-Xms3G -Xmx3G"
+  persistence:
+    enabled: true
+    # storageClass: ""
+    size: 40Gi
+    disksPerBroker: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1Gi
+    limits:
+      cpu: 1000m
+      memory: 3500Mi
+  ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
+  ## and remove the curly braces after 'resources:'
+  #  limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #  requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  securityContext: 
+    runAsUser: 0
+
