@@ -7,7 +7,7 @@ version: 0.6.0
 dependencies:
 - name: cp-kafka
   version: 0.1.0
-  repository: cp-kafka.enabled
+  repository: https://snappyflow.github.io/helm-charts/
 - name: cp-zookeeper
   version: 0.1.0
   repository: https://snappyflow.github.io/helm-charts/
