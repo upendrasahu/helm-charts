@@ -420,6 +420,26 @@ entries:
     urls:
     - https://github.com/snappyflow/helm-charts/releases/download/elasticsearch-0.3.7/elasticsearch-0.3.7.tgz
     version: 0.3.7
+  elasticsearchv1:
+  - apiVersion: v1
+    created: "2021-04-23T12:42:17.559757017Z"
+    description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
+      and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
+      Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
+      logs
+    digest: 72564640fabe2d2761e48381e224b275c5fe36f498e33e38d05041ceec3773a9
+    home: https://www.elastic.co/products/elasticsearch
+    icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
+    maintainers:
+    - email: Maplelabs
+      name: Maplelabs
+    name: elasticsearchv1
+    sources:
+    - https://www.elastic.co/products/elasticsearch
+    - https://github.com/pires/kubernetes-elasticsearch-cluster
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/elasticsearchv1-0.3.10/elasticsearchv1-0.3.10.tgz
+    version: 0.3.10
   expresscart:
   - apiVersion: v1
     appVersion: "1.0"
@@ -518,6 +538,16 @@ entries:
     urls:
     - https://github.com/snappyflow/helm-charts/releases/download/kafka-2.4.5/kafka-2.4.5.tgz
     version: 2.4.5
+  kafka-cluster:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-04-23T12:42:17.701470342Z"
+    description: A Helm chart for kafka and zookeeper
+    digest: 1ac59a8b4679bbba6ea923be300b5c2f6a8e229635897d76067e5d78674d7f58
+    name: kafka-cluster
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/kafka-cluster-0.6.1/kafka-cluster-0.6.1.tgz
+    version: 0.6.1
   kafka-sfagent:
   - apiVersion: v1
     appVersion: 5.3.1
