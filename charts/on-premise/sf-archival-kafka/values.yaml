@@ -162,7 +162,7 @@ autoscaling:
 
   apmConnectAutoscaling:
     enabled: true
-    minReplicas: 1
+    minReplicas: 3
     maxReplicas: 5
     cpu:
       targetAverageValue: 850m # 85% of CPU allocated to connector
