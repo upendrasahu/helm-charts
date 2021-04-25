@@ -348,8 +348,8 @@ controller:
 
     type: LoadBalancer
     nodePorts:
-      http: {}
-      https: {}
+      http: 30009
+      https: 30010
       tcp: {}
       udp: {}
 
