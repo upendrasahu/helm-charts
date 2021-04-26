@@ -24,7 +24,7 @@ spec:
         backend:
           serviceName: {{ include "sfapm.fullname" . }}-apm
           servicePort: 8000
-      - path: /login
+      - path: /login/
         backend:
           serviceName: {{ include "sfapm.fullname" . }}-apm
           servicePort: 8000
