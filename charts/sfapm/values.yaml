@@ -316,11 +316,11 @@ postgresql:
   # create a user and grant access to database snappyflow and vizbuilder
   # provide external section if enabled is false
 
-  # external:
-  #   dbHost: "test-db-postgresql"
-  #   dbPort: ""
-  #   dbUser: "test"
-  #   dbPassword: "test123"
+  external:
+    dbHost: ""
+    dbPort: ""
+    dbUser: ""
+    dbPassword: ""
 
   image:
     repository: postgres
