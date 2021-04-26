@@ -39,6 +39,17 @@ data:
     {{- else }}
     KEYCLOAK_MODE: ""
     {{- end }}
+    ES_USER: "{{ .Values.ingress.es_user }}"
+    ES_PROTOCOL: "{{ .Values.ingress.es_http }}"
+    ES_HOST: "{{ .Values.ingress.es_host }}"
+    ES_PASS: "{{ .Values.ingress.es_pass }}"
+    ES_PORT: "{{ .Values.ingress.es_port }}"
+
+    ARCHIVER_API_URL: "{{ .Values.ingress.kafka_api }}"
+    ARCHIVER_URL: "{{ .Values.ingress.arhiver_url }}"
+    KAFKA_USERNAME: "{{ .Values.ingress.kafka_user }}"
+    KAFKA_PASSWORD: "{{ .Values.ingress.kafka_pwd }}"
+
     GOOGLE_CLIENT_ID: "{{ .Values.google_client_id }}"
     GOOGLE_CLIENT_SECRET: "{{ .Values.google_client_secret }}"
     GOOGLE_CALLBACK_URL_RELATIVE: "{{ .Values.google_callback_url }}"

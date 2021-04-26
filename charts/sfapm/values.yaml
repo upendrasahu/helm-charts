@@ -73,6 +73,15 @@ sfapm:
   replicaCount: 3
   ingress:
     enabled: false
+    es_user: ""
+    es_http: "http"
+    es_host: ""
+    es_pass: ""
+    es_port: ""
+    kafka_api: ""
+    arhiver_url: ""
+    kafka_user: ""
+    kafka_pwd: ""
   autoscaling:
     enabled: true
     minReplicas: 3
