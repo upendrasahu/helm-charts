@@ -9,6 +9,7 @@ enableDebug: false
 nameOverride: ""
 fullnameOverride: ""
 imagePullSecrets: []
+
 sidecarLogger:
   enabled: true
   image:
@@ -70,6 +71,17 @@ sfapmui:
 
 sfapm:
   replicaCount: 3
+  ingress:
+    enabled: false
+    es_user: ""
+    es_http: "http"
+    es_host: ""
+    es_pass: ""
+    es_port: ""
+    kafka_api: ""
+    arhiver_url: ""
+    kafka_user: ""
+    kafka_pwd: ""
   autoscaling:
     enabled: true
     minReplicas: 3
@@ -224,6 +236,19 @@ tolerations: []
 
 affinity: {}
 
+sfapmaffinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+            - key: "role"
+              operator: In
+              values:
+              - server
+        topologyKey: "kubernetes.io/hostname"
+
 redis:
   image:
     repository: redis
@@ -264,7 +289,6 @@ keycloak:
   websiteurl: "" # websiteURL
   defaultprofile: "demo-profile" # default profile for demo apps
 
-
 # Google client configuration
 google_client_id: ""
 google_client_secret: ""
@@ -292,11 +316,11 @@ postgresql:
   # create a user and grant access to database snappyflow and vizbuilder
   # provide external section if enabled is false
 
-  # external:
-  #   dbHost: "test-db-postgresql"
-  #   dbPort: ""
-  #   dbUser: "test"
-  #   dbPassword: "test123"
+  external:
+    dbHost: ""
+    dbPort: ""
+    dbUser: ""
+    dbPassword: ""
 
   image:
     repository: postgres
@@ -310,8 +334,8 @@ postgresql:
   rootPassword: postgres
   rootUser: postgres
   multidb: snappyflow;vizbuilder
-  multidbUser: ""
-  multidbUserPassord: ""
+  multidbUser: snappyflow
+  multidbUserPassord: maplelabs
 
 global:
   sfappname: apm-server-saas
@@ -320,7 +344,7 @@ global:
   sfprojectname_key: snappyflow/projectname
   nginx_geo_info_collection: true
   nginx_ua_parsing: true
-  enable_sftrace: true
+  enable_sftrace: false
   key: ""
 
 
