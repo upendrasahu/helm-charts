@@ -12,13 +12,13 @@ data:
     key: "{{ .Values.global.key }}"
     metrics:
       plugins:
-      - name: nginx
+      - name: kube-sfagent-nginx
         enabled: true
         interval: 300
         config:
-          location: nginx_status
-          port: 80
-          secure: false
+          location: status
+          port: 443
+          secure: true
     logging:
       plugins:
       - name: nginx-access
