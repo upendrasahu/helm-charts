@@ -3,6 +3,7 @@ global:
   snappyflowAppLabel: "appname"
   snappyflowProjectName: "nginxingress"
   snappyflowAppName: "ingress"
+  subnets: ""
 
 ## nginx configuration
 ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/controllers/nginx/configuration.md
