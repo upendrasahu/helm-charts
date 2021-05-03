@@ -1,0 +1,17 @@
+apiVersion: v2
+name: sfapm-python3
+description: A Helm chart to deploy snappyflow on Kubernetes
+home: https://www.snappyflow.io
+type: application
+version: 4.0.2
+appVersion: 4.0
+
+dependencies:
+- name: redis
+  version: 0.2.8
+  repository: https://snappyflow.github.io/helm-charts/
+- name: postgresql
+  version: 0.1.2
+  repository: https://snappyflow.github.io/helm-charts/
+  condition: postgresql.enabled
+
