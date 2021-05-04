@@ -6,7 +6,7 @@ metadata:
   annotations: 
     {{ toYaml .Values.controller.service.annotations | nindent 4 }}
     {{- if .Values.global.subnets }}
-    service.beta.kubernetes.io/aws-load-balancer-subnets: {{ .Values.global.subnets }}
+    service.beta.kubernetes.io/aws-load-balancer-subnets: {{ .Values.global.subnets | replace " " "," }}
     {{- end }}
                
 {{- end }}
