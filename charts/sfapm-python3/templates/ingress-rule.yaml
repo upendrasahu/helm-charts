@@ -48,13 +48,4 @@ spec:
         backend:
           serviceName: {{ include "sfapm.fullname" . }}-vizbuilder
           servicePort: 8000
-      - path: /sftrace
-        backend:
-          serviceName: {{ include "sfapm.fullname" . }}-sftrace
-          servicePort: 8200
-
-      - path: /jaegertrace
-        backend:
-          serviceName: {{ include "sfapm.fullname" . }}-jaegersftrace
-          servicePort: 14268
 {{- end }}
