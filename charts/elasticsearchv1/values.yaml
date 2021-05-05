@@ -1,7 +1,7 @@
 image:
   es:
-    repository: docker.elastic.co/elasticsearch/elasticsearch-oss
-    tag: 6.8.6
+    repository: quay.io/pires/docker-elasticsearch-kubernetes
+    tag: 6.2.3
     pullPolicy: Always
   init:
     repository: busybox
