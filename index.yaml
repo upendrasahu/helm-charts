@@ -422,6 +422,25 @@ entries:
     version: 0.3.7
   elasticsearchv1:
   - apiVersion: v1
+    created: "2021-05-05T08:13:24.67443295Z"
+    description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
+      and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
+      Pod metrics, Storage metrics, Elasticsearch cluster metrics, JVM metrics, and
+      logs
+    digest: 8f4de3177a898c9b99226beab49a315996a65c3314e1c6d43f750a1e30469f24
+    home: https://www.elastic.co/products/elasticsearch
+    icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
+    maintainers:
+    - email: Maplelabs
+      name: Maplelabs
+    name: elasticsearchv1
+    sources:
+    - https://www.elastic.co/products/elasticsearch
+    - https://github.com/pires/kubernetes-elasticsearch-cluster
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/elasticsearchv1-0.3.11/elasticsearchv1-0.3.11.tgz
+    version: 0.3.11
+  - apiVersion: v1
     created: "2021-04-23T12:42:17.559757017Z"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
