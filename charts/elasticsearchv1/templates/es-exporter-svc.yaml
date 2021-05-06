@@ -1,13 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ template "fullname" . }}-exporter
+  name: {{ template "elasticsearch.uname" . }}-exporter
   labels:
-    app: {{ template "fullname" . }}
+    app: {{ template "elasticsearch.uname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    component: {{ template "fullname" . }}
+    component: {{ template "elasticsearch.uname" . }}
     role: exporter
     snappyflow/plugin: elasticsearch
     {{- range $key, $value := .Values.labels }}
@@ -24,5 +24,5 @@ spec:
       port: {{ .Values.exporter.service.httpPort }}
       protocol: TCP
   selector:
-    component: {{ template "fullname" . }}
+    component: {{ template "elasticsearch.uname" . }}
     role: exporter
