@@ -42,7 +42,7 @@ spec:
           image: "{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag }}"
           imagePullPolicy: "IfNotPresent"
           command: ["elasticsearch_exporter",
-                    "--es.uri=http://{{ template "elasticsearch.uname" . }}:9200",
+                    "--es.uri=http://{{ template "elasticsearch.uname" . }}-headless:9200",
                     "--es.all",
                     "--es.shards",
                     "--es.cluster_settings",
