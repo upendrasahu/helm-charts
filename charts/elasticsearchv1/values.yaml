@@ -107,7 +107,7 @@ labels:
   snappyflow/appname: escluster
   snappyflow/projectname: on-premise
 
-esJavaOpts: "-Xmx3g -Xms3g"
+esJavaOpts: "-Xmx1g -Xms1g"
 
 resources:
   requests:
