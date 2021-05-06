@@ -10,8 +10,9 @@ metadata:
     component: {{ template "fullname" . }}
     role: exporter
     snappyflow/plugin: elasticsearch
-    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
-    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
 {{- if .Values.exporter.service.annotations }}
   annotations:
 {{ toYaml .Values.exporter.service.annotations | indent 4 }}
