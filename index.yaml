@@ -422,6 +422,22 @@ entries:
     version: 0.3.7
   elasticsearchv1:
   - apiVersion: v1
+    appVersion: 6.8.15
+    created: "2021-05-06T12:03:40.277779211Z"
+    description: Official Elastic helm chart for Elasticsearch
+    digest: bab07bec77536a3fe614de32f82c804e30b498be6214a8ab240c434d951d7ec5
+    home: https://github.com/elastic/helm-charts
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    maintainers:
+    - email: helm-charts@elastic.co
+      name: Elastic
+    name: elasticsearchv1
+    sources:
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/elasticsearchv1-6.8.15/elasticsearchv1-6.8.15.tgz
+    version: 6.8.15
+  - apiVersion: v1
     created: "2021-05-05T08:13:24.67443295Z"
     description: This Elasticsearch cluster supports 3 master nodes, 2 data nodes,
       and 2 client nodes. Data nodes use Persistent volumes. Includes monitoring of
