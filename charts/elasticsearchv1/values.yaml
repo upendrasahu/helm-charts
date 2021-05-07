@@ -14,7 +14,7 @@ roles:
   data: "true"
 
 replicas: 3
-minimumMasterNodes: 2
+minimumMasterNodes: 3
 
 esMajorVersion: ""
 
@@ -107,15 +107,15 @@ labels:
   snappyflow/appname: escluster
   snappyflow/projectname: on-premise
 
-esJavaOpts: "-Xmx1g -Xms1g"
+esJavaOpts: "-Xmx2g -Xms2g"
 
 resources:
   requests:
-    cpu: "1000m"
-    memory: "2Gi"
+    cpu: "500m"
+    memory: "3Gi"
   limits:
     cpu: "1000m"
-    memory: "2Gi"
+    memory: "3Gi"
 
 initResources: {}
   # limits:
