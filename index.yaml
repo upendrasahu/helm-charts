@@ -423,6 +423,22 @@ entries:
   elasticsearchv1:
   - apiVersion: v1
     appVersion: 6.8.15
+    created: "2021-05-11T14:08:30.971931413Z"
+    description: Official Elastic helm chart for Elasticsearch
+    digest: ba252dc29b21f0ba12edd038ca741580c355d616cfe9132c0510329bff2dc357
+    home: https://github.com/elastic/helm-charts
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    maintainers:
+    - email: helm-charts@elastic.co
+      name: Elastic
+    name: elasticsearchv1
+    sources:
+    - https://github.com/elastic/elasticsearch
+    urls:
+    - https://github.com/snappyflow/helm-charts/releases/download/elasticsearchv1-6.8.25/elasticsearchv1-6.8.25.tgz
+    version: 6.8.25
+  - apiVersion: v1
+    appVersion: 6.8.15
     created: "2021-05-11T11:34:11.450589507Z"
     description: Official Elastic helm chart for Elasticsearch
     digest: 92d655e747b03b030830ca916f8170e4b30f485a654f6df1ccdfe6a9bcbbee6a
