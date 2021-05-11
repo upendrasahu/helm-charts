@@ -23,7 +23,7 @@ esMajorVersion: ""
 esConfig: 
   elasticsearch.yml: |
     script.painless.regex.enabled: true
-    action.auto_create_index: %7Bnow%2Fd%7BYYYY-MM-dd%7D%7D-1%3E
+    action.auto_create_index: false
   log4j2.properties: |
     status = error
     #dest = err
