@@ -80,7 +80,6 @@ configurationOverrides:
   "log.retention.hours": 24
   "auto.create.topics.enable": false
   "log.retention.check.interval.ms": 10000
-  "message.max.bytes": 20971520
   "zookeeper.connection.timeout.ms": 18000
   "group.initial.rebalance.delay.ms": 3000
 
