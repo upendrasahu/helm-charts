@@ -23,7 +23,7 @@ esMajorVersion: ""
 esConfig: 
   elasticsearch.yml: |
     script.painless.regex.enabled: true
-    action.auto_create_index: false
+    action.auto_create_index: ".security,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*"
   log4j2.properties: |
     status = error
     #dest = err
