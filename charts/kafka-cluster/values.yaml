@@ -1,6 +1,6 @@
 global:
-  sfappname: kafka
-  sfprojectname: scale-test
+  sfappname: sf-data-path
+  sfprojectname: on-premise
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
 

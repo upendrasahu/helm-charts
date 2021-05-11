@@ -338,8 +338,8 @@ postgresql:
   multidbUserPassord: maplelabs
 
 global:
-  sfappname: apm-server-saas
-  sfprojectname: apm-server
+  sfappname: sf-portal-app
+  sfprojectname: on-premise
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
   nginx_geo_info_collection: true
