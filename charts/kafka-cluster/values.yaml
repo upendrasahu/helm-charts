@@ -90,7 +90,7 @@ cp-kafka:
   persistence:
     enabled: true
     # storageClass: ""
-    size: 40Gi
+    size: 250Gi
     disksPerBroker: 1
   resources:
     requests:

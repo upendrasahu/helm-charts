@@ -5,7 +5,7 @@ maintainers:
 - email: helm-charts@elastic.co
   name: Elastic
 name: elasticsearchv1
-version: 6.8.23
+version: 6.8.24
 appVersion: 6.8.15
 sources:
   - https://github.com/elastic/elasticsearch
