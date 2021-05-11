@@ -7,8 +7,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    snappyflow/appname: kafka
-    snappyflow/projectname: scale-test
+    snappyflow/appname: sf-data-path
+    snappyflow/projectname: on-premise
     role: exporter
 spec:
   replicas: 1

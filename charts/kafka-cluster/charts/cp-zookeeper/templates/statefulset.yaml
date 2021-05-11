@@ -26,9 +26,9 @@ spec:
   template:
     metadata:
       labels:
-        snappyflow/projectname: scale-test
-        snappyflow/appname: kafka
-        snappyflow/component: kafka
+        snappyflow/projectname: on-premise
+        snappyflow/appname: sf-data-path
+        snappyflow/component: sf-data-path
         app: {{ template "cp-zookeeper.name" . }}
         release: {{ .Release.Name }}
       {{- if or .Values.podAnnotations .Values.prometheus.jmx.enabled }}

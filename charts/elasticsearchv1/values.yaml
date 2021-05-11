@@ -105,7 +105,7 @@ podAnnotations: {}
 
 # additionals labels
 labels: 
-  snappyflow/appname: escluster
+  snappyflow/appname: ES-cluster
   snappyflow/projectname: on-premise
 
 esJavaOpts: "-Xmx2g -Xms2g"
