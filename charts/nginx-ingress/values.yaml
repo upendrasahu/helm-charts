@@ -1,8 +1,8 @@
 global:
-  snappyflowProjectLabel: "projectname"
-  snappyflowAppLabel: "appname"
-  snappyflowProjectName: "nginxingress"
-  snappyflowAppName: "ingress"
+  snappyflowProjectLabel: "snappyflow/projectname"
+  snappyflowAppLabel: "snappyflow/appname"
+  snappyflowProjectName: "on-premise"
+  snappyflowAppName: "sf-data-path"
   subnets: ""
 
 ## nginx configuration
