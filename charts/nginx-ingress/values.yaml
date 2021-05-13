@@ -4,7 +4,7 @@ global:
   snappyflowProjectName: "on-premise"
   snappyflowAppName: "sf-data-path"
   subnets: ""
-  internalllb: "true"
+  internalllb: true
   lbannotation: {}
 
 ## nginx configuration
