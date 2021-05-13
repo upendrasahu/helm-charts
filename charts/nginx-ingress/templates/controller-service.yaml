@@ -4,9 +4,11 @@ kind: Service
 metadata:
 {{- if .Values.controller.service.annotations }}
   annotations: 
+    {{- if and (.Values.global.subnets) (eq .Values.global.internalllb "true") }}
     {{ toYaml .Values.controller.service.annotations | nindent 4 }}
-    {{- if .Values.global.subnets }}
     service.beta.kubernetes.io/aws-load-balancer-subnets: {{ .Values.global.subnets | replace " " "," }}
+    {{ else }}
+     {{ .Values.global.lbannotation }}
     {{- end }}
                
 {{- end }}
