@@ -181,7 +181,7 @@ vizbuilder_celery:
     command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q signature -c10 $CELERY_OPTS"
   provisiontemplate:
     replicaCount: 1
-    command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q provisiontemplate -c10 $CELERY_OPTS"
+    command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q provisiontemplate -c1 $CELERY_OPTS"
 
 
 sftrace:
