@@ -1,6 +1,0 @@
-dependencies:
-  - name: prometheus-adapter
-    condition: customMetrics.enabled
-  - name: prometheus
-    condition: autoscaling.enabled
-
