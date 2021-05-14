@@ -50,7 +50,7 @@ sfapmui:
     repository: snappyflowml/sfapm-ui
     tag: stable
     pullPolicy: Always
-  resources: 
+  resources:
     limits:
       cpu: 500m
       memory: 250Mi
@@ -61,7 +61,7 @@ sfapmui:
     type: NodePort # this is the entrypoint change to Loadbalancer
     nodePort: 30080
   env: {}
-  tls: 
+  tls:
     enabled: true
     # change these please provide base64 encode certificate and its keys
     # use command base64 -w 0 <filename>
@@ -92,7 +92,7 @@ sfapm:
     repository: snappyflowml/sfapm-server
     tag: python3
     pullPolicy: Always
-  resources: 
+  resources:
     limits:
       cpu: 2000m
       memory: 1000Mi
@@ -104,7 +104,7 @@ sfapm:
     port: 8000
 
 sfapm_celery:
-  resources: 
+  resources:
     limits:
       cpu: 500m
       memory: 500Mi
@@ -145,7 +145,7 @@ vizbuilder:
     repository: snappyflowml/sfapm-vizbuilder
     tag: python3
     pullPolicy: Always
-  resources: 
+  resources:
     limits:
       cpu: 2000m
       memory: 1000Mi
@@ -158,7 +158,7 @@ vizbuilder:
 
 
 vizbuilder_celery:
-  resources: 
+  resources:
     limits:
       cpu: 500m
       memory: 500Mi
@@ -179,6 +179,9 @@ vizbuilder_celery:
   signature:
     replicaCount: 1
     command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q signature -c10 $CELERY_OPTS"
+  provisiontemplate:
+    replicaCount: 1
+    command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q provisiontemplate -c1 $CELERY_OPTS"
 
 
 sftrace:
@@ -211,7 +214,7 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
-  # The names of the image pull secrets to be attached to this service account 
+  # The names of the image pull secrets to be attached to this service account
   imagePullSecrets: []
   # disable mounting sa token inside pods
   automountServiceAccountToken: false
