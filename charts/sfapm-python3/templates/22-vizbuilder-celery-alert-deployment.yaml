@@ -136,7 +136,7 @@ spec:
             - configMapRef:
                 name: {{ include "sfapm.fullname" . }}-vizbuilder
           resources:
-            {{- toYaml .Values.vizbuilder_celery.resources | nindent 12 }}
+            {{- toYaml .Values.vizbuilder_celery.alert.resources | nindent 12 }}
           livenessProbe:
             initialDelaySeconds: 300
             periodSeconds: 180
