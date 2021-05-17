@@ -25,11 +25,11 @@ prometheus:
     ## Resource limits
     resources:
       limits:
-        cpu: 200m
-        memory: 1Gi
-      requests:
         cpu: 100m
-        memory: 100Mi
+        memory: 200Mi
+      requests:
+        cpu: 10m
+        memory: 50Mi
 ## ------------------------------------------------------
 ## Zookeeper
 ## ------------------------------------------------------
@@ -42,7 +42,7 @@ cp-zookeeper:
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
   #  - name: "regcred"
-  heapOptions: "-Xms1G -Xmx1G"
+  heapOptions: "-Xms384M -Xmx384M"
   persistence:
     enabled: true
     ## The size of the PersistentVolume to allocate to each Zookeeper Pod in the StatefulSet. For
@@ -60,11 +60,11 @@ cp-zookeeper:
     runAsUser: 0
   resources:
     requests:
-      cpu: 200m
-      memory: 512Mi
+      cpu: 10m
+      memory: 256Mi
     limits:
-      cpu: 500m
-      memory: 1Gi 
+      cpu: 100m
+      memory: 512Mi
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
   ## and remove the curly braces after 'resources:'
   #  limits:
@@ -86,7 +86,7 @@ cp-kafka:
   ## https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
   imagePullSecrets:
   #  - name: "regcred"
-  heapOptions: "-Xms3G -Xmx3G"
+  heapOptions: "-Xms1500M -Xmx1500M"
   persistence:
     enabled: true
     # storageClass: ""
@@ -94,11 +94,11 @@ cp-kafka:
     disksPerBroker: 1
   resources:
     requests:
-      cpu: 200m
-      memory: 1Gi
+      cpu: 100m
+      memory: 1500Mi
     limits:
-      cpu: 1000m
-      memory: 3500Mi
+      cpu: 200m
+      memory: 2500Mi
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
   ## and remove the curly braces after 'resources:'
   #  limits:

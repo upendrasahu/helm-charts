@@ -170,7 +170,13 @@ prometheus:
 
     ## Resources configuration for the JMX exporter container.
     ## See the `resources` documentation above for details.
-    resources: {}
+    resources:
+      limits:
+        cpu: 100m
+        memory: 400Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
 
 nodeport:
   enabled: false
