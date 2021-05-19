@@ -84,6 +84,7 @@ sfapm:
     arhiver_url: ""
     kafka_user: ""
     kafka_pwd: ""
+  serverid: ""
   autoscaling:
     enabled: true
     minReplicas: 2

@@ -24,6 +24,7 @@ data:
     REDIS_PORT: "6379"
     VIZBUILDER_HOST: {{ include "sfapm.fullname" . }}-vizbuilder
     VIZBUILDER_PORT: "{{ .Values.vizbuilder.service.port }}"
+    SERVERID: "{{ .Values.sfapm.serverid }}"
     {{- if .Values.keycloak.enabled }}
     KEYCLOAK_MODE: "True"
     KEYCLOAK_SERVER: "{{ .Values.keycloak.serverIP }}"
