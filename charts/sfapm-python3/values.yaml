@@ -52,7 +52,7 @@ sfapmui:
   image:
     repository: snappyflowml/sfapm-ui
     tag: stable
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: 200m
@@ -96,7 +96,7 @@ sfapm:
   image:
     repository: snappyflowml/sfapm-server
     tag: python3
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: 1000m
@@ -186,7 +186,7 @@ vizbuilder:
   image:
     repository: snappyflowml/sfapm-vizbuilder
     tag: python3
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   resources:
     limits:
       cpu: 1000m
