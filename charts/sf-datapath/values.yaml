@@ -31,6 +31,9 @@ global:
 
 creds: "control:$apr1$pjbvxsh8$UnVE6PZ/3874l.cJ.Xc1e0"
 
+# Pod priority class value
+priority: 100
+
 nginx-ingress:
 
   containerResources:
@@ -142,9 +145,6 @@ es-kafka-connect:
       requests:
         cpu: 256m
         memory: 1Gi
-
-# Pod priority class value
-priority: 100
 
 autoscaling:
   ## Auto scaling configuration

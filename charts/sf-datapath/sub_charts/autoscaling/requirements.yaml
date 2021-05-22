@@ -1,9 +1,7 @@
 dependencies:
   - name: prometheus-adapter
-    condition: customMetrics.enabled
     version: 2.5.0
     repository: file://./sub_charts/prometheus-adapter
   - name: prometheus
-    condition: autoscaling.enabled
     version: 11.11.0
     repository: file://./sub_charts/prometheus
