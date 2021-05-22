@@ -1,0 +1,27 @@
+dependencies:
+- name: compaction-controller
+  repository: file://./sub_charts/compaction-controller
+  version: 0.1.0
+- name: cron
+  repository: file://./sub_charts/cron
+  version: 0.1.0
+- name: dataset-controller
+  repository: file://./sub_charts/dataset-controller
+  version: 0.1.0
+- name: ingest-controller
+  repository: file://./sub_charts/ingest-controller
+  version: 0.1.0
+- name: log-archival
+  repository: file://./sub_charts/log-archival
+  version: 0.1.0
+- name: spark-manager
+  repository: file://./sub_charts/spark-manager
+  version: 0.1.0
+- name: query-controller
+  repository: file://./sub_charts/query-controller
+  version: 0.1.0
+- name: spark-history-server
+  repository: file://./sub_charts/spark-history-server
+  version: 1.4.3
+digest: sha256:a061b0d39523cd1eaab3c888368f170a33c7550697c82ee03afd04c932a36e39
+generated: "2021-05-22T22:44:04.009969942+05:30"

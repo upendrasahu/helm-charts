@@ -1,0 +1,46 @@
+{{- if and .Values.global.archival.enabled .Values.prometheus.jmx.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "s3-kafka-connect.fullname" . }}-jmx-configmap
+  labels:
+    app: {{ template "s3-kafka-connect.name" . }}
+    chart: {{ template "s3-kafka-connect.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  jmx-kafka-connect-prometheus.yml: |+
+    startDelaySeconds: 90
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:{{ .Values.jmx.port }}/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    whitelistObjectNames:
+    - "java.lang:*"
+    - "kafka.connect:*"
+    rules:
+    - pattern: "kafka.connect<type=connect-worker-metrics>"
+      cache: true
+    - pattern: "kafka.connect<type=connect-worker-metrics>([^:]+):"
+      cache: true
+    - pattern: "kafka.connect<type=connect-worker-metrics, connector=([^:]+)>([^:]+):"
+      cache: true
+    - pattern: "kafka.connect<type=connect-metrics, client-id=([^:]+)><>([^:]+)"
+      cache: true
+    - pattern: "kafka.connect<type=connector-task-metrics, connector=([^:]+), task=([^:]+)><>([^:]+)"
+      cache: true
+    - pattern: kafka.connect<type=connect-worker-rebalance-metrics><>([a-z-]+)
+      cache: true
+    - pattern: kafka.connect<type=connector-metrics, connector=(.+)><>([a-z-]+)
+      cache: true
+    - pattern: kafka.connect<type=(.+)-metrics, connector=(.+), task=(.+)><>(.+-total|.+-count|.+-ms|.+-ratio|.+-avg|.+-failures|.+-requests|.+-timestamp|.+-logged|.+-errors|.+-retries|.+-skipped|.+-rate|.+-max)
+      cache: true
+    - pattern: java.lang<name=(.+), type=(.+)><(.+)>(\w+)
+      name: java_lang_$2_$4_$3_$1
+      cache: true
+    - pattern: java.lang<name=(.+), type=(.+)><>(\w+)
+      name: java_lang_$2_$3_$1
+      cache: true
+    - pattern : java.lang<type=(.*)>
+      cache: true
+{{- end }}

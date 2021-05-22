@@ -1,0 +1,24 @@
+{{- if .Values.restKafkaAutoscaling.enabled -}}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "autoscaling.fullname" . }}-rest-kafka
+  namespace: {{ .Release.Namespace }}
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "autoscaling.restKafkaAutoscaling.fullname" . }}
+  minReplicas: {{ .Values.restKafkaAutoscaling.minReplicas }}
+  maxReplicas: {{ .Values.restKafkaAutoscaling.maxReplicas }}
+  metrics:
+  - type: Pods
+    pods:
+      metricName: kafka_rest_memory_usage_MiB
+      targetAverageValue: "{{ .Values.restKafkaAutoscaling.memory.targetAverageValue }}"
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageValue: "{{ .Values.restKafkaAutoscaling.cpu.targetAverageValue }}"
+{{- end -}}

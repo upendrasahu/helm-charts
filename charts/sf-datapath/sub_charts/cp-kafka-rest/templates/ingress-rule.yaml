@@ -1,0 +1,19 @@
+{{- if .Values.global.ingress.enabled }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "cp-kafka-rest.fullname" . }}-ingress
+  namespace: {{ .Release.Namespace}}
+  annotations:
+    kubernetes.io/ingress.class: snappyflow-apm
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /sfmetrics(/|$)(.*)
+        backend:
+          serviceName: {{ template "cp-kafka-rest.fullname" . }}-external
+          servicePort: 8082
+{{- end }}
