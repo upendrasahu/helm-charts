@@ -1,0 +1,38 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+    name: {{ template "sfk-interface.fullname" . }}-config
+    namespace: {{ .Release.Namespace }}
+data:
+    config.json: |-
+        {
+            "kafka": {
+                "brokers": "{{ .Values.global.kafkaBrokers }}",
+                "rest_proxy": "http://{{ template "sfk-interface.kafkaRest.fullname" . }}:8082",
+                "rest_auth": "http://{{ template "sfk-interface.authenticator.fullname" . }}",
+                "connect": "http://{{ template "sfk-interface.apmConnect.fullname" . }}:8083"
+            },
+            "agent_ep": "{{ .Values.global.sfAgentInput.scheme }}://{{ .Values.global.sfAgentInput.host }}:{{ .Values.global.sfAgentInput.port }}",
+            "sign_service": "http://{{ template "sfk-interface.signatures.fullname" . }}",
+            "db": {
+                "name":  "{{ .Values.global.postgresql.postgresqlDatabase }}",
+                "user":  "{{ .Values.global.postgresql.postgresqlUsername }}",
+                "password": "{{ .Values.global.postgresql.postgresqlPassword }}",
+                "host": "{{ template "sfk-interface.postgresql.fullname" . }}",
+                "port": {{ .Values.global.postgresql.servicePort }}
+            }
+        }
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "sfk-interface.fullname" . }}-sink-cron
+  namespace: {{ .Release.Namespace }}
+data:
+  config.json: |-
+    {
+      "intervalInSec": {{ index .Values "cron" "intervalInSec" }},
+      "url": "http://{{ include "sfk-interface.fullname" . }}{{ index .Values "cron" "path"}}"
+    }

@@ -1,0 +1,9 @@
+dependencies:
+- name: prometheus-adapter
+  repository: file://./sub_charts/prometheus-adapter
+  version: 2.5.0
+- name: prometheus
+  repository: file://./sub_charts/prometheus
+  version: 11.11.0
+digest: sha256:6826c96652d70115754e643107b1ff9dd01ad7b7389985c60254b47b0f0e1511
+generated: "2021-05-22T22:49:55.261133531+05:30"
