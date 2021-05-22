@@ -1,1 +1,0 @@
-This chart installs a Confluent Kafka Connect along with an API server to interact with Kafka
