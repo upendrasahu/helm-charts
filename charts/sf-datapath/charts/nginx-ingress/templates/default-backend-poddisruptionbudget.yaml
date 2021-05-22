@@ -1,0 +1,15 @@
+{{- if gt (.Values.defaultBackend.replicaCount | int) 1 -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    {{- include "nginx-ingress.labels" . | nindent 4 }}
+    app.kubernetes.io/component: default-backend
+  name: {{ include "nginx-ingress.defaultBackend.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "nginx-ingress.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: default-backend
+  minAvailable: {{ .Values.defaultBackend.minAvailable }}
+{{- end }}

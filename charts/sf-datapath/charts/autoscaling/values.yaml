@@ -1,0 +1,33 @@
+# Default values for sf.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+customMetrics:
+  enabled: true
+
+archivalConnectAutoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  cpu:
+    targetAverageValue: 691m # 90% of CPU allocated to connector
+  memory:
+    targetAverageValue: 800 # MiB -> When memory utilization reaches x Mib, auto-scaling kicks in. Value should be ~80% of container memory limit
+
+apmConnectAutoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  cpu:
+    targetAverageValue: 900m # 90% of CPU allocated to connector
+  memory:
+    targetAverageValue: 1200 # MiB -> When memory utilization reaches x Mib, auto-scaling kicks in. Value should be ~80% of container memory limit
+
+restKafkaAutoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  cpu:
+    targetAverageValue: 450m # 90% of CPU allocated to rest-server
+  memory:
+    targetAverageValue: 800 # MiB -> When memory utilization reaches x Mib, auto-scaling kicks in. Value should be ~80% of container memory limit

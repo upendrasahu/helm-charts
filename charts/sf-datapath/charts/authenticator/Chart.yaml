@@ -1,0 +1,23 @@
+apiVersion: v1
+appVersion: "1.0"
+description: A Helm chart for Kubernetes
+name: authenticator
+version: 0.1.0
+
+dependencies:
+  - name: ingest-controller
+    condition: ingest-controller.enabled
+  - name: log-archival
+    condition: log-archival.enabled
+  - name: dataset-controller
+    condition: dataset-controller.enabled
+  - name: monitor
+    condition: monitor.enabled
+  - name: es-plugin
+    condition: es-plugin.enabled
+  - name: nginx-ingress
+    condition: nginx-ingress.enabled
+  - name: spark-history-server
+    condition: spark-history-server.enabled
+  - name: postgresql
+    condition: postgresql.enabled 
