@@ -9,7 +9,7 @@ config:
   # This is used to create account in APM, this need not be same as actual Kubernets cluster name.
   # Allowed max 32 char, Alphanumeric(a-zA-Z0-9) with dash(-) and underscore(_).
   # REQUIRED field with non empty value
-  cluster_name: sabari-kubernetes
+  cluster_name: kubernetes
   # project name label key, value of the label will be added in documents as _tag_projectName
   # projectname_label: snappyflow/projectname
   #
@@ -18,7 +18,7 @@ config:
   #
   # SnappyFlow APM Elasticsearch Target key copied from APM cloudprofile
   # REQUIRED field with non empty value.
-  key: "57EXOZg6OHPKarUhGT3GjBnBBDR+OPqJ/BmpnsoNfZ/f/B/w5zt5u9jkqev0MKET2vrYL9Bz2MExCS13gbRMmEFilSi0TSH6YBc3VaIBnNGOFKOHzVO37ZUYqOss0F6mlsmob0S7q8o6Ueh1rTrZszMMbePOSkla7E7sUfOiw4mxppwDRewotUjnFsCR00R3RQgsdK4kS1m1nHCfH/ZU8vzgk7KN554FJFn1DUEd5bR2XtRfwPjNRRk3gq7EISRBwAseEM5X+CB8ZkQjCguKbJRBnpUcZfvtfn+m7R4rRanPuzsfnEarKIqk650/zLDpJa9j9hKLBX3VUFrGUWDfuvI5q/25AU9ZZCMOWI1tOXppZggq0g99Ty2QeP9RbTYwWpGFgq89n1K185MGoTIQuaIqLqY/2pd3aV+lW4s49c1ZZz8/RqJAvbOuVpQoQdJQUOvgcXQmgOB15EZXfWPLi0JDLjc5naOMrxlOyyuLmaqKYta3WdEz7oRiq6nhrjGIMGdDgk9aj/ZzWE8kZa3bA9acb6RniekqwQFCCprkvsoF5/oIxjXupYyepZ7bWoPihm5O+6NT2KE2y/umrX1tzGiAWj/k/z0BLhsvmpxdsDGKjymSJhwg4drizcuKhAS9hjn1JVfQoTwK9jgiNG5P+g=="
+  key: ""
   #
   # SnappyFlow Key for cloud heartbeat and metrics, 
   # If not provided then key used
