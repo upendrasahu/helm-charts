@@ -17,33 +17,21 @@ spec:
       labels:
         app: {{ template "sf-apm-agents.name" . }}
         release: {{ .Release.Name }}
+        agentKind: cluster
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       containers:
-      - name: inventory
-        image: "{{ .Values.cluster_agent.inventory.image.repository }}:{{ .Values.cluster_agent.inventory.image.tag }}"
-        imagePullPolicy: {{ .Values.cluster_agent.inventory.image.pullPolicy }}
+      - name: cluster-agent
+        image: "{{ .Values.cluster_agent.image.repository }}:{{ .Values.cluster_agent.image.tag }}"
+        imagePullPolicy: {{ .Values.cluster_agent.image.pullPolicy }}
+        command: ["/bin/sh","-c"]
+        args: ["/app/kube-cluster"]
         resources:
-{{ toYaml .Values.cluster_agent.inventory.resources | indent 12 }}
-        volumeMounts:
-          - name: config
-            mountPath: /opt/config
-            readOnly: true
-      - name: cluster
-        image: "{{ .Values.cluster_agent.cluster_monitoring.image.repository }}:{{ .Values.cluster_agent.cluster_monitoring.image.tag }}"
-        imagePullPolicy: {{ .Values.cluster_agent.cluster_monitoring.image.pullPolicy }}
-        resources:
-{{ toYaml .Values.cluster_agent.cluster_monitoring.resources | indent 12 }}
-        volumeMounts:
-          - name: config
-            mountPath: /opt/config
-            readOnly: true
-      - name: events
-        image: "{{ .Values.cluster_agent.event_metrics.image.repository }}:{{ .Values.cluster_agent.event_metrics.image.tag }}"
-        imagePullPolicy: {{ .Values.cluster_agent.event_metrics.image.pullPolicy }}
-        resources:
-{{ toYaml .Values.cluster_agent.event_metrics.resources | indent 12 }}
+{{ toYaml .Values.cluster_agent.resources | indent 12 }}
+        ports:
+        - name: socketserver
+          containerPort: 1200
         volumeMounts:
           - name: config
             mountPath: /opt/config

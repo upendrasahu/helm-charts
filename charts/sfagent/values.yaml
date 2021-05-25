@@ -9,7 +9,7 @@ config:
   # This is used to create account in APM, this need not be same as actual Kubernets cluster name.
   # Allowed max 32 char, Alphanumeric(a-zA-Z0-9) with dash(-) and underscore(_).
   # REQUIRED field with non empty value
-  cluster_name: kubernetes
+  cluster_name: sabari-kubernetes
   # project name label key, value of the label will be added in documents as _tag_projectName
   # projectname_label: snappyflow/projectname
   #
@@ -18,7 +18,7 @@ config:
   #
   # SnappyFlow APM Elasticsearch Target key copied from APM cloudprofile
   # REQUIRED field with non empty value.
-  key: ""
+  key: "57EXOZg6OHPKarUhGT3GjBnBBDR+OPqJ/BmpnsoNfZ/f/B/w5zt5u9jkqev0MKET2vrYL9Bz2MExCS13gbRMmEFilSi0TSH6YBc3VaIBnNGOFKOHzVO37ZUYqOss0F6mlsmob0S7q8o6Ueh1rTrZszMMbePOSkla7E7sUfOiw4mxppwDRewotUjnFsCR00R3RQgsdK4kS1m1nHCfH/ZU8vzgk7KN554FJFn1DUEd5bR2XtRfwPjNRRk3gq7EISRBwAseEM5X+CB8ZkQjCguKbJRBnpUcZfvtfn+m7R4rRanPuzsfnEarKIqk650/zLDpJa9j9hKLBX3VUFrGUWDfuvI5q/25AU9ZZCMOWI1tOXppZggq0g99Ty2QeP9RbTYwWpGFgq89n1K185MGoTIQuaIqLqY/2pd3aV+lW4s49c1ZZz8/RqJAvbOuVpQoQdJQUOvgcXQmgOB15EZXfWPLi0JDLjc5naOMrxlOyyuLmaqKYta3WdEz7oRiq6nhrjGIMGdDgk9aj/ZzWE8kZa3bA9acb6RniekqwQFCCprkvsoF5/oIxjXupYyepZ7bWoPihm5O+6NT2KE2y/umrX1tzGiAWj/k/z0BLhsvmpxdsDGKjymSJhwg4drizcuKhAS9hjn1JVfQoTwK9jgiNG5P+g=="
   #
   # SnappyFlow Key for cloud heartbeat and metrics, 
   # If not provided then key used
@@ -56,82 +56,45 @@ config:
 #  container for node/pod kubelet monitoring + storage metrics
 #  container for fluent-bit logs
 node_agent:
-  node_metrics:
-    image:
-      repository: snappyflowml/sfkube-node-metrics
-      tag: latest
-      pullPolicy: Always
-    # if enabled
-    configmap:
-      # cluster monitoring interval, default is 300 seconds
-      interval: 30
-      # Tags to be added in cluster metrics document
-      #tags: {}
-      #target: {}
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 250m
-        memory: 256Mi
-  
-  prometheus_poller:
-    image:
-      repository: snappyflowml/sfkube-node-prom
-      tag: latest
-      pullPolicy: Always
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 1000m
-        memory: 512Mi
-    configmap:
-      log_dir: /tmp
-      interval: 30
-      system_interval: 60
-    plugin_interval:
-      elasticsearch:
-        cluster: 300
-        node: 300
-        index: 900
-      nginx:
-        default: 300
-      mysql:
-        default: 300
-      kafka:
-        default: 300
-      jmx:
-        default: 300
-      kafka-jmx:
-        default: 300
-      kafka-rest:
-        default: 300
-      kafka-connect:
-        default: 300
-      zookeeper-zmx:
-        default: 300
-
-  fluentbit:
-    enabled: true
-    drop_cluster_logs: false
-    image:
-      fluent_bit:
-        repository: snappyflowml/kube-fluent
-        tag: latest
-      pullPolicy: Always
-
-    podAnnotations: {}
-
-    resources: {}
-      # limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      # requests:
-      #   cpu: 10m
-      #   memory: 8Mi
+  image:
+    repository: sabariarunkumarp/node-agent-cmb
+    tag: 5.23
+    pullPolicy: Always
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  kubelet_configmap:
+    interval: 300
+  prometheus_configmap:
+    log_dir: /tmp
+    interval: 30
+    system_interval: 60
+  plugin_interval:
+    elasticsearch:
+      cluster: 300
+      node: 300
+      index: 900
+    nginx:
+      default: 300
+    mysql:
+      default: 300
+    kafka:
+      default: 300
+    jmx:
+      default: 300
+    kafka-jmx:
+      default: 300
+    kafka-rest:
+      default: 300
+    kafka-connect:
+      default: 300
+    zookeeper-zmx:
+      default: 300
+  drop_cluster_logs: false
 
   tolerations:
     - effect: NoExecute
@@ -173,56 +136,20 @@ forwardmetric:
 #   Container for kube events
 #   Container for application inventory
 cluster_agent:
-  inventory:
-    image:
-      repository: snappyflowml/sfkube-inventory
-      tag: latest
-      pullPolicy: Always
-
-    ## container resource requests and limits
-    ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
-    ##
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 250m
-        memory: 256Mi
-  # Cluster monitoring
-  cluster_monitoring:
-    image:
-      repository: snappyflowml/sfkube-cluster
-      tag: latest
-      pullPolicy: Always
-    # if enabled
-    configmap:
-      # cluster monitoring interval, default is 300 seconds
-      interval: 300
-      # Tags to be added in cluster metrics document
-      #tags: {}
-      #target: {}
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 250m
-        memory: 256Mi
-
-  event_metrics:
-    image:
-      repository: snappyflowml/sfkube-events
-      tag: latest
-      pullPolicy: Always
-
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 250m
-        memory: 256Mi
+  image:
+    repository: sabariarunkumarp/kubecluster
+    tag: 5.91
+    pullPolicy: Always
+  # if enabled
+  configmap:
+    interval: 300
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
 
   tolerations: []
 

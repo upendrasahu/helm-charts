@@ -11,11 +11,10 @@ data:
   config.yaml: |
 {{ toYaml .Values.config | indent 4 }}
   clusterconfig.yaml: |
-{{ toYaml .Values.cluster_agent.cluster_monitoring.configmap | indent 4 }}
-  promconfig.yaml: |
-{{ toYaml .Values.node_agent.prometheus_poller.configmap | indent 4 }}
+{{ toYaml .Values.cluster_agent.configmap | indent 4 }}
   nodeconfig.yaml: |
-{{ toYaml .Values.node_agent.node_metrics.configmap | indent 4 }}
+{{ toYaml .Values.node_agent.kubelet_configmap | indent 4 }}
+  promconfig.yaml: |
+{{ toYaml .Values.node_agent.prometheus_configmap | indent 4 }}
   interval.yaml: |
-{{ toYaml .Values.node_agent.prometheus_poller.plugin_interval | indent 4 }}
-
+{{ toYaml .Values.node_agent.plugin_interval | indent 4 }}

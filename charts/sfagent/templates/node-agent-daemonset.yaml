@@ -26,40 +26,24 @@ spec:
       serviceAccountName: {{ if .Values.rbac.create }}{{ template "sf-apm-agents.name" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
       hostPID: true
       containers:
-      - name: prometheus
-        image: "{{ .Values.node_agent.prometheus_poller.image.repository }}:{{ .Values.node_agent.prometheus_poller.image.tag }}"
-        imagePullPolicy: {{ .Values.node_agent.prometheus_poller.image.pullPolicy }}
+      - name: node-agent
+        image: "{{ .Values.node_agent.image.repository }}:{{ .Values.node_agent.image.tag }}"
+        imagePullPolicy: {{ .Values.node_agent.image.pullPolicy }}
         command: ["/bin/sh","-c"]
-        args: ["/app/kube-prom -nodename $NODE_NAME -system -debug"]
+        args: ["mkdir -p /var/log/sfagent/ && /app/kube-node -nodename $NODE_NAME -remote-socket-service-ip $SOCKET_SERVICE -debug"]
         resources:
-{{ toYaml .Values.node_agent.prometheus_poller.resources | indent 12 }}
+{{ toYaml .Values.node_agent.resources | indent 12 }}
         env:
           - name: NODE_NAME
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: MY_POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-        volumeMounts:
-          - name: config
-            mountPath: /opt/config
-            readOnly: true
-      - name: nodekubelet
-        image: "{{ .Values.node_agent.node_metrics.image.repository }}:{{ .Values.node_agent.node_metrics.image.tag }}"
-        imagePullPolicy: {{ .Values.node_agent.node_metrics.image.pullPolicy }}
-        resources:
-{{ toYaml .Values.node_agent.node_metrics.resources | indent 12 }}
-        env:
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
+          - name: SOCKET_SERVICE
+            value: {{ template "sf-apm-agents.fullname" . }}-service
+        {{- if .Values.node_agent.drop_cluster_logs }}
+          - name: DORP_CLUSTER_LOGS
+            value: "1"
+        {{- end }}
           - name: POD_NAME
             valueFrom:
               fieldRef:
@@ -73,9 +57,15 @@ spec:
           capabilities:
             add:
             - SYS_ADMIN
-        resources:
-{{ toYaml .Values.node_agent.node_metrics.resources | indent 12 }}
         volumeMounts:
+          - name: config
+            mountPath: /opt/config
+            readOnly: true
+          - name: varlog
+            mountPath: /var/log
+          - name: varlibdockercontainers
+            mountPath: /var/lib/docker/containers
+            readOnly: true
           - name: proc
             mountPath: /host/proc
             mountPropagation: Bidirectional
@@ -85,43 +75,6 @@ spec:
           - name: root-fs
             mountPath: /rootfs
             mountPropagation: Bidirectional
-          - name: config
-            mountPath: /opt/config
-            readOnly: true
-      {{- if .Values.node_agent.fluentbit.enabled }}
-      - name: fluent-bit
-        image: "{{ .Values.node_agent.fluentbit.image.fluent_bit.repository }}:{{ .Values.node_agent.fluentbit.image.fluent_bit.tag }}"
-        imagePullPolicy: "{{ .Values.node_agent.fluentbit.image.pullPolicy }}"
-        env:
-          - name: NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-        {{- if .Values.node_agent.fluentbit.drop_cluster_logs }}
-          - name: DORP_CLUSTER_LOGS
-            value: "1"
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: MY_POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-        {{- end }}
-        command: ["/bin/sh","-c"]
-        args: ["mkdir -p /var/log/sfagent/ && /app/fluent-config-gen -nodename $NODE_NAME -debug"]
-        resources:
-{{ toYaml .Values.node_agent.fluentbit.resources | indent 10 }}
-        volumeMounts:
-          - name: varlog
-            mountPath: /var/log
-          - name: varlibdockercontainers
-            mountPath: /var/lib/docker/containers
-            readOnly: true
-          - name: config
-            mountPath: /opt/config
-        {{- end }}
       terminationGracePeriodSeconds: 30
     {{- if .Values.node_agent.nodeSelector }}
       nodeSelector:
