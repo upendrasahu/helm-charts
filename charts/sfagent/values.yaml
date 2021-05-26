@@ -57,8 +57,8 @@ config:
 #  container for fluent-bit logs
 node_agent:
   image:
-    repository: sabariarunkumarp/node-agent-cmb
-    tag: 5.23
+    repository: snappyflowml/kube-node
+    tag: latest
     pullPolicy: Always
   resources:
     requests:
@@ -137,8 +137,8 @@ forwardmetric:
 #   Container for application inventory
 cluster_agent:
   image:
-    repository: sabariarunkumarp/kubecluster
-    tag: 5.91
+    repository: snappyflowml/kube-cluster
+    tag: latest
     pullPolicy: Always
   # if enabled
   configmap:
