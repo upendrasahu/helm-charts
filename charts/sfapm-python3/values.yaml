@@ -411,7 +411,7 @@ postgresql:
 
 global:
   sfappname: sf-portal-app
-  sfprojectname: on-premise
+  sfprojectname: snappyflow-app
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
   nginx_geo_info_collection: true
