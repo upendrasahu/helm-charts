@@ -1,7 +1,7 @@
 global:
   snappyflowProjectLabel: "snappyflow/projectname"
   snappyflowAppLabel: "snappyflow/appname"
-  snappyflowProjectName: "on-premise"
+  snappyflowProjectName: "snappyflow-app"
   snappyflowAppName: "sf-data-path"
   subnets: ""
   internalllb: true
