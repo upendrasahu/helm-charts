@@ -1,0 +1,40 @@
+{{- if and .Values.prometheus.jmx.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "cp-kafka-rest.fullname" . }}-jmx-configmap
+  labels:
+    app: {{ template "cp-kafka-rest.name" . }}
+    chart: {{ template "cp-kafka-rest.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  jmx-kafka-rest-prometheus.yml: |+
+    startDelaySeconds: 60
+    jmxUrl: service:jmx:rmi:///jndi/rmi://localhost:{{ .Values.jmx.port }}/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    whitelistObjectNames:
+    - "java.lang:*"
+    - "kafka.rest:type=producer-topic-metrics,*"
+    - "kafka.rest:type=j*y-metrics,*"
+    rules:
+    - pattern : "kafka.rest<type=producer-topic-metrics, client-id=([^:]+), topic=((log|control|trace|metric)-[\\d\\w]+)><>([^:]+)"
+      name: kafka_producer_producer_topic_metrics_$4
+      labels:
+        client-id: "$1"
+        topic: "$2"
+      cache: true
+    - pattern : "kafka.rest<type=jersey-metrics><>(topic.produce-json\\+v2)"
+      cache: true
+    - pattern : "kafka.rest<type=jetty-metrics>"
+    - pattern: java.lang<name=(.+), type=(.+)><(.+)>(\w+)
+      name: java_lang_$2_$4_$3_$1
+      cache: true
+    - pattern: java.lang<name=(.+), type=(.+)><>(\w+)
+      name: java_lang_$2_$3_$1
+      cache: true
+    - pattern : java.lang<type=(.*)>
+      cache: true
+{{- end }}

@@ -1,0 +1,30 @@
+dependencies:
+- name: nginx-ingress
+  repository: file://./sub_charts/nginx-ingress
+  version: 3.6.0
+- name: cp-schema-registry
+  repository: file://./sub_charts/cp-schema-registry
+  version: 0.1.0
+- name: cp-kafka-rest
+  repository: file://./sub_charts/cp-kafka-rest
+  version: 0.1.0
+- name: s3-kafka-connect
+  repository: file://./sub_charts/s3-kafka-connect
+  version: 0.1.0
+- name: es-kafka-connect
+  repository: file://./sub_charts/es-kafka-connect
+  version: 0.1.0
+- name: autoscaling
+  repository: file://./sub_charts/autoscaling
+  version: 0.1.0
+- name: authenticator
+  repository: file://./sub_charts/authenticator
+  version: 0.1.0
+- name: sfk-interface
+  repository: file://./sub_charts/sfk-interface
+  version: 0.1.0
+- name: signatures
+  repository: file://./sub_charts/signatures
+  version: 0.1.0
+digest: sha256:c3aa2f9841b35b475f06421884308e8216c053acee2d96059ef3ab77a480766d
+generated: "2021-05-22T23:14:17.543052691+05:30"

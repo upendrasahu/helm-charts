@@ -21,12 +21,22 @@ spec:
       labels:
         app: {{ template "cp-kafka.fullname" . }}-exporter
         release: {{ .Release.Name }}
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
+      initContainers:
+        - name: kafka-ready
+          image: "snappyflowml/kafka-zk-check:alpha"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - ./kafka-init.sh
+            - {{ .Release.Name }}-cp-kafka-headless:9092
       containers:
       - image: "danielqsj/kafka-exporter:v1.0.1"
         name: kafka-exporter
         args:
-          - --kafka.server=kafka-cp-kafka-headless:9092
+          - --kafka.server={{ .Release.Name }}-cp-kafka-headless:9092
           - --web.listen-address=:9308
         ports:
           - containerPort: 9308

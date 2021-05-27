@@ -99,14 +99,7 @@ cp-kafka:
     limits:
       cpu: 200m
       memory: 2500Mi
-  ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
-  ## and remove the curly braces after 'resources:'
-  #  limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  #  requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+
   securityContext: 
     runAsUser: 0
 

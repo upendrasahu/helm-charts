@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "compaction-controller.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "compaction-controller.labels" . | indent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "compaction-controller.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "compaction-controller.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        release: {{ .Release.Name }}
+        {{ .Values.global.snappyflowProjectLabel}}: {{ .Values.global.snappyflowProjectName }}
+        {{ .Values.global.snappyflowAppLabel }}: {{ .Values.global.snappyflowAppName }}
+    spec:
+      priorityClassName: {{ .Release.Name }}-priority-class
+    {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- if and (eq .Values.global.secrets.aws.enable true) (eq .Values.global.secrets.aws.use_iam_role true) }}
+      serviceAccountName: {{ .Release.Name }}-service-account
+    {{- end}}
+      initContainers:
+        - name: kafka-ready
+          image: "snappyflowml/kafka-zk-check:alpha"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - ./kafka-init.sh
+            - {{ .Values.global.kafkaBrokers }}
+        - name: db-ready
+          image: "bitnami/postgresql:11.5.0-debian-9-r34"
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - "until pg_isready -d postgresql://'{{ .Values.global.postgresql.postgresqlUsername }}':'{{ .Values.global.postgresql.postgresqlPassword }}'@'{{ template "compaction-controller.postgresql.fullname" . }}':{{ .Values.global.postgresql.servicePort }}/'{{ .Values.global.postgresql.postgresqlDatabase }}'; do sleep 3; done"
+      containers:
+        - name: "compaction-controller"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/conf
+          {{- if (eq .Values.global.secrets.gcs.enable true) }}
+          - name: google-cloud-key
+            mountPath: /var/secrets/google
+          {{- end }}
+          env:
+          {{- if (eq .Values.global.secrets.gcs.enable true) }}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /var/secrets/google/key.json
+          {{- end }}
+          {{- if (eq .Values.global.secrets.aws.enable true) }}
+          {{- if (eq .Values.global.secrets.aws.use_iam_role false) }}
+          - name: AWS_ACCESS_KEY_ID
+            value: {{ .Values.global.secrets.aws.AWS_ACCESS_KEY_ID }}
+          - name: AWS_SECRET_ACCESS_KEY
+            value: {{ .Values.global.secrets.aws.AWS_SECRET_ACCESS_KEY }}
+          - name: AWS_REGION
+            value: {{ .Values.global.secrets.aws.AWS_DEFAULT_REGION }}
+          {{- end }}
+          {{- end }}
+          resources:
+{{- toYaml .Values.containerResources.compaction | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ template "compaction-controller.fullname" . }}
+        {{- if (eq .Values.global.secrets.gcs.enable true) }}
+        - name: google-cloud-key
+          secret:
+            secretName: {{ .Values.global.secrets.gcs.secret }}
+        {{- end}}
+

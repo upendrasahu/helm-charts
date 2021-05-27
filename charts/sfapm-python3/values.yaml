@@ -93,7 +93,7 @@ sfapm:
     # Hence value > 100 needs to be calculated based on set limits
     # Below values are calculated such that (limit / request) * 80 -> for 80% target utilization
     targetCPUUtilizationPercentage: 1600
-    targetMemoryUtilizationPercentage: 110
+    targetMemoryUtilizationPercentage: 120
   image:
     repository: snappyflowml/sfapm-server
     tag: python3
@@ -101,10 +101,10 @@ sfapm:
   resources:
     limits:
       cpu: 1000m
-      memory: 512Mi
+      memory: 768Mi
     requests:
       cpu: 50m
-      memory: 384Mi
+      memory: 512Mi
   service:
     type: ClusterIP
     port: 8000
@@ -150,7 +150,7 @@ sfapm_celery:
       requests:
         cpu: 10m
         memory: 100Mi
-    replicaCount: 2
+    replicaCount: 3
     command: "celery -A snappyflow worker -l $LOG_LEVEL -Q periodic -c5 $CELERY_OPTS"
   sftrace:
     resources:
@@ -220,7 +220,7 @@ vizbuilder_celery:
       requests:
         cpu: 10m
         memory: 100Mi
-    replicaCount: 2
+    replicaCount: 3
     command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q alert -c10 $CELERY_OPTS"
   logops:
     resources:
@@ -252,7 +252,6 @@ vizbuilder_celery:
         memory: 100Mi
     replicaCount: 1
     command: "celery -A vizbuilder worker -l $LOG_LEVEL -Q provisiontemplate -c1 $CELERY_OPTS"
-
 
 sftrace:
   replicaCount: 1
@@ -419,5 +418,4 @@ global:
   nginx_ua_parsing: true
   enable_sftrace: false
   key: ""
-
 

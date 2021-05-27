@@ -62,6 +62,14 @@ spec:
                     - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       {{- end }}
+      initContainers:
+        - name: zookeeper-ready
+          image: "snappyflowml/kafka-zk-check:alpha"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - ./zookeeper-init.sh
+            - {{ include "cp-kafka.cp-zookeeper.service-name" . }}
       containers:
       {{- if .Values.prometheus.jmx.enabled }}
       - name: prometheus-jmx-exporter
