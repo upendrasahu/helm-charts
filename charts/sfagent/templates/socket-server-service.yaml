@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "sf-apm-agents.fullname" . }}-service
+  labels:
+    app: {{ template "sf-apm-agents.fullname" . }}-cluster
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+    - port: 1200
+      name: agent-socketserver
+  selector:
+    app: {{ template "sf-apm-agents.name" . }}
+    release: {{ .Release.Name }}
+    agentKind: cluster
