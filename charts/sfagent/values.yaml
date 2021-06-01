@@ -19,7 +19,13 @@ config:
   # SnappyFlow APM Elasticsearch Target key copied from APM cloudprofile
   # REQUIRED field with non empty value.
   key: ""
-  #
+
+  # set the flag to true for supporting existing customer until their appliance mode apm-server ported to support index with `$` suffixed
+  # Will be effective only in case of direct elastic target
+  # Not enabling the flag or setting the flag to false will assume apm-server have the latest changes
+  # 
+  # es_target_index_without_suffix: false
+
   # SnappyFlow Key for cloud heartbeat and metrics, 
   # If not provided then key used
   # cloud_key: "cluster_key"
@@ -95,7 +101,6 @@ node_agent:
     zookeeper-zmx:
       default: 300
   drop_cluster_logs: false
-
   tolerations:
     - effect: NoExecute
       operator: Exists
