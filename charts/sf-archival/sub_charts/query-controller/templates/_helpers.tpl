@@ -96,3 +96,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- printf "%s" $port -}}
 {{- end -}}
 
+{{- define "query-controller.hive-server.fullname" -}}
+{{- printf "%s-%s" .Release.Name "hive-server" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

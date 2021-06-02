@@ -17,10 +17,10 @@ data:
       },
       "partitionColumnNames": ["year", "month", "day"],
       "hive": {
-        "userName": "{{ .Values.global.hive.userName }}",
-        "host": "{{ .Values.global.hive.host }}",
-        "port": {{ .Values.global.hive.port }},
-        "auth": "{{ .Values.global.hive.auth }}"
+        "userName": "root",
+        "host": "{{ template "ingest-controller.hive-server.fullname" . }}",
+        "port": 10000,
+        "auth": "NONE"
       },
       "logArchivalURL": "http://{{ template "ingest-controller.log-archival.fullname" . }}",
       "schemaRegistryURL": "http://{{ template "ingest-controller.schemaRegistry.fullname" . }}:8081",

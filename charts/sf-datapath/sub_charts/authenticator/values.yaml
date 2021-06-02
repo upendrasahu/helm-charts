@@ -1,38 +1,9 @@
 # Default values for Ingest Controller.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-global:
-
-  postgresql:
-    host: "archival-dev.cmebsmm3knzu.us-west-2.rds.amazonaws.com"
-    postgresqlDatabase: archival
-    postgresqlUsername: archive
-    postgresqlPassword: archive123
-    servicePort: 5432
-
-  kafkaBrokers: ""
-
-  archival:
-    enabled: true
-    releaseName: archival
-
-  sfAgentInput:
-    host: 127.0.0.1
-    port: 443
-    scheme: https
-
-  snappyflowProjectLabel: snappyflow/projectname
-  snappyflowAppLabel: snappyflow/appname
-
-  snappyflowProjectName: "Kafka"
-  snappyflowAppName: "ConsumersAndProducers"
-
-  imagePullSecrets:
-  - name: xxxx
-
 image:
   repository: snappyflowml/authenticator
-  tag: dev-3
+  tag: 4
   pullPolicy: IfNotPresent
 
 nameOverride: ""

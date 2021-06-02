@@ -15,10 +15,10 @@ data:
         "port": {{ .Values.global.postgresql.servicePort }}
       },
       "hive": {
-        "userName": "{{ .Values.global.hive.userName }}",
-        "host": "{{ .Values.global.hive.host }}",
-        "port": {{ .Values.global.hive.port }},
-        "auth": "{{ .Values.global.hive.auth }}"
+        "userName": "root",
+        "host": "{{ template "query-controller.hive-server.fullname" . }}",
+        "port": 10000,
+        "auth": "NONE"
       },
       "ingestControllerURL": "http://{{ template "query-controller.ingest-controller.fullname" . }}",
       "jobTypes": ["LogQuery", "Histogram"],

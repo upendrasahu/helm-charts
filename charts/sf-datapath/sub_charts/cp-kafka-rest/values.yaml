@@ -1,19 +1,10 @@
 # Default values for cp-kafka-rest.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-# Snappyflow labels
-global:
-  snappyflowProjectName: "Kafka"
-  snappyflowAppName: "ConsumersAndProducers"
-
-  imagePullSecrets:
-  - name: xxxx
-
 replicaCount: 1
 
 image: snappyflowml/sf-kafka-rest
-imageTag: dev-4
+imageTag: 3
 imagePullPolicy: IfNotPresent
 
 servicePort: 8082

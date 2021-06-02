@@ -14,14 +14,17 @@ dependencies:
 - name: log-archival
   repository: file://./sub_charts/log-archival
   version: 0.1.0
+- name: query-controller
+  repository: file://./sub_charts/query-controller
+  version: 0.1.0
 - name: spark-manager
   repository: file://./sub_charts/spark-manager
   version: 0.1.0
-- name: query-controller
-  repository: file://./sub_charts/query-controller
+- name: hive-and-hadoop
+  repository: file://./sub_charts/hive-and-hadoop
   version: 0.1.0
 - name: spark-history-server
   repository: file://./sub_charts/spark-history-server
   version: 1.4.3
-digest: sha256:a061b0d39523cd1eaab3c888368f170a33c7550697c82ee03afd04c932a36e39
-generated: "2021-05-22T22:44:04.009969942+05:30"
+digest: sha256:ac04a761f4363a2d81e27ea668ff77de8e099adb5a4b60c58afb76ec925764d9
+generated: "2021-06-01T12:14:44.848706482+05:30"

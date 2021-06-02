@@ -1,17 +1,10 @@
 # Default values for cp-kafka-connect.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-global:
-  snappyflowProjectName: "Kafka"
-  snappyflowAppName: "ConsumersAndProducers"
-
-  imagePullSecrets:
-  - name: xxxx
-
 replicaCount: 1
 
 image: snappyflowml/arch-kafka-connect
-imageTag: dev-17
+imageTag: 4
 imagePullPolicy: IfNotPresent
 
 servicePort: 8083

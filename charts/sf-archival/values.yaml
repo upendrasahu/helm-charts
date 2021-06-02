@@ -32,12 +32,6 @@ global:
     enabled: true
     releaseName: sf-datapath
 
-  hive:
-    userName: ubuntu
-    host: 127.0.0.1
-    port: 10000
-    auth: NONE
-
   snappyflowProjectLabel: snappyflow/projectname
   snappyflowAppLabel: snappyflow/appname
 

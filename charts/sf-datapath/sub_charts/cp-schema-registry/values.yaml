@@ -1,21 +1,6 @@
 # Default values for cp-schema-registry.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
-## ------------------------------------------------------
-## Schema Registry
-## ------------------------------------------------------
-global:
-  snappyflowProjectName: "Kafka"
-  snappyflowAppName: "ConsumersAndProducers"
-
-  imagePullSecrets:
-  - name: xxxx
-
-  archival:
-    enabled: true
-    releaseName: archival
-
 ## Number of Scheme Registry Pod
 replicaCount: 1
 
@@ -79,7 +64,7 @@ schemaGenerator:
   enabled: true
   intervalInMin: 20
   image: snappyflowml/schema-generator
-  imageTag: dev-12
+  imageTag: 6
   imagePullPolicy: IfNotPresent
   targets:
     - name: schema-registry

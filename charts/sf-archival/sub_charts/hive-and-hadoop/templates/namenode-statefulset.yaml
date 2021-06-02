@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "hadoop.fullname" . }}-namenode
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "hadoop.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "hadoop.name" . }}-namenode
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: "namenode"
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      volumeMode: Filesystem
+  serviceName: {{ include "hadoop.namenode.service" . }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: {{ include "hadoop.name" . }}-namenode
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        release: {{ .Release.Name }}
+        {{ .Values.global.snappyflowProjectLabel}}: {{ .Values.global.snappyflowProjectName }}
+        {{ .Values.global.snappyflowAppLabel }}: {{ .Values.global.snappyflowAppName }}
+    spec:
+      priorityClassName: {{ .Release.Name }}-priority-class
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if and (eq .Values.global.secrets.aws.enable true) (eq .Values.global.secrets.aws.use_iam_role true) }}
+      serviceAccountName: {{ .Release.Name }}-service-account
+      {{- end}}
+      containers:
+        - name: namenode
+          image: "{{ .Values.image.namenode.repository }}:{{ .Values.image.namenode.tag }}"
+          imagePullPolicy: {{ .Values.image.namenode.pullPolicy }}
+          volumeMounts:
+          - name: namenode
+            mountPath: /hadoop/dfs/name
+          {{- if (eq .Values.global.secrets.gcs.enable true) }}
+          - name: google-cloud-key
+            mountPath: /var/secrets/google
+          {{- end }}
+          envFrom:
+          - configMapRef:
+              name: {{ template "hive-and-hadoop.fullname" . }}-env
+          env:
+          - name: HADOOP_HEAPSIZE
+            value: "256"
+          - name: CLUSTER_NAME
+            value: {{ .Release.Name }}
+          {{- if (eq .Values.global.secrets.gcs.enable true) }}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /var/secrets/google/key.json
+          {{- end }}
+          {{- if (eq .Values.global.secrets.aws.enable true) }}
+          {{- if (eq .Values.global.secrets.aws.use_iam_role false) }}
+          - name: AWS_ACCESS_KEY_ID
+            value: {{ .Values.global.secrets.aws.AWS_ACCESS_KEY_ID }}
+          - name: AWS_SECRET_ACCESS_KEY
+            value: {{ .Values.global.secrets.aws.AWS_SECRET_ACCESS_KEY }}
+          - name: AWS_REGION
+            value: {{ .Values.global.secrets.aws.AWS_DEFAULT_REGION }}
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: namenode
+              containerPort: {{ .Values.service.namenode.port }}
+              protocol: TCP
+          startupProbe:
+            tcpSocket:
+              port: namenode
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 20
+            timeoutSeconds: 9
+          livenessProbe:
+            tcpSocket:
+              port: namenode
+            initialDelaySeconds: 300
+            periodSeconds: 60
+            timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+{{- toYaml .Values.containerResources.namenode | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if (eq .Values.global.secrets.gcs.enable true) }}
+      volumes:
+        - name: google-cloud-key
+          secret:
+            secretName: {{ .Values.global.secrets.gcs.secret }}
+      {{- end}}
