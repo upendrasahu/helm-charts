@@ -1,7 +1,14 @@
-# Default values for Log Archival.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 global:
+  hive:
+    internal:
+      enabled: true
+    external:
+      enabled: false
+      # Below fields must be changed when external hive.external.enabled is true
+      userName: ubuntu
+      host: 127.0.0.1
+      port: 10000
+      auth: NONE
 
   postgresql:
     host: host
@@ -50,7 +57,7 @@ ingest-controller:
     ingestcontroller:
       limits:
         cpu: 50m
-        memory: 75Mi
+        memory: 512Mi
       requests:
         cpu: 10m
         memory: 10Mi
@@ -78,7 +85,7 @@ dataset-controller:
     datasetcontroller:
       limits:
         cpu: 100m
-        memory: 200Mi
+        memory: 512Mi
       requests:
         cpu: 10m
         memory: 10Mi
