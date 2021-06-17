@@ -144,7 +144,6 @@ controller:
   ## Annotations to be added to the controller Deployment or DaemonSet
   ##
   annotations: {}
-
   #  keel.sh/pollSchedule: "@every 60m"
 
   ## Labels to be added to the controller Deployment or DaemonSet
