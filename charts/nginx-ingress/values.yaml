@@ -143,7 +143,9 @@ controller:
 
   ## Annotations to be added to the controller Deployment or DaemonSet
   ##
-  annotations: {}
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9113'
   #  keel.sh/pollSchedule: "@every 60m"
 
   ## Labels to be added to the controller Deployment or DaemonSet
@@ -609,10 +611,7 @@ defaultBackend:
 
   ## Annotations to be added to default backend pods
   ##
-  podAnnotations:
-    annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/port: '9113'
+  podAnnotations: {}
 
   replicaCount: 1
 
