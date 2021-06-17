@@ -22,7 +22,7 @@ data:
           secure: true
           {{- else }}
           port: 80
-          secure: true
+          secure: false
           {{- end }}
     logging:
       plugins:
