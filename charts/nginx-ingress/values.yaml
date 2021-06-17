@@ -609,7 +609,10 @@ defaultBackend:
 
   ## Annotations to be added to default backend pods
   ##
-  podAnnotations: {}
+  podAnnotations:
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '9113'
 
   replicaCount: 1
 

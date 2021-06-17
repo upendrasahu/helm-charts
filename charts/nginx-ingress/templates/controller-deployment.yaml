@@ -78,7 +78,7 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: SCRAPE_URI
-              value: http://127.0.0.1:80/nginx_status
+              value: http://127.0.0.1:80/status
             - name: NGINX_RETRIES
               value: "5"
             - name: NGINX_RETRY_INTERVAL
