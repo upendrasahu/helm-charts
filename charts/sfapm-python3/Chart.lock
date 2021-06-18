@@ -4,6 +4,6 @@ dependencies:
   version: 0.2.8
 - name: postgresql
   repository: https://snappyflow.github.io/helm-charts/
-  version: 0.1.3
-digest: sha256:3914362f60e1834b645ed2a119fd9c2fcad66ba3535ca33708bec031be4a3ec4
-generated: "2021-06-18T12:56:37.499519523+05:30"
+  version: 0.1.4
+digest: sha256:b6cf4221b42e73cb6e871f8efa62d33a4fc66ca41adea0bf0471bf07eb5b7bc5
+generated: "2021-06-18T16:03:56.658673661+05:30"
