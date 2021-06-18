@@ -83,8 +83,8 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 global:
-  sfappname: apm-server
-  sfprojectname: apmdemo-sf-io
+  sfappname: sf-portal-app
+  sfprojectname: snappyflow-app
   sfappname_key: snappyflow/appname
   sfprojectname_key: snappyflow/projectname
   key: ""
