@@ -5,6 +5,8 @@ metadata:
   labels:
     {{- include "postgresql.labels" . | nindent 4 }}
     snappyflow/component: postgresql
+    {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+    {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -20,6 +22,8 @@ spec:
       labels:
         {{- include "postgresql.selectorLabels" . | nindent 8 }}
         snappyflow/component: postgresql
+        {{ default "snappyflow/appname" .Values.global.sfappname_key }}: {{ default .Release.Name .Values.global.sfappname }}
+        {{ default "snappyflow/projectname" .Values.global.sfprojectname_key }}: {{ default .Release.Name .Values.global.sfprojectname }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
