@@ -128,4 +128,7 @@ spec:
         configMap:
           name: {{ include "postgresql.fullname" . }}-init
       {{- end }}
+      - name: sfagent
+        configMap:
+          name: {{ include "postgresql.fullname" . }}-sfagent
       
